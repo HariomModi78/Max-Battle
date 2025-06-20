@@ -1,4 +1,9 @@
-
+let myOption = document.getElementsByClassName("myOption");
+for(let i=0;i<myOption.length;i++){
+    myOption[i].addEventListener("click",function(){
+        window.location.href = `/${myOption[i].id}`
+    })
+}
 let board = document.querySelector(".board");
 let slide = document.querySelector(".slide");
 let circle = document.getElementsByClassName("circle")
