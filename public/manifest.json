@@ -1,0 +1,36 @@
+{
+    "name": "Max Battle",
+    "short_name": "Max Battle",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#317EFB",
+    "icons": [
+      {
+        "src": "/images/icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+  {
+    "src": "/images/screen.png",
+    "sizes": "897x504",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+  {
+    "src": "/images/screen.png",
+    "sizes": "897x504",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+]
+  }
+  
