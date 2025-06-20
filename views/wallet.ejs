@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/wallet.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div class="logo back" id="">
+                <img id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big">My Wallet</p>
+            </div>
+            <div class="notification">
+                <!-- <img src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div class="part1">
+            <div class="amount">
+                <img class="smallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                8</div>
+            <div class="options">
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        3</div>
+                    <div class="optionName1">Deposited</div>
+                </div>
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        3</div>
+                    <div class="optionName1">Winning</div>
+                </div>
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        3</div>
+                    <div class="optionName1">Bonus</div>
+                </div>
+            </div>
+        </div>
+        <div class="option deposit">
+            <div class="optionLogo">
+                <img src="https://cdn-icons-png.flaticon.com/128/15222/15222005.png" alt="">
+            </div>
+            <div class="optionName">Add Coins</div>
+            <div class="optionArrow">
+                <img src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+        <div class="option withdraw">
+            <div class="optionLogo">
+                <img src="https://cdn-icons-png.flaticon.com/128/4293/4293211.png" alt="">
+            </div>
+            <div class="optionName">Withdraw Coins</div>
+            <div class="optionArrow">
+                <img src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+        <div class="option transaction">
+            <div class="optionLogo">
+                <img src="https://cdn-icons-png.flaticon.com/128/3621/3621029.png" alt="">
+            </div>
+            <div class="optionName">Transaction</div>
+            <div class="optionArrow">
+                <img src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+
+        <div class="fakeFooter"></div>
+        <div class="footer">
+            <div class="footerBox earn" id="earn">
+                <img src="https://cdn-icons-png.flaticon.com/128/2958/2958733.png" id="earn" alt="">
+                <p id="earn">Earn</p>
+            </div>
+            <div class="footerBox home" id="home">
+                <img src="https://cdn-icons-png.flaticon.com/128/263/263115.png" id="home" alt="">
+                <p id="home" >Home</p>
+            </div>
+            <div class="footerBox center wallet" id="wallet">
+                <img src="https://cdn-icons-png.flaticon.com/128/2746/2746064.png" id="wallet" alt="">
+                <p id="wallet">Wallet</p>
+            </div>
+            <div class="footerBox leadboard" id="leadboard">
+                <img src="https://cdn-icons-png.flaticon.com/128/819/819590.png" id="leadboard" alt="">
+                <p id="leadboard">Leadboard</p>
+            </div>
+            <div class="footerBox profile" id="profile">
+                <img src="https://cdn-icons-png.flaticon.com/128/1144/1144760.png" id="profile" alt="">
+                <p id="profile">Profile</p>
+            </div>
+        </div>
+
+        </div>
+    </main>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/back.js"></script>
+    <script>
+        let deposit = document.querySelector(".deposit");
+        let withdraw = document.querySelector(".withdraw");
+        let transaction = document.querySelector(".transaction");
+        deposit.addEventListener("click",function(){
+            window.location.href = "/deposit"
+        })
+        withdraw.addEventListener("click",function(){
+            window.location.href = "/withdraw"
+        })
+        transaction.addEventListener("click",function(){
+            window.location.href = "/transaction"
+        })
+    </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
