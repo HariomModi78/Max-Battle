@@ -113,7 +113,9 @@
           amount,
           currency: "INR",
           receipt: "rcpt_" + Date.now(),
-          userId: main.id // send userId to backend
+          notes:{
+            userId:main.id
+          }
         })
       });
 
