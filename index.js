@@ -17,6 +17,7 @@ const crypto = require("crypto");
 const userDataBase = require("./models/userModel.js");
 const tournamentDataBase = require("./models/tournamentModel.js");
 const registrationDataBase = require("./models/registrationModel.js");
+const transactionDataBase = require("./models/transactionModel.js");
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
 
@@ -263,7 +264,39 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
     res.redirect(`/adminTotalTournament/${admin._id}`);
 })
 app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(req,res){
-    await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    if(user.totalBalance>=tournament.entryFee){
+    const entryFee = tournament.entryFee;
+    let depositedToDeduct = 0;
+    let winningToDeduct = 0;
+    let bonusToDeduct = 0;
+    let remaining = 0;
+
+    if (user.deposited >= entryFee) {
+        depositedToDeduct = entryFee;
+    } else {
+     depositedToDeduct = user.deposited;
+     remaining = entryFee - depositedToDeduct;
+    }
+    if (user.winning >= remaining) {
+        winningToDeduct = remaining;
+    } else {
+    winningToDeduct = user.winning;
+    remaining -= winningToDeduct;
+    }
+    if (user.bonus >= remaining) {
+      bonusToDeduct = remaining;
+    } 
+        await userDataBase.findOneAndUpdate({_id:user._id},{
+            $inc:{
+                totalBalance:-tournament.entryFee,
+                deposited:-depositedToDeduct,
+                winning:-winningToDeduct,
+                bonus:-bonusToDeduct
+            }
+        })
+        await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
         $set:{
             [`slots.${req.params.slotNumber-1}`]:req.params.userId
             }
@@ -274,6 +307,10 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
         }
     })
     res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
+    }else{
+        res.redirect("/");
+    }
+   
 })
 
 
@@ -378,7 +415,7 @@ app.post("/verify-payment", (req, res) => {
 const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
 app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
-    //console.log("Webhook triggered for payment:", payment.id);
+    // console.log("Webhook triggered for payment:", payment.id);
     //console.log("hariom modi ye body Hai =",req.body);
     const razorpaySignature = req.headers['x-razorpay-signature'];
     const body = JSON.stringify(req.body);
@@ -391,15 +428,25 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     if (razorpaySignature === expectedSignature) {
         //console.log("Working hariom")
         let payment = req.body.payload.payment.entity;
-        //console.log("payment",payment);
+        // console.log("payment",payment);
         //console.log("payment.amount",payment.notes)
-        
-        await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
+       let transaction = await transactionDataBase.create({
+            paymentId:payment.id,
+            orderId:payment.orderId,
+            amount:payment.amount,
+            status:payment.status,
+            userId:payment.notes.userId
+        })
+        let doubleCheck = await transactionDataBase.findOne({paymentId:payment.id});
+        if(!doubleCheck){
+            await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
             $inc:{
                 totalBalance: payment.amount / 100,
                 deposited: payment.amount / 100
             },
         })
+        }
+        
         //console.log("✅ Verified Razorpay Webhook");
         //console.log("Payment Details:", req.body);
 
