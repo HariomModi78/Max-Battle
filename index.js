@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(cookieParser());
 app.listen(3000,()=>{
-    console.log("Server is running ");
+    //console.log("Server is running ");
 })
 app.get("/",async function(req,res){
     if(req.cookies.token){
@@ -51,7 +51,7 @@ app.post("/register",async function(req,res){
     let oldUser = await userDataBase.findOne({email:req.body.email});
     if(!oldUser){
         let promocode =(req.body.promocode).toString().split("@");
-        console.log(promocode[0]);
+        //console.log(promocode[0]);
         bcrypt.genSalt(10,function(err,salt){
         bcrypt.hash(req.body.password,salt,async function(err,hash){
            let newUser =  await userDataBase.create({
@@ -88,7 +88,7 @@ app.get("/login",async function(req,res){
 })
 app.post("/login",async function(req,res){
     let user = await userDataBase.findOne({email:req.body.email});
-    console.log(user)
+    //console.log(user)
     if(user){
         bcrypt.compare(req.body.password,user.password,function(err,result){
         if(result){
@@ -296,7 +296,7 @@ const writeData = (data) => {
 app.post("/create-order", async (req, res) => {
   try {
     let user = jwt.verify(req.cookies.token,`${process.env.PIN}`);
-    console.log(user);
+    //console.log(user);
     const { amount, currency, receipt, notes } = req.body;
 
     const options = {
@@ -307,7 +307,7 @@ app.post("/create-order", async (req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
-    console.log(order);
+    //console.log(order);
     const orders = readData();
     orders.push({
       order_id: order.id,
@@ -320,7 +320,7 @@ app.post("/create-order", async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     res.status(500).json({ error: "error creating order" });
   }
 });
@@ -333,7 +333,7 @@ app.get("/payment-success", (req, res) => {
 // Verify payment route
 app.post("/verify-payment", (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  console.log(req.body);
+  //console.log(req.body);
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const isValid = validateWebhookSignature(body, razorpay_signature, razorpay.key_secret);
@@ -378,7 +378,8 @@ app.post("/verify-payment", (req, res) => {
 const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
 app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
-    console.log("hariom modi ye body Hai =",req.body);
+    //console.log("Webhook triggered for payment:", payment.id);
+    //console.log("hariom modi ye body Hai =",req.body);
     const razorpaySignature = req.headers['x-razorpay-signature'];
     const body = JSON.stringify(req.body);
 
@@ -386,12 +387,12 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         .update(body)
         .digest('hex');
     console.log("razorpaySignature = ",razorpaySignature);
-    console.log("expextedSignature = ",expectedSignature);
+    //console.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
-        console.log("Working hariom")
+        //console.log("Working hariom")
         let payment = req.body.payload.payment.entity;
-        console.log("payment",payment);
-        console.log("payment.amount",payment.notes)
+        //console.log("payment",payment);
+        //console.log("payment.amount",payment.notes)
         
         await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
             $inc:{
@@ -399,12 +400,12 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
                 deposited: payment.amount / 100
             },
         })
-        console.log("✅ Verified Razorpay Webhook");
-        console.log("Payment Details:", req.body);
+        //console.log("✅ Verified Razorpay Webhook");
+        //console.log("Payment Details:", req.body);
 
         res.status(200).json({ status: "ok" });
     } else {
-        console.log("❌ Invalid Webhook Signature");
+        //console.log("❌ Invalid Webhook Signature");
         res.status(400).json({ error: "Invalid signature" });
     }
 });
