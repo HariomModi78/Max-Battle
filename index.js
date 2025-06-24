@@ -396,6 +396,9 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
             $inc:{
                 totalBalance:payment.amount/100
+            },
+            $inc:{
+                deposited:payment.amount/100
             }
         })
         console.log("✅ Verified Razorpay Webhook");
