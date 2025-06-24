@@ -384,7 +384,7 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         .update(body)
         .digest('hex');
     console.log("razorpaySignature = ",razorpaySignature);
-    console.log("expextedSignature = ",expextedSignature);
+    console.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
         let user = jwt.verify(req.cookies.token,`${process.env.PIN}`)
         let payment = req.body.payload.payment.entity;
