@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="fakeHeader"></div>
-        <div class="option" id="1">
+        <div class="option" id="5">
             <div class="optionPart1">
                 <div class="getwayName">TranzUPI</div>
                 <div class="detail">5 INR = 5 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
@@ -120,6 +120,9 @@
         name: "Max Battle",
         description: "Test Transaction",
         order_id: order.id,
+        notes: {
+             userId: "<%= user._id %>"  // Pass userId here
+        },
         handler: function (response) {
           fetch("/verify-payment", {
             method: "POST",
