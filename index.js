@@ -374,7 +374,7 @@ app.post("/verify-payment", (req, res) => {
 
 // Your webhook secret from Razorpay dashboard
 app.post('/paymentCheck', bodyParser.raw({ type: 'application/json' }), (req, res) => {
-  const secret = process.env.WEBHOOK_SECRET;
+  const secret = process.env.WEBHOOCK_SECRET;
 
   const signature = req.headers['x-razorpay-signature'];
   const expectedSignature = crypto
