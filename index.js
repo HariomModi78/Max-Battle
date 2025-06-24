@@ -373,24 +373,33 @@ app.post("/verify-payment", (req, res) => {
 
 
 // Your webhook secret from Razorpay dashboard
-app.post('/paymentCheck', bodyParser.raw({ type: 'application/json' }), (req, res) => {
-  const secret = process.env.WEBHOOCK_SECRET;
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-  const signature = req.headers['x-razorpay-signature'];
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(req.body)
+app.post("/paymentCheck", express.raw({ type: '*/*' }), async (req, res) => {
+  const razorpaySignature = req.headers['x-razorpay-signature'];
+  const body = req.body; // this is now a Buffer
+
+  const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
+    .update(body) // ✅ body is a Buffer now
     .digest('hex');
 
-  if (signature !== expectedSignature) {
+  if (razorpaySignature === expectedSignature) {
+    const jsonData = JSON.parse(body); // 🔁 now safely parse the raw buffer
+    const payment = jsonData.payload.payment.entity;
+
+    // Example: Get user from token or other method
+    const user = jwt.verify(req.cookies.token, process.env.PIN);
+
+    await userDataBase.findOneAndUpdate({ _id: user._id }, {
+      $inc: {
+        totalBalance: payment.amount / 100
+      }
+    });
+
+    console.log("✅ Verified Razorpay Webhook");
+    res.status(200).json({ status: "ok" });
+  } else {
     console.log("❌ Invalid Webhook Signature");
-    return res.status(400).send('Invalid signature');
+    res.status(400).json({ error: "Invalid signature" });
   }
-
-  console.log("✅ Valid Webhook Signature");
-  // process the payload
-  const payload = JSON.parse(req.body.toString());
-  console.log("Payload:", payload);
-
-  res.status(200).json({ status: 'ok' });
 });
