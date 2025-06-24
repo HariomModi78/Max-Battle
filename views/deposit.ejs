@@ -96,16 +96,27 @@
     <script src="/script.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    let main = document.querySelector("main");
-    let option =document.getElementsByClassName("option");
-    for(let i=0;i<option.length;i++){
-        option[i].onclick = async function () {
-      const amount = option[i].id;
+  let main = document.querySelector("main");
+  let optionsList = document.getElementsByClassName("option");
+
+  for (let i = 0; i < optionsList.length; i++) {
+    optionsList[i].onclick = async function () {
+      const amount = optionsList[i].id;
+
       const res = await fetch("/create-order", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency: "INR", receipt: "rcpt_" + Date.now(), notes: {} })
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include", // ensure cookies (e.g. token) are sent
+        body: JSON.stringify({
+          amount,
+          currency: "INR",
+          receipt: "rcpt_" + Date.now(),
+          userId: main.id // send userId to backend
+        })
       });
+
       const order = await res.json();
 
       if (order.error) {
@@ -118,32 +129,21 @@
         amount: order.amount,
         currency: order.currency,
         name: "Max Battle",
-        description: "Test Transaction",
+        description: "Transaction",
         order_id: order.id,
-        notes: {
-             userId: "<%= user._id %>"  // Pass userId here
-        },
+        // DO NOT pass notes from frontend — let backend do it correctly
         handler: function (response) {
-          fetch("/verify-payment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response)
-          })
-          .then(r => r.json())
-          .then(data => {
-            if (data.status === "ok") window.location =`/wallet/${main.id}`;
-            else alert("Verification failed");
-          })
-          .catch(() => alert("Error verifying payment"));
+          alert("✅ Payment successful!\nWait a moment while your wallet is updated.");
+          window.location = `/wallet/${main.id}`;
         },
         theme: { color: "#F37254" }
       };
 
-      new Razorpay(options).open();
+      const rzp = new Razorpay(options);
+      rzp.open();
     };
-    }
-    
-  </script>
+  }
+</script>
     
 </body>
 </html>
