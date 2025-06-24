@@ -373,33 +373,32 @@ app.post("/verify-payment", (req, res) => {
 
 
 // Your webhook secret from Razorpay dashboard
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
-app.post("/paymentCheck", express.raw({ type: '*/*' }), async (req, res) => {
-  const razorpaySignature = req.headers['x-razorpay-signature'];
-  const body = req.body; // this is now a Buffer
+app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
+    console.log("hariom modi ye body Hai =",req.body);
+    const razorpaySignature = req.headers['x-razorpay-signature'];
+    const body = JSON.stringify(req.body);
 
-  const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
-    .update(body) // ✅ body is a Buffer now
-    .digest('hex');
+    const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
+        .update(body)
+        .digest('hex');
+    console.log("razorpaySignature = ",razorpaySignature);
+    console.log("expextedSignature = ",expextedSignature);
+    if (razorpaySignature === expectedSignature) {
+        let user = jwt.verify(req.cookies.token,`${process.env.PIN}`)
+        let payment = req.body.payload.payment.entity;
+        await userDataBase.findOneAndUpdate({_id:user._id},{
+            $inc:{
+                totalBalance:payment.amount/100
+            }
+        })
+        console.log("✅ Verified Razorpay Webhook");
+        console.log("Payment Details:", req.body);
 
-  if (razorpaySignature === expectedSignature) {
-    const jsonData = JSON.parse(body); // 🔁 now safely parse the raw buffer
-    const payment = jsonData.payload.payment.entity;
-
-    // Example: Get user from token or other method
-    const user = jwt.verify(req.cookies.token, process.env.PIN);
-
-    await userDataBase.findOneAndUpdate({ _id: user._id }, {
-      $inc: {
-        totalBalance: payment.amount / 100
-      }
-    });
-
-    console.log("✅ Verified Razorpay Webhook");
-    res.status(200).json({ status: "ok" });
-  } else {
-    console.log("❌ Invalid Webhook Signature");
-    res.status(400).json({ error: "Invalid signature" });
-  }
+        res.status(200).json({ status: "ok" });
+    } else {
+        console.log("❌ Invalid Webhook Signature");
+        res.status(400).json({ error: "Invalid signature" });
+    }
 });
