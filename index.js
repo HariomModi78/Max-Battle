@@ -386,8 +386,11 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     console.log("razorpaySignature = ",razorpaySignature);
     console.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
+        console.log("Working hariom")
         let user = jwt.verify(req.cookies.token,`${process.env.PIN}`)
         let payment = req.body.payload.payment.entity;
+        console.log("payment",payment);
+        console.log("payment.amount",payment.amount)
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:payment.amount/100
