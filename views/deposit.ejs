@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/deposit.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main id="<%=user._id%>">
+        <div class="header">
+            <div class="logo back" id="wallet">
+                <img id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big">Buy Coins</p>
+            </div>
+            <div class="notification">
+                <!-- <img src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div class="option" id="5">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">5 INR = 5 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">5 INR</div>
+        </div>
+        <div class="option" id="10">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">10 INR = 10 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">10 INR</div>
+        </div>
+        <div class="option" id="15">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">15 INR = 15 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">15 INR</div>
+        </div>
+        <div class="option" id="30">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">30 INR = 30 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">30 INR</div>
+        </div>
+        <div class="option" id="40">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">40 INR = 40 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">40 INR</div>
+        </div>
+        <div class="option" id="50">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">50 INR = 50 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">50 INR</div>
+        </div>
+        <div class="option" id="200">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">200 INR = 200 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">200 INR</div>
+        </div>
+        <div class="option" id="300">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">300 INR = 300 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">300 INR</div>
+        </div>
+        <div class="option" id="400">
+            <div class="optionPart1">
+                <div class="getwayName">TranzUPI</div>
+                <div class="detail">400 INR = 400 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">400 INR</div>
+        </div>
+    </main>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    let main = document.querySelector("main");
+    let option =document.getElementsByClassName("option");
+    for(let i=0;i<option.length;i++){
+        option[i].onclick = async function () {
+      const amount = option[i].id;
+      const res = await fetch("/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, currency: "INR", receipt: "rcpt_" + Date.now(), notes: {} })
+      });
+      const order = await res.json();
+
+      if (order.error) {
+        alert(order.error);
+        return;
+      }
+
+      const options = {
+        key: "rzp_live_EjcCJrQWjxa8g4",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Max Battle",
+        description: "Test Transaction",
+        order_id: order.id,
+        handler: function (response) {
+          fetch("/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response)
+          })
+          .then(r => r.json())
+          .then(data => {
+            if (data.status === "ok") window.location =`/wallet/${main.id}`;
+            else alert("Verification failed");
+          })
+          .catch(() => alert("Error verifying payment"));
+        },
+        theme: { color: "#F37254" }
+      };
+
+      new Razorpay(options).open();
+    };
+    }
+    
+  </script>
+    
+</body>
+</html>
