@@ -295,13 +295,17 @@ const writeData = (data) => {
 // Create order route
 app.post("/create-order", async (req, res) => {
   try {
+    let user = jwt.verify(req.cookies.token,`${process.env.PIN}`);
+    console.log(user);
     const { amount, currency, receipt, notes } = req.body;
 
     const options = {
       amount: amount * 100,
       currency: currency || "INR",
       receipt,
-      notes
+      notes: {
+            userId: user._id, 
+        }
     };
 
     const order = await razorpay.orders.create(options);
@@ -387,11 +391,11 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     console.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
         console.log("Working hariom")
-        let user = jwt.verify(req.cookies.token,`${process.env.PIN}`)
         let payment = req.body.payload.payment.entity;
         console.log("payment",payment);
-        console.log("payment.amount",payment.amount)
-        await userDataBase.findOneAndUpdate({_id:user._id},{
+        console.log("payment.amount",payment.notes)
+        
+        await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
             $inc:{
                 totalBalance:payment.amount/100
             }
