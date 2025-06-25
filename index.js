@@ -445,6 +445,14 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         let payment = req.body.payload.payment.entity;
         console.log("payment",payment);
         console.log("payment.amount",payment.notes)
+        // const existingPayment = await transaction.findOne({ paymentId: payment.id });
+
+        // if (existingPayment) {
+        //  // Payment already processed — ignore the duplicate webhook
+        //  return res.status(200).json({ message: 'Duplicate payment webhook ignored.' });
+        // }
+        let doubleCheck = await transactionDataBase.findOne({paymentId:payment.id});
+        if(!doubleCheck){
        let transaction = await transactionDataBase.create({
             paymentId:payment.id,
             orderId:payment.order_id,
@@ -452,8 +460,7 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
             status:payment.status,
             userId:payment.notes.userId
         })
-        let doubleCheck = await transactionDataBase.findOne({paymentId:payment.id});
-        if(!doubleCheck){
+        
             await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
             $inc:{
                 totalBalance: payment.amount / 100,
