@@ -33,3 +33,6 @@ main{
     margin-left: 0.2rem;
 
 }
+.disable{
+    display: none;
+}
