@@ -48,20 +48,20 @@ tournament[i].addEventListener("click",function(){
 let y = 0;
 window.addEventListener("scroll",function(event){
     if(window.scrollY>0 && window.scrollY>y){
-        home.style.cssText = "animation:move linear forwards 1s;"
-        earn.style.cssText = "animation:move linear forwards 1s;"
-        wallet.style.cssText = "animation:move linear forwards 1s;"
-        leadboard.style.cssText = "animation:move linear forwards 1s;"
-        profile.style.cssText = "animation:move linear forwards 1s;"
+        home.style.cssText = "animation:move linear forwards 500ms;"
+        earn.style.cssText = "animation:move linear forwards 500ms;"
+        wallet.style.cssText = "animation:move linear forwards 500ms;"
+        leadboard.style.cssText = "animation:move linear forwards 500ms;"
+        profile.style.cssText = "animation:move linear forwards 500ms;"
         y = window.scrollY;
         console.log("y = ",y);
     }
     else{
-        home.style.cssText = "animation:move1 linear forwards 1s;"
-        earn.style.cssText = "animation:move1 linear forwards 1s;"
-        wallet.style.cssText = "animation:move1 linear forwards 1s;"
-        leadboard.style.cssText = "animation:move1 linear forwards 1s;"
-        profile.style.cssText = "animation:move1 linear forwards 1s;"
+        home.style.cssText = "animation:move1 linear forwards 500ms;"
+        earn.style.cssText = "animation:move1 linear forwards 500ms;"
+        wallet.style.cssText = "animation:move1 linear forwards 500ms;"
+        leadboard.style.cssText = "animation:move1 linear forwards 500ms;"
+        profile.style.cssText = "animation:move1 linear forwards 500ms;"
             y =0;
         
 
