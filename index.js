@@ -143,7 +143,8 @@ app.get("/withdraw/:userId",async function(req,res){
 })
 app.get("/transaction/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("transaction",{user:user});
+    let transaction = await transactionDataBase.find({userId:user._id});
+    res.render("transaction",{user:user,transaction:transaction});
 })
 app.get("/editProfile/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
