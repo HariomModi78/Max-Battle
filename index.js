@@ -51,11 +51,12 @@ app.get("/register",async function(req,res){
 app.post("/register",async function(req,res){
     let oldUser = await userDataBase.findOne({email:req.body.email});
     if(!oldUser){
-        let promocode =(req.body.promocode).toString().split("@");
+        let promocode =String(req.body.promocode).split("@");
+        var newUser;
         //console.log(promocode[0]);
         bcrypt.genSalt(10,function(err,salt){
         bcrypt.hash(req.body.password,salt,async function(err,hash){
-           let newUser =  await userDataBase.create({
+            newUser =  await userDataBase.create({
                 gameName:req.body.gameName,
                 gameId:req.body.gameId,
                 username:req.body.username,
@@ -77,7 +78,7 @@ app.post("/register",async function(req,res){
 app.get("/login",async function(req,res){
     if(req.cookies.token){
         try{
-           let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
+           var token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
         }catch(e){
             res.render("login");
         }
@@ -157,7 +158,9 @@ app.get("/tournament/upcomming/:type/:userId",async function(req,res){
 })
 app.get("/myUpcomming/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("myUpcomming",{user:user});
+    let tournament = await tournamentDataBase.find();
+
+    res.render("myUpcomming",{user:user,tournament:tournament});
 })
 app.get("/myOngoing/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
@@ -234,7 +237,7 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
 })
 app.get("/adminTotalTournament/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
-    let tournament = await tournamentDataBase.find();
+    let tournament = await tournamentDataBase.find().sort({dateAndTime:1});
     res.render("adminTotalTournament",{tournament:tournament,admin:admin});
 })
 app.get("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
@@ -266,7 +269,7 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
 app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
-    if(user.totalBalance>=tournament.entryFee){
+        if(user.totalBalance>=tournament.entryFee){
     const entryFee = tournament.entryFee;
     let depositedToDeduct = 0;
     let winningToDeduct = 0;
@@ -288,6 +291,8 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
     if (user.bonus >= remaining) {
       bonusToDeduct = remaining;
     } 
+    if(!tournament.slots[req.params.slotNumber-1]){
+        tournament.slots[req.params.slotNumber-1]
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-tournament.entryFee,
@@ -297,20 +302,30 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
             }
         })
         await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
+        $inc:{
+            slotsFilled:1
+            },
         $set:{
             [`slots.${req.params.slotNumber-1}`]:req.params.userId
             }
-    })
-    await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
-        $inc:{
-            slotsFilled:1
-        }
-    })
+        })
     res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
+    }else{
+        res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
+    }
+        
     }else{
         res.redirect("/");
     }
+
+    
+    
    
+})
+
+app.get("/logout",function(req,res){
+    res.clearCookie("token");
+    res.redirect("/login");
 })
 
 
@@ -426,10 +441,10 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     console.log("razorpaySignature = ",razorpaySignature);
     //console.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
-        //console.log("Working hariom")
+        console.log("Working hariom")
         let payment = req.body.payload.payment.entity;
-        // console.log("payment",payment);
-        //console.log("payment.amount",payment.notes)
+        console.log("payment",payment);
+        console.log("payment.amount",payment.notes)
        let transaction = await transactionDataBase.create({
             paymentId:payment.id,
             orderId:payment.orderId,
@@ -456,3 +471,4 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         res.status(400).json({ error: "Invalid signature" });
     }
 });
+
