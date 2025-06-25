@@ -98,6 +98,7 @@
     %>
     <%if(flag){%>
         <div class="join" id="<%=user._id%>/<%=val._id%>">JOINED</div>
+        <div class="joinButton disable" id="<%=user._id%>/<%=val._id%>">JOIN</div>
         <%flag = false%>
     <%}else{%>
         <div class="joinButton" id="<%=user._id%>/<%=val._id%>">JOIN</div>
@@ -116,6 +117,7 @@
         let tournament = document.getElementsByClassName("tournament");
         for(let i=0;i<tournament.length;i++){
             tournament[i].addEventListener("click",function(e){
+                console.log(e.target.className)
                 if(e.target.className =="joinButton"){
                     window.location.href = `/tournament/slot/${joinButton[i].id}`
                 }else{
