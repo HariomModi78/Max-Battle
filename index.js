@@ -51,7 +51,7 @@ app.get("/register",async function(req,res){
 app.post("/register",async function(req,res){
     let oldUser = await userDataBase.findOne({email:req.body.email});
     if(!oldUser){
-        let promocode =String(req.body.promocode).split("@");
+        let promocode =String(req.body.email).split("@");
         var newUser;
         console.log(promocode[0]);
         bcrypt.genSalt(10,function(err,salt){
