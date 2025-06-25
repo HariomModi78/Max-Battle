@@ -65,11 +65,11 @@ app.post("/register",async function(req,res){
                 promocode:promocode[0]
             })
         })
-        
-    })
-    let token = jwt.sign({email:req.body.email,role:"user"},`${process.env.PIN}`);
+        let token = jwt.sign({email:req.body.email,role:"user"},`${process.env.PIN}`);
     res.cookie("token",token);
     res.redirect(`/home/${newUser._id}`);
+    })
+    
     }else{
         res.redirect("/register");
     }
