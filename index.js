@@ -53,7 +53,7 @@ app.post("/register",async function(req,res){
     if(!oldUser){
         let promocode =String(req.body.promocode).split("@");
         var newUser;
-        //console.log(promocode[0]);
+        console.log(promocode[0]);
         bcrypt.genSalt(10,function(err,salt){
         bcrypt.hash(req.body.password,salt,async function(err,hash){
             newUser =  await userDataBase.create({
@@ -447,8 +447,8 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         console.log("payment.amount",payment.notes)
        let transaction = await transactionDataBase.create({
             paymentId:payment.id,
-            orderId:payment.orderId,
-            amount:payment.amount,
+            orderId:payment.order_id,
+            amount:payment.amount/100,
             status:payment.status,
             userId:payment.notes.userId
         })
