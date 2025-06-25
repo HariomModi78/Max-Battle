@@ -38,6 +38,7 @@ let earn = document.querySelector(".earn");
 let wallet = document.querySelector(".wallet");
 let leadboard = document.querySelector(".leadboard");
 let profile = document.querySelector(".profile");
+let footer = document.querySelector(".footer");
 let tournament = document.getElementsByClassName("tournament");
 
 for(let i=0;i<tournament.length;i++)
@@ -53,6 +54,7 @@ window.addEventListener("scroll",function(event){
         wallet.style.cssText = "animation:move linear forwards 500ms;"
         leadboard.style.cssText = "animation:move linear forwards 500ms;"
         profile.style.cssText = "animation:move linear forwards 500ms;"
+        footer.style.cssText = "animation:move linear forwards 500ms;"
         y = window.scrollY;
         console.log("y = ",y);
     }
@@ -62,6 +64,7 @@ window.addEventListener("scroll",function(event){
         wallet.style.cssText = "animation:move1 linear forwards 500ms;"
         leadboard.style.cssText = "animation:move1 linear forwards 500ms;"
         profile.style.cssText = "animation:move1 linear forwards 500ms;"
+        footer.style.cssText = "animation:move1 linear forwards 500ms;"
             y =0;
         
 
