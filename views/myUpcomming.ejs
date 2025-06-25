@@ -111,12 +111,7 @@
         let tournament = document.getElementsByClassName("tournament");
         for(let i=0;i<joinButton.length;i++){
             tournament[i].addEventListener("click",function(e){
-                if(e.target.className =="joinButton"){
-                    window.location.href = "/tournament/slot"
-                }else{
-                    window.location.href = "/tournament/detail"
-                }
-                
+                    window.location.href = `/tournament/detail/${tournament[i].id}`
             })
         }
         
