@@ -29,6 +29,14 @@ app.use(cookieParser());
 app.listen(3000,()=>{
     //console.log("Server is running ");
 })
+
+function isAdmin(user){
+    if(user.role=="admin"){
+        return true;
+    }else{
+        return false;
+    }
+}
 app.get("/",async function(req,res){
     if(req.cookies.token){
         
@@ -141,9 +149,27 @@ app.get("/withdraw/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     res.render("withdraw",{user:user});
 })
+app.post("/withdraw/:userId",async function(req,res){
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    if(user.winning >=req.body.amount){
+        await userDataBase.findOneAndUpdate({_id:user._id},{
+            $inc:{
+                totalBalance:-Number(req.body.amount),
+                winning:-Number(req.body.amount),
+            },
+        })
+        await transactionDataBase.create({
+              upiId:req.body.upiId,
+              amount: req.body.amount,
+              status: "withdrawal",                   
+              userId: user._id,
+        })
+    }
+    res.redirect(`/wallet/${req.params.userId}`);
+})
 app.get("/transaction/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let transaction = await transactionDataBase.find({userId:user._id});
+    let transaction = await transactionDataBase.find({userId:user._id}).sort({createdAt:-1});
     res.render("transaction",{user:user,transaction:transaction});
 })
 app.get("/editProfile/:userId",async function(req,res){
@@ -153,20 +179,17 @@ app.get("/editProfile/:userId",async function(req,res){
 app.get("/faq",function(req,res){
     res.render("faq");
 })
-app.get("/tournament/upcomming/:type/:userId",async function(req,res){
-    let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find().sort({dateAndTime:1});
-    res.render("upcomming",{user:user,tournament:tournament});
-})
+
 app.get("/myUpcomming/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find();
+    let tournament = await tournamentDataBase.find({status:"upcomming"});
 
     res.render("myUpcomming",{user:user,tournament:tournament});
 })
 app.get("/myOngoing/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("myOngoing",{user:user});
+    let tournament = await tournamentDataBase.find({status:"ongoing"});
+    res.render("myOngoing",{user:user,tournament:tournament});
 })
 app.get("/myStatistics/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
@@ -174,13 +197,23 @@ app.get("/myStatistics/:userId",async function(req,res){
 })
 app.get("/myCompleted/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("myCompleted",{user:user});
+    let tournament = await tournamentDataBase.find({status:"ongoing"});
+    res.render("myCompleted",{user:user,tournament:tournament});
 })
-app.get("/tournament/result/:type",function(req,res){
-    res.render("result");
+app.get("/tournament/result/:userId",async function(req,res){
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    let tournament = await tournamentDataBase.find({status:"result"}).sort({dateAndTime:1});
+    res.render("result",{user:user,tournament:tournament});
 })
-app.get("/tournament/ongoing/:type",function(req,res){
-    res.render("ongoing");
+app.get("/tournament/upcomming/:userId",async function(req,res){
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    let tournament = await tournamentDataBase.find({status:"upcomming"}).sort({dateAndTime:1});
+    res.render("upcomming",{user:user,tournament:tournament});
+})
+app.get("/tournament/ongoing/:userId",async function(req,res){
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    let tournament = await tournamentDataBase.find({status:"ongoing"}).sort({dateAndTime:1});
+    res.render("ongoing",{user:user,tournament:tournament});
 }) 
 app.get("/tournament/slot/:userId/:tournamentId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
@@ -189,19 +222,40 @@ app.get("/tournament/slot/:userId/:tournamentId",async function(req,res){
 })
 app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let slotNumber = req.params.slotNumber;
+    let slotNumber = parseInt(req.params.slotNumber);
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
-    res.render("tournamentPayment",{user:user,tournament:tournament,slotNumber:slotNumber});
+    // console.log(slotNumber);
+    
+    let tournamentUsers = tournament.slots.filter(function(val){
+        if(val!=null) return val;
+    })
+    if(tournament.slots[slotNumber-1]!=null){
+        return res.redirect("/");
+    }else{
+        for(let i=0;i<tournamentUsers.length;i++){
+            
+            if(tournamentUsers[i].toString() == user._id.toString()){
+                return res.redirect("/");
+            }
+        }
+    }
+    
+        res.render("tournamentPayment",{user:user,tournament:tournament,slotNumber:slotNumber});
 })
 app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let user = await userDataBase.findOne({_id:req.params.userId});
     res.render("tournamentDetail",{tournament:tournament,user:user});
 })
+
 app.get("/adminPanel/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
     let user = await userDataBase.find();
     let tournament = await tournamentDataBase.find();
+    let upcommingTournament = await tournamentDataBase.find({status:"upcomming"});
     let ongoing = tournament.filter(function(val){
         if(val.status =="ongoing"){
             return val;
@@ -209,20 +263,29 @@ app.get("/adminPanel/:adminId",async function(req,res){
             return false;
         }
     })
-    res.render("adminPanel",{user:user.length,tournament:tournament.length,ongoing:ongoing.length,admin:admin});
+    res.render("adminPanel",{user:user.length,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length});
 })
 app.get("/adminTotalUser/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
     let users = await userDataBase.find();
     res.render("adminTotalUser",{users:users,admin:admin});
 })
 app.get("/adminCreateTournament/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
     res.render("adminCreateTournament",{admin:admin});
 })
 app.post("/adminCreateTournament/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
-    await tournamentDataBase.create({
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament = await tournamentDataBase.create({
         description:req.body.description,
         dateAndTime:req.body.dateAndTime,
         entryFee:req.body.entryFee,
@@ -233,22 +296,77 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
         map:req.body.map,
         createdBy:req.params.adminId,
         firstPrize:req.body.firstPrize,
-        secondPrize:req.body.secondPrize
+        secondPrize:req.body.secondPrize,
+        slots: Array(Number(req.body.totalSlots)).fill(null),
     })
+    console.log(tournament);
     res.redirect(`/adminCreateTournament/${admin._id}`);
 })
-app.get("/adminTotalTournament/:adminId",async function(req,res){
+app.get("/admin/tournament/:status/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
-    let tournament = await tournamentDataBase.find().sort({dateAndTime:1});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament;
+    if(req.params.status=="total"){
+        tournament = await tournamentDataBase.find().sort({dateAndTime:1});
+    }else if(req.params.status=="upcomming"){
+        tournament = await tournamentDataBase.find({status:"upcomming"}).sort({dateAndTime:1});
+    }else if(req.params.status=="ongoing"){
+        tournament = await tournamentDataBase.find({status:"ongoing"}).sort({dateAndTime:1});
+    }
     res.render("adminTotalTournament",{tournament:tournament,admin:admin});
 })
 app.get("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
-    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    
     let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     res.render("adminEditTournament",{tournament:tournament,admin:admin});
+})
+app.get("/adminPrizeDistribute/:adminId/:tournamentId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).sort({dateAndTime:1});
+    let temp = tournament.slots.filter(function(val){
+        if(val!==null){
+            return true;
+        }
+    })
+    // console.log(temp)
+    let user = await userDataBase.find({_id:temp});
+    // console.log(user);
+    res.render("prizeDistribution",{user:user,tournament:tournament,admin:admin});
+})
+app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res){
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    if(tournament.status == "completed"){
+        return res.redirect(`/adminPanel/${req.params.adminId}`);
+    }
+    let users = JSON.parse(req.body.users);
+    for(let i=0;i<users.length;i++){
+        await userDataBase.findOneAndUpdate({_id:users[i].userId},{
+            $inc:{
+                totalKills:users[i].kills,
+                winning:users[i].kills*tournament.perKillAmount,
+                totalBalance:users[i].kills*tournament.perKillAmount
+            }
+        })
+    }
+    await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
+        status:"completed"
+    })
+    res.redirect(`/adminPanel/${req.params.adminId}`)
 })
 app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
     if(req.body.delete){
         await tournamentDataBase.findOneAndDelete({_id:req.params.tournamentId});
     }else{
@@ -266,11 +384,24 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
     })
     }
     
-    res.redirect(`/adminTotalTournament/${admin._id}`);
+    res.redirect(`/adminPanel/${admin._id}`);
 })
 app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
+    let slotNumber = parseInt(req.params.slotNumber);
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    // console.log(slotNumber);
+    
+    if(tournament.slots[slotNumber-1]!=null){
+        return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
+    }
+    const alreadyJoined = tournament.slots.some(slot => {
+        return slot?.toString() === user._id.toString(); /// ? userd for skip any null value //if the condition is true is return true
+    });
+    if (alreadyJoined) {
+         return res.redirect("/");
+    }
+
         if(user.totalBalance>=tournament.entryFee){
     const entryFee = tournament.entryFee;
     let depositedToDeduct = 0;
@@ -293,8 +424,22 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
     if (user.bonus >= remaining) {
       bonusToDeduct = remaining;
     } 
-    if(!tournament.slots[req.params.slotNumber-1]){
-        tournament.slots[req.params.slotNumber-1]
+        
+    const updatedTournament = await tournamentDataBase.findOneAndUpdate({
+            _id:req.params.tournamentId,
+            [`slots.${parseInt(req.params.slotNumber) - 1}`]: null
+        },{
+        $inc:{
+            slotsFilled:1
+            },
+        $set:{
+            [`slots.${req.params.slotNumber-1}`]:req.params.userId
+            }
+        })
+        console.log(updatedTournament);
+        if (!updatedTournament) {
+            return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
+        }
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-tournament.entryFee,
@@ -303,26 +448,22 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
                 bonus:-bonusToDeduct
             }
         })
-        await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
-        $inc:{
-            slotsFilled:1
-            },
-        $set:{
-            [`slots.${req.params.slotNumber-1}`]:req.params.userId
-            }
-        })
     res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
     }else{
         res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
     }
         
-    }else{
-        res.redirect("/");
-    }
+    
 
     
     
    
+})
+app.post("/tournament/setOngoing/:tournamentId/:adminId",async function(req,res){
+    await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
+        status:req.body.status
+    })
+    res.redirect(`/adminPanel/${req.params.adminId}`);
 })
 
 app.get("/logout",function(req,res){
