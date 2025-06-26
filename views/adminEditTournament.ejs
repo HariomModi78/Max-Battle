@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="stylesheet" href="/stylesheets/adminPanel.css">
+    <link rel="stylesheet" href="/stylesheets/adminCreateTournament.css">
+
+</head>
+<body>
+    <main>
+        <div class="sideBar">
+            <div class="esportText">Admin Panel</div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/8323/8323511.png" class="home" alt="">
+                <div class="optionName home">Dashboard</div>
+            </div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/9743/9743061.png" class="profile" alt="">
+                <div class="optionName profile">Tournaments</div>
+            </div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/476/476863.png" class="login" alt="">
+                <div class="optionName login">Users</div>
+            </div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/6811/6811049.png" class="myTournament" alt="">
+                <div class="optionName myTournament">Pending Results</div>
+            </div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/7653/7653930.png" class="support" alt="">
+                <div class="optionName support">Announcements</div>
+            </div>
+            <div class="option">
+                <img src="https://cdn-icons-png.flaticon.com/128/4400/4400828.png" class="privacyPolicy" alt="">
+                <div class="optionName privacyPolicy">Logout</div>
+            </div>
+        </div>
+        <div class="topBar">
+                <div class="mobileMenu">
+                    <img class="mobileMenu" src="https://cdn-icons-png.flaticon.com/128/2099/2099125.png" alt="">
+                </div>
+                Edit Tournament
+            </div>
+        <div class="page">
+            <div class="fakeHeader"></div>
+            <div class="insidePage">
+                <div class="buttonBox">
+                    <form action="/tournament/setOngoing/<%=tournament._id%>/<%=admin._id%>" method="post" class="ongoing">
+                        <input style="display: none;" type="text" name="status" value="ongoing" id="">
+                        <input class="ongoing" type="submit" value="Tournament is Ongoing">
+                    </form>
+                    <form action="" method="post" class="ongoing">
+                        <input style="display: none;" type="text" name="status" value="result" id="">
+                        <input class="ongoing" type="submit" value="Ditribute tournament prize">
+                    </form>
+                    <form action="/adminEditTournament/<%=admin._id%>/<%=tournament._id%>" method="post" class="ongoing">
+                        <input style="display: none;" type="text" name="delete" value="delete" id="">
+                        <input class="deleteButton" type="submit" value="Delete this tournament">
+                    </form>
+                </div>
+                
+            <div class="events">
+                <form action="/adminEditTournament/<%=admin._id%>/<%=tournament._id%>" method="post">
+                    <div class="inputBox">
+                        <input class="input" required type="text" name="description"  placeholder="" id="description" value="<%=tournament.description%>">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="datetime-local" name="dateAndTime" placeholder="" id="date" value="<%=tournament.dateAndTime%>">
+                        <label for="date" >Date</label> 
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="entryFee" placeholder="" id="entryFee" value="<%=tournament.entryFee%>">
+                        <label for="entryFee">Entry Fee</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="perKillAmount" placeholder="" id="perKillAmount" value="<%=tournament.perKillAmount%>">
+                        <label for="perKillAmount">Per Kill Amount</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="prizePool" placeholder="" id="prizePool" value="<%=tournament.prizePool%>">
+                        <label for="prizePool">Price Pool</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="text" name="matchType" placeholder="" id="matchType" value="<%=tournament.matchType%>">
+                        <label for="matchType">Match Type(like solo,duo,squad)</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="totalSlots" placeholder="" id="totalSlots" value="<%=tournament.totalSlots%>">
+                        <label for="totalSlots">Total Slots</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="text" name="map" placeholder="" id="map" value="<%=tournament.map%>">
+                        <label for="totalSlots">Map</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="firstPrize" placeholder="" id="firstPrize" value="<%=tournament.firstPrize%>">
+                        <label for="firstPrize">First Prize</label>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input" required type="number" name="secondPrize" placeholder="" id="secondPrize" value="<%=tournament.secondPrize%>">
+                        <label for="secondPrize">Second Prize</label>
+                    </div>
+                    <input type="submit" class="submit" value="Update">
+                </form>
+            </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <script src="/javaScripts/register.js"></script>
+    <script>
+        let mobileMenu = document.querySelector(".mobileMenu");
+        let sideBar = document.querySelector(".sideBar");
+        let flag = false;
+        mobileMenu.addEventListener("click",function(){
+    if(flag==false){
+        sideBar.classList = "mobileSideBar";
+        sideBar.style.cssText = "display:flex";
+        for(let i=0;i<label.length;i++){
+            label[i].style.cssText = "z-index:-1";
+        }
+        flag = true;
+    }else{
+        sideBar.style.cssText = "display:none";
+        for(let i=0;i<label.length;i++){
+            label[i].style.cssText = "z-index:1";
+        }
+        flag = false;
+    }
+})
+    let option = document.getElementsByClassName("option");
+
+    for(let i=0;i<option.length;i++){
+    option[i].addEventListener("click",function(){
+        window.location.href = `/${option[i].id}`;
+    })
+    }
+    </script>
+</body>
+</html>

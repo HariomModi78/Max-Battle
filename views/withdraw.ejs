@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/withdraw.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div class="logo back" id="wallet">
+                <img id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big">Withdraw Coins</p>
+            </div>
+            <div class="notification">
+                <!-- <img src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <form action="/withdraw/<%=user._id%>" method="post">
+           <div class="inputBox">
+                <input class="input" type="text" name="upiId" id="upiId" placeholder="" required>
+                <label for="upiId">UPI id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="number" name="amount" id="amount" placeholder="" required>
+                <label for="amount">Amount</label>
+            </div>
+            <input class="normalButton" id="input" type="submit" value="Withdraw">
+        </form>
+        <strong>
+            Note:You can only withdraw winning maxcoins
+        </strong>
+        
+    </main>
+    <script>
+        let upi = document.querySelector("#upiId");
+        let amount = document.querySelector("#amount");
+        let button = document.querySelector("#input");
+        upi.addEventListener("input",function(){
+            if((upi.value).length>0 && (amount.value).length>0){
+                button.classList = "color"
+            }
+        })
+        amount.addEventListener("input",function(){
+            if((upi.value).length>0 && (amount.value).length>0){
+                button.classList = "color"
+            }
+        })
+    </script>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/javaScripts/register.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
