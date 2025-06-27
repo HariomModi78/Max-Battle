@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/leadboard.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/128/8541/8541807.png" alt="">
+            </div>
+            <div class="support">
+                <img src="https://cdn-icons-png.flaticon.com/128/10439/10439810.png" alt="">
+            </div>
+            <div class="greet">
+                <p>Wellcome Back,</p>
+                <p class="big">Max Battle</p>
+            </div>
+            <div class="notification">
+                <img src="https://cdn-icons-png.flaticon.com/128/1827/1827370.png" alt="">
+                <div class="number">3</div>
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div class="timeOption">
+            <div class="week">Weekly</div>
+            <div class="month">Monthly</div>
+        </div>
+        <div class="optionHeading">
+            <div class="option">Position</div>            
+            <div class="option">Player Name</div>            
+            <div class="option">Winning</div>            
+        </div>
+        <% users.forEach(function(val,index){ %>
+            <div class="playerDetail">
+            <div class="option"><%=index+1%></div>
+            <div class="option"><%=val.gameName%></div>
+            <div class="option"><%=val.winning%></div>
+        </div>
+        <% }) %>
+        
+        
+       
+
+        <div class="fakeHeader"></div>
+        <div class="fakeFooter"></div>
+        <div class="footer"> 
+            <div class="footerBox earn" id="earn/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/2958/2958733.png" id="earn/<%=user._id%>" alt="">
+                <p id="earn/<%=user._id%>">Earn</p>
+            </div>
+            <div class="footerBox home" id="home/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/263/263115.png" id="home/<%=user._id%>" alt="">
+                <p id="home/<%=user._id%>" >Home</p>
+            </div>
+            <div class="footerBox center wallet" id="wallet/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/2746/2746064.png" id="wallet/<%=user._id%>" alt="">
+                <p id="wallet/<%=user._id%>">Wallet</p>
+            </div>
+            <div class="footerBox leadboard" id="leadboard/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/819/819590.png" id="leadboard/<%=user._id%>" alt="">
+                <p id="leadboard/<%=user._id%>">Leadboard</p>
+            </div>
+            <div class="footerBox profile" id="profile/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/1144/1144760.png" id="profile/<%=user._id%>" alt="">
+                <p id="profile/<%=user._id%>">Profile</p>
+            </div>
+        </div>
+
+        </div>
+    </main>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
