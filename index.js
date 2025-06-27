@@ -16,7 +16,7 @@ const crypto = require("crypto");
 
 const userDataBase = require("./models/userModel.js");
 const tournamentDataBase = require("./models/tournamentModel.js");
-const registrationDataBase = require("./models/registrationModel.js");
+const tournamentLeadboardDataBase = require("./models/tournamentLeadboard.js");
 const transactionDataBase = require("./models/transactionModel.js");
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
@@ -161,11 +161,17 @@ app.post("/withdraw/:userId",async function(req,res){
         await transactionDataBase.create({
               upiId:req.body.upiId,
               amount: req.body.amount,
-              status: "withdrawal",                   
+              status: "withdraw",                   
               userId: user._id,
         })
     }
     res.redirect(`/wallet/${req.params.userId}`);
+})
+app.get("/pendingWithdrawRequest/:adminId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId});
+    let withdraw = await transactionDataBase.find({status:"withdraw",flag:false}).populate("userId");
+    console.log(withdraw);
+    res.render("withdrawRequest",{withdraw:withdraw,admin:admin});
 })
 app.get("/transaction/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
@@ -197,12 +203,12 @@ app.get("/myStatistics/:userId",async function(req,res){
 })
 app.get("/myCompleted/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find({status:"ongoing"});
+    let tournament = await tournamentDataBase.find({status:"completed"});
     res.render("myCompleted",{user:user,tournament:tournament});
 })
 app.get("/tournament/result/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find({status:"result"}).sort({dateAndTime:1});
+    let tournament = await tournamentDataBase.find({status:"completed"}).sort({dateAndTime:1});
     res.render("result",{user:user,tournament:tournament});
 })
 app.get("/tournament/upcomming/:userId",async function(req,res){
@@ -242,6 +248,14 @@ app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(r
     
         res.render("tournamentPayment",{user:user,tournament:tournament,slotNumber:slotNumber});
 })
+app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
+    console.log(tournamentLeadboard.player)
+    console.log(tournament);
+    let players = (tournamentLeadboard.player);
+    res.render("tournamentLeadboard",{players:players,tournament:tournament});
+})
 app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let user = await userDataBase.findOne({_id:req.params.userId});
@@ -256,6 +270,7 @@ app.get("/adminPanel/:adminId",async function(req,res){
     let user = await userDataBase.find();
     let tournament = await tournamentDataBase.find();
     let upcommingTournament = await tournamentDataBase.find({status:"upcomming"});
+    let withdraw = await transactionDataBase.find({status:"withdraw",flag:false});
     let ongoing = tournament.filter(function(val){
         if(val.status =="ongoing"){
             return val;
@@ -263,7 +278,31 @@ app.get("/adminPanel/:adminId",async function(req,res){
             return false;
         }
     })
-    res.render("adminPanel",{user:user.length,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length});
+    let transaction = await transactionDataBase.find({paymentId:{$ne:null}});
+    
+    res.render("adminPanel",{user:user.length,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length,withdraw:withdraw.length,transaction:transaction});
+})
+app.post("/adminApproveWithdraw/:adminId/:transactionId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    await transactionDataBase.findOneAndUpdate({_id:req.params.transactionId},{
+        flag:true
+    })
+    res.redirect(`/pendingWithdrawRequest/${req.params.adminId}`);
+})
+app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament = await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
+        roomId:req.body.roomId,
+        roomPassword:req.body.roomPassword
+    });
+    console.log(tournament);
+    res.redirect(`/adminEditTournament/${req.params.adminId}/${req.params.tournamentId}`);
 })
 app.get("/adminTotalUser/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
@@ -351,12 +390,16 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
     for(let i=0;i<users.length;i++){
         await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
-                totalKills:users[i].kills,
+                totalKill:users[i].kills,
                 winning:users[i].kills*tournament.perKillAmount,
                 totalBalance:users[i].kills*tournament.perKillAmount
             }
         })
     }
+    await tournamentLeadboardDataBase.create({
+        tournamentId:tournament._id,
+        player:users
+    })
     await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
         status:"completed"
     })
@@ -440,12 +483,14 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
         if (!updatedTournament) {
             return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
         }
+        
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-tournament.entryFee,
                 deposited:-depositedToDeduct,
                 winning:-winningToDeduct,
-                bonus:-bonusToDeduct
+                bonus:-bonusToDeduct,
+                totalMatch:1
             }
         })
     res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
