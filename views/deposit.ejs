@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/deposit.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main id="<%=user._id%>">
+        <div class="header">
+            <div class="logo back"  id="wallet">
+                <img style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big">Buy Coins</p>
+            </div>
+            <div class="notification">
+                <!-- <img src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+               <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+    </div>
+    <div class="page">
+        <div class="option" id="5">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">5 INR = 5 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">5 INR</div>
+        </div>
+        <div class="option" id="10">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">10 INR = 10 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">10 INR</div>
+        </div>
+        <div class="option" id="15">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">15 INR = 15 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">15 INR</div>
+        </div>
+        <div class="option" id="30">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">30 INR = 30 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">30 INR</div>
+        </div>
+        <div class="option" id="40">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">40 INR = 40 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">40 INR</div>
+        </div>
+        <div class="option" id="50">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">50 INR = 50 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">50 INR</div>
+        </div>
+        <div class="option" id="200">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">200 INR = 200 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">200 INR</div>
+        </div>
+        <div class="option" id="300">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">300 INR = 300 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">300 INR</div>
+        </div>
+        <div class="option" id="400">
+            <div class="optionPart1">
+                <div class="getwayName">Razorpay</div>
+                <div class="detail">400 INR = 400 Max coin : Take screenshort of Qr code and pay on that Qr within 2 minutes</div>
+            </div>
+            <div class="optionPart2">400 INR</div>
+        </div>
+    </div>
+        
+    </main>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+  let main = document.querySelector("main");
+  let optionsList = document.getElementsByClassName("option");
+
+  for (let i = 0; i < optionsList.length; i++) {
+    
+    optionsList[i].addEventListener("click",async function () {
+        document.querySelector(".page").style.display = "none";
+        document.getElementById("pageLoader").style.display = "flex";
+        setTimeout(function(){
+            document.querySelector(".page").style.display = "block";
+            document.getElementById("pageLoader").style.display = "none";
+        },1500);
+      const amount = optionsList[i].id;
+
+      const res = await fetch("/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include", // ensure cookies (e.g. token) are sent
+        body: JSON.stringify({
+          amount,
+          currency: "INR",
+          receipt: "rcpt_" + Date.now(),
+          notes:{
+            userId:main.id
+          }
+        })
+      });
+
+      const order = await res.json();
+
+      if (order.error) {
+        alert(order.error);
+        return;
+      }
+
+      const options = {
+        key: "rzp_live_EjcCJrQWjxa8g4",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Max Battle",
+        description: "Transaction",
+        order_id: order.id,
+        // DO NOT pass notes from frontend — let backend do it correctly
+        handler: function (response) {
+          alert("✅ Payment successful!\nWait a moment while your wallet is updated.");
+          window.location = `/wallet/${main.id}`;
+        },
+        theme: { color: "#F37254" }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    });
+  }
+</script>
+    
+</body>
+</html>
