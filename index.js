@@ -125,7 +125,8 @@ app.get("/profile/:userId",async function(req,res){
 })
 app.get("/leadboard/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let users = await userDataBase.find();
+    let users = await userDataBase.find().sort({monthlyWinning:-1});
+    console.log(users)
     res.render("leadboard",{user:user,users:users});
 })
 app.get("/earn/:userId",async function(req,res){
@@ -197,10 +198,6 @@ app.get("/myOngoing/:userId",async function(req,res){
     let tournament = await tournamentDataBase.find({status:"ongoing"});
     res.render("myOngoing",{user:user,tournament:tournament});
 })
-app.get("/myStatistics/:userId",async function(req,res){
-    let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("myStatistics");
-})
 app.get("/myCompleted/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     let tournament = await tournamentDataBase.find({status:"completed"});
@@ -253,7 +250,7 @@ app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
     console.log(tournamentLeadboard.player)
     console.log(tournament);
-    let players = (tournamentLeadboard.player);
+    let players = (tournamentLeadboard.player).sort((a,b)=>b.kills-a.kills);
     res.render("tournamentLeadboard",{players:players,tournament:tournament});
 })
 app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
@@ -392,6 +389,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
             $inc:{
                 totalKill:users[i].kills,
                 winning:users[i].kills*tournament.perKillAmount,
+                monthlyWinning:users[i].kills*tournament.perKillAmount,
                 totalBalance:users[i].kills*tournament.perKillAmount
             }
         })
