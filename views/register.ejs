@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="topBar">Max Battle</div>
+        <pre class="quate">"Show your gameplay
+             and earn rewards"
+        </pre>
+        <div class="wellcome">Wellcome</div>
+        <form action="/register" method="post">
+            <div class="inputBox">
+                <input class="input" type="text" name="gameName" id="gameName" placeholder="" required>
+                <label for="gameName">FFM Game Name</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="text" name="gameId" id="gameId" placeholder="" required>
+                <label for="gameId">FFM Game Id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="text" name="username" id="username" placeholder="" required>
+                <label for="username"> Create Username</label>
+            </div>
+            
+            <div class="inputBox">
+                <input class="input" type="email" name="email" id="email" placeholder="" required>
+                <label for="email">Email-Id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="password" name="password" id="password" placeholder="" required>
+                <label for="password">Create Password</label>
+            </div>
+            <div class="inputBox flex">
+                <input class="input" type="text" name="promoCode" id="promoCode" placeholder="">
+                <label for="promoCode">Promo code <div class="light">(optional)</div></label>
+                <div class="apply">Apply</div>
+            </div>
+            <input type="submit" value="Signup" class="payAndJoin"> 
+            
+        </form>
+
+        <div class="fakeButton">
+            <div class="lastOption"><p>Already a user? </p> <a href="/login"> login</a></div>
+        </div>
+        
+    </main>
+    <script src="/javaScripts/register.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
