@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(cookieParser());
 app.listen(3000,()=>{
-    //console.log("Server is running ");
+    ////.log("Server is running ");
 })
 
 function isAdmin(user){
@@ -61,7 +61,7 @@ app.post("/register",async function(req,res){
     if(!oldUser){
         let promocode =String(req.body.email).split("@");
         var newUser;
-        console.log(promocode[0]);
+        //.log(promocode[0]);
         bcrypt.genSalt(10,function(err,salt){
         bcrypt.hash(req.body.password,salt,async function(err,hash){
             newUser =  await userDataBase.create({
@@ -99,7 +99,7 @@ app.get("/login",async function(req,res){
 })
 app.post("/login",async function(req,res){
     let user = await userDataBase.findOne({email:req.body.email});
-    //console.log(user)
+    ////.log(user)
     if(user){
         bcrypt.compare(req.body.password,user.password,function(err,result){
         if(result){
@@ -126,7 +126,7 @@ app.get("/profile/:userId",async function(req,res){
 app.get("/leadboard/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     let users = await userDataBase.find().sort({monthlyWinning:-1});
-    console.log(users)
+    //.log(users)
     res.render("leadboard",{user:user,users:users});
 })
 app.get("/earn/:userId",async function(req,res){
@@ -171,7 +171,7 @@ app.post("/withdraw/:userId",async function(req,res){
 app.get("/pendingWithdrawRequest/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId});
     let withdraw = await transactionDataBase.find({status:"withdraw",flag:false}).populate("userId");
-    console.log(withdraw);
+    //.log(withdraw);
     res.render("withdrawRequest",{withdraw:withdraw,admin:admin});
 })
 app.get("/transaction/:userId",async function(req,res){
@@ -227,7 +227,7 @@ app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(r
     let user = await userDataBase.findOne({_id:req.params.userId});
     let slotNumber = parseInt(req.params.slotNumber);
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
-    // console.log(slotNumber);
+    // //.log(slotNumber);
     
     let tournamentUsers = tournament.slots.filter(function(val){
         if(val!=null) return val;
@@ -248,8 +248,8 @@ app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(r
 app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
-    console.log(tournamentLeadboard.player)
-    console.log(tournament);
+    //.log(tournamentLeadboard.player)
+    //.log(tournament);
     let players = (tournamentLeadboard.player).sort((a,b)=>b.kills-a.kills);
     res.render("tournamentLeadboard",{players:players,tournament:tournament});
 })
@@ -298,7 +298,7 @@ app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
         roomId:req.body.roomId,
         roomPassword:req.body.roomPassword
     });
-    console.log(tournament);
+    //.log(tournament);
     res.redirect(`/adminEditTournament/${req.params.adminId}/${req.params.tournamentId}`);
 })
 app.get("/adminTotalUser/:adminId",async function(req,res){
@@ -335,7 +335,7 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
         secondPrize:req.body.secondPrize,
         slots: Array(Number(req.body.totalSlots)).fill(null),
     })
-    console.log(tournament);
+    //.log(tournament);
     res.redirect(`/adminCreateTournament/${admin._id}`);
 })
 app.get("/admin/tournament/:status/:adminId",async function(req,res){
@@ -373,9 +373,9 @@ app.get("/adminPrizeDistribute/:adminId/:tournamentId",async function(req,res){
             return true;
         }
     })
-    // console.log(temp)
+    // //.log(temp)
     let user = await userDataBase.find({_id:temp});
-    // console.log(user);
+    // //.log(user);
     res.render("prizeDistribution",{user:user,tournament:tournament,admin:admin});
 })
 app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res){
@@ -431,7 +431,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
     let user = await userDataBase.findOne({_id:req.params.userId});
     let slotNumber = parseInt(req.params.slotNumber);
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
-    // console.log(slotNumber);
+    // //.log(slotNumber);
     
     if(tournament.slots[slotNumber-1]!=null){
         return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
@@ -477,7 +477,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
             [`slots.${req.params.slotNumber-1}`]:req.params.userId
             }
         })
-        console.log(updatedTournament);
+        //.log(updatedTournament);
         if (!updatedTournament) {
             return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
         }
@@ -534,7 +534,7 @@ const writeData = (data) => {
 app.post("/create-order", async (req, res) => {
   try {
     let user = jwt.verify(req.cookies.token,`${process.env.PIN}`);
-    //console.log(user);
+    ////.log(user);
     const { amount, currency, receipt, notes } = req.body;
 
     const options = {
@@ -545,7 +545,7 @@ app.post("/create-order", async (req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
-    //console.log(order);
+    ////.log(order);
     const orders = readData();
     orders.push({
       order_id: order.id,
@@ -558,7 +558,7 @@ app.post("/create-order", async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    //console.error(error);
+    ////.error(error);
     res.status(500).json({ error: "error creating order" });
   }
 });
@@ -571,7 +571,7 @@ app.get("/payment-success", (req, res) => {
 // Verify payment route
 app.post("/verify-payment", (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  //console.log(req.body);
+  ////.log(req.body);
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const isValid = validateWebhookSignature(body, razorpay_signature, razorpay.key_secret);
@@ -616,21 +616,21 @@ app.post("/verify-payment", (req, res) => {
 const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
 app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
-    // console.log("Webhook triggered for payment:", payment.id);
-    //console.log("hariom modi ye body Hai =",req.body);
+    // //.log("Webhook triggered for payment:", payment.id);
+    ////.log("hariom modi ye body Hai =",req.body);
     const razorpaySignature = req.headers['x-razorpay-signature'];
     const body = JSON.stringify(req.body);
 
     const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
         .update(body)
         .digest('hex');
-    console.log("razorpaySignature = ",razorpaySignature);
-    //console.log("expextedSignature = ",expectedSignature);
+    //.log("razorpaySignature = ",razorpaySignature);
+    ////.log("expextedSignature = ",expectedSignature);
     if (razorpaySignature === expectedSignature) {
-        console.log("Working hariom")
+        //.log("Working hariom")
         let payment = req.body.payload.payment.entity;
-        console.log("payment",payment);
-        console.log("payment.amount",payment.notes)
+        //.log("payment",payment);
+        //.log("payment.amount",payment.notes)
         // const existingPayment = await transaction.findOne({ paymentId: payment.id });
 
         // if (existingPayment) {
@@ -655,12 +655,12 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         })
         }
         
-        //console.log("✅ Verified Razorpay Webhook");
-        //console.log("Payment Details:", req.body);
+        ////.log("✅ Verified Razorpay Webhook");
+        ////.log("Payment Details:", req.body);
 
         res.status(200).json({ status: "ok" });
     } else {
-        //console.log("❌ Invalid Webhook Signature");
+        ////.log("❌ Invalid Webhook Signature");
         res.status(400).json({ error: "Invalid signature" });
     }
 });
