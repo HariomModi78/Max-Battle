@@ -25,9 +25,9 @@
                 <p>Wellcome Back,</p>
                 <p class="big">Max Battle</p>
             </div>
-            <div class="notification">
-                <img src="https://cdn-icons-png.flaticon.com/128/1827/1827370.png" alt="">
-                <div class="number">3</div>
+            <div class="walletAmount" id="wallet/<%=user._id%>">
+                <img class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                <div class="number"><%=user.totalBalance%></div>
             </div>
         </div>
         <div id="pageLoader">
@@ -181,6 +181,7 @@
 
         </div>
     </main>
+    <script src="/javaScripts/header.js"></script>
     <script src="/javaScripts/footer.js"></script>
     <script src="/javaScripts/profile.js"></script>
     <script src="/javaScripts/boiler.js"></script>
