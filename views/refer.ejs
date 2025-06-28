@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/earn.css">
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div class="logo back" id="earn">
+                <img src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big">Refer & Earn</p>
+            </div>
+            <div class="notification">
+                <img src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt="">
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div class="referDetail">
+            <div class="referLogo">
+                <img src="https://cdn-icons-png.flaticon.com/128/3597/3597742.png" alt="">
+            </div>
+            <h3>REFER MORE TO EARN MORE</h3>
+            <p>Invite your friend on app using promo code to earn </p>
+            <p>5 Max Coins
+                when they join first paid match</p>
+        </div>
+        <h3>YOUR CODE</h3>
+        <div class="promocode"><%=user.promocode%></div>
+        <h4>Refer Process</h4>
+        <div class="referProcess">
+            <div class="step">
+                <img src="https://cdn-icons-png.flaticon.com/128/2910/2910756.png" alt="">
+                <p>User register</p>
+            </div>
+            <div class="next">
+                <img src="https://cdn-icons-png.flaticon.com/128/2989/2989988.png" alt="">
+            </div>
+            <div class="step">
+                <img src="https://cdn-icons-png.flaticon.com/128/686/686589.png" alt="">
+                <p>joinMatch (paid tournament)</p>
+            </div>
+            <div class="next">
+                <img src="https://cdn-icons-png.flaticon.com/128/2989/2989988.png" alt="">
+            </div>
+            <div class="step">
+                <img src="https://cdn-icons-png.flaticon.com/128/2666/2666513.png" alt="">
+                <p>Get Reward</p>
+            </div>
+            
+        </div>
+        <div class="referNow">REFER NOW</div>
+        <div class="fakeHeader"></div>
+        <div class="fakeFooter"></div>
+        <div class="footer"> 
+            <div class="footerBox earn" id="earn/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/2958/2958733.png" id="earn/<%=user._id%>" alt="">
+                <p id="earn/<%=user._id%>">Earn</p>
+            </div>
+            <div class="footerBox home" id="home/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/263/263115.png" id="home/<%=user._id%>" alt="">
+                <p id="home/<%=user._id%>" >Home</p>
+            </div>
+            <div class="footerBox center wallet" id="wallet/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/2746/2746064.png" id="wallet/<%=user._id%>" alt="">
+                <p id="wallet/<%=user._id%>">Wallet</p>
+            </div>
+            <div class="footerBox leadboard" id="leadboard/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/819/819590.png" id="leadboard/<%=user._id%>" alt="">
+                <p id="leadboard/<%=user._id%>">Leadboard</p>
+            </div>
+            <div class="footerBox profile" id="profile/<%=user._id%>">
+                <img src="https://cdn-icons-png.flaticon.com/128/1144/1144760.png" id="profile/<%=user._id%>" alt="">
+                <p id="profile/<%=user._id%>">Profile</p>
+            </div>
+        </div>
+
+        </div>
+    </main>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
