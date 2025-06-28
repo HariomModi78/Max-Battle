@@ -5,6 +5,13 @@ window.addEventListener("resize",function(e){
         document.querySelector("body").style.cssText = "display:block";
     }
 })
+console.log(footerBox);
+for(let i=0;i<footerBox.length;i++){
+    footerBox[i].addEventListener("click", function() {
+    document.querySelector("main").style.display = "none";
+    document.getElementById("pageLoader").style.display = "block";
+});
+}
 window.addEventListener("load", function() {
     document.getElementById("pageLoader").style.display = "none";
     document.querySelector("main").style.display = "block";
