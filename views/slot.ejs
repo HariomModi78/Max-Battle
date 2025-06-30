@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="stylesheet" href="/stylesheets/deposit.css">
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main class="flex">
+        <div id="pageLoader" >
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="footer">
+                <div class="button">Cancel</div>
+                <div class="button">Add Money</div>
+            </div>
+    </div>
+        <div class="page flex">
+            <div class="header">
+            <div class="logo back" id="wallet">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            
+            <div class="greet">
+                <p class="big">Choose your match slot</p>
+            </div>
+            <div class="notification">
+                <!-- <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <%for(let i=0;i< tournament.totalSlots;i++){%>
+            <%if(tournament.slots[i]){%>
+                <div class="choose">
+                    <p><%=i+1%></p>
+                    <input class="blur" type="radio" name=""  id="" checked>
+                </div>
+            <%}else{%>
+                <div class="choose">
+                    <label for="<%=i+1%>"><%=i+1%></label>
+                    <input class="select" id="<%=i+1%>" type="radio" name="Modi" id="<%=i+1%>">
+                </div>
+            <%}%>
+        <%}%>
+        <div class="fakeFooter"></div>
+        <div class="nextParent">
+            <div class="next" id="<%=user.id%>/<%=tournament._id%>">NEXT</div>
+        </div>
+        </div>
+        
+        
+    </main>
+    <script src="/javaScripts/back.js"></script>
+    <script>
+        let select = document.getElementsByClassName("select");
+        let slotNumber;
+        let page = document.querySelector(".page");
+        let pageLoader = document.getElementById("pageLoader");
+        for(let i=0;i<select.length;i++){
+            select[i].addEventListener("click",function(){
+                slotNumber = select[i].id;
+            })
+        }
+        document.querySelector(".next").addEventListener("click",function(){
+            if(slotNumber){
+                page.style.display = "none";
+                pageLoader.style.display = "block"
+                setTimeout(function(){
+            page.style.display = "flex";
+            pageLoader.style.display = "none";
+        },1000);
+                window.location.href = `/tournament/payment/${document.querySelector(".next").id}/${slotNumber}`
+            }
+            
+        })
+    </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
