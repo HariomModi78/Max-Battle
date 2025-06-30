@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/withdraw.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="header">
+            <div class="logo back" id="wallet">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            
+            <div class="greet">
+                <p class="big">Withdraw Coins</p>
+            </div>
+            <div class="notification">
+                <!-- <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader" id="/withdraw/<%=user._id%>"></div>
+        <form method="post">
+           <div class="inputBox">
+                <input class="input" type="text" name="upiId" id="upiId" placeholder="" required>
+                <label for="upiId">UPI id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="number" name="amount" id="amount" placeholder="" required>
+                <label for="amount">Amount</label>
+            </div>
+            <input class="normalButton" id="input" type="submit" value="Withdraw">
+        </form>
+        <strong id="<%=user.winning%>">
+            Note:You can only withdraw winning maxcoins
+        </strong>
+    </main>
+    <script>
+        let upi = document.querySelector("#upiId");
+        let fakeHeader = document.querySelector(".fakeHeader");
+        let form1 = document.querySelector("form");
+        let strong = document.querySelector("strong");
+        let amount = document.querySelector("#amount");
+        let button = document.querySelector("#input");
+        upi.addEventListener("input",function(){
+            if((upi.value).length>0 && (amount.value).length>0){
+                button.classList = "color"
+            }
+        })
+        button.addEventListener("click",function(e){
+            
+            if((upi.value).length>0 && (amount.value).length>0){
+                if(parseInt(amount.value)<50){
+                    e.preventDefault();
+                    alert(`minimum withdrawl is 50 Max Coins`);
+                }else{ 
+                if(parseInt(strong.id)<parseInt(amount.value)){
+                    e.preventDefault();
+                    alert("You don't have sufficent balance")
+                }else{
+                    alert("Your withdrawal request is successfuly sent 🎉")
+                    form1.action = fakeHeader.id;
+                }
+            }
+            }
+        })
+        amount.addEventListener("input",function(){
+            if((upi.value).length>0 && (amount.value).length>0){
+                button.classList = "color"
+            }
+        })
+    </script>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/javaScripts/register.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
