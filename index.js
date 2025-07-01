@@ -115,6 +115,9 @@ app.post("/login",async function(req,res){
     }
     
 })
+// app.get("/notification",function(req,res){
+//     res.render("notification");
+// })
 app.get("/home/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     res.render("home",{user:user});
@@ -250,7 +253,7 @@ app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
     //.log(tournamentLeadboard.player)
     //.log(tournament);
-    let players = (tournamentLeadboard.player).sort((a,b)=>b.kills-a.kills);
+    let players = (tournamentLeadboard?.player || []).sort((a,b)=>b.kills-a.kills);
     res.render("tournamentLeadboard",{players:players,tournament:tournament});
 })
 app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
@@ -616,52 +619,46 @@ app.post("/verify-payment", (req, res) => {
 const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
 app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
-    // //.log("Webhook triggered for payment:", payment.id);
-    ////.log("hariom modi ye body Hai =",req.body);
+  try {
     const razorpaySignature = req.headers['x-razorpay-signature'];
     const body = JSON.stringify(req.body);
 
-    const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
-        .update(body)
-        .digest('hex');
-    //.log("razorpaySignature = ",razorpaySignature);
-    ////.log("expextedSignature = ",expectedSignature);
+    const expectedSignature = crypto
+      .createHmac('sha256', WEBHOOK_SECRET)
+      .update(body)
+      .digest('hex');
+
     if (razorpaySignature === expectedSignature) {
-        //.log("Working hariom")
-        let payment = req.body.payload.payment.entity;
-        //.log("payment",payment);
-        //.log("payment.amount",payment.notes)
-        // const existingPayment = await transaction.findOne({ paymentId: payment.id });
+      const payment = req.body.payload.payment.entity;
 
-        // if (existingPayment) {
-        //  // Payment already processed — ignore the duplicate webhook
-        //  return res.status(200).json({ message: 'Duplicate payment webhook ignored.' });
-        // }
-        let doubleCheck = await transactionDataBase.findOne({paymentId:payment.id});
-        if(!doubleCheck){
-       let transaction = await transactionDataBase.create({
-            paymentId:payment.id,
-            orderId:payment.order_id,
-            amount:payment.amount/100,
-            status:payment.status,
-            userId:payment.notes.userId
-        })
-        
-            await userDataBase.findOneAndUpdate({_id:payment.notes.userId},{
-            $inc:{
-                totalBalance: payment.amount / 100,
-                deposited: payment.amount / 100
-            },
-        })
-        }
-        
-        ////.log("✅ Verified Razorpay Webhook");
-        ////.log("Payment Details:", req.body);
+      const alreadyExists = await transactionDataBase.findOne({ paymentId: payment.id });
+      if (!alreadyExists) {
+        await transactionDataBase.create({
+          paymentId: payment.id,
+          orderId: payment.order_id,
+          amount: payment.amount / 100,
+          status: payment.status,
+          userId: payment.notes.userId
+        });
 
-        res.status(200).json({ status: "ok" });
+        await userDataBase.findOneAndUpdate(
+          { _id: payment.notes.userId },
+          {
+            $inc: {
+              totalBalance: payment.amount / 100,
+              deposited: payment.amount / 100
+            }
+          }
+        );
+      }
+
+      return res.status(200).json({ status: "ok" });
     } else {
-        ////.log("❌ Invalid Webhook Signature");
-        res.status(400).json({ error: "Invalid signature" });
+      return res.status(400).json({ error: "Invalid signature" });
     }
+  } catch (err) {
+    console.error("Webhook error:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
