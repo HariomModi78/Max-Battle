@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  paymentId: { type: String,},     // Razorpay Payment ID
+  paymentId: { type: String,unique:true},     // Razorpay Payment ID
   orderId: { type: String},                      // Razorpay Order ID
   amount: { type: Number},                       // In paise (e.g., 50000 = ₹500)
   currency: { type: String, default: 'INR' },
