@@ -35,15 +35,19 @@
     </main>
      <script>
         let loader = document.querySelector(".loader");
-        let form = document.querySelector("form");
-        form.addEventListener("submit",function(){
-            document.querySelector("main").style.display = "none";
-            loader.style.display = "block";
-            setTimeout(function(){
-                document.querySelector("main").style.display = "flex";
-                loader.style.display = "none";
-            },4000)
-        })
+let form = document.querySelector("form");
+
+form.addEventListener("submit", function() {
+    document.querySelector("main").style.display = "none";
+    loader.style.display = "block";
+});
+
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        document.querySelector("main").style.display = "flex";
+        loader.style.display = "none";
+    }
+});
         
 
 
