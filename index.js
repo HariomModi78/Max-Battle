@@ -70,7 +70,7 @@ app.use(hpp());
 app.use(cors());
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,                 // allow 500 requests per IP
+  max: 50,                 // allow 500 requests per IP
   standardHeaders: true,
   legacyHeaders: false,
    message: "Too many attempts. Try again after 10 minutes."
