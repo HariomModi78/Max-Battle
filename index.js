@@ -80,7 +80,7 @@ const authLimiter = rateLimit({
 app.use("/login", authLimiter);
 app.use("/register", authLimiter);
 app.use("/otp", authLimiter); 
-
+app.set('trust proxy', 1);
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
 
