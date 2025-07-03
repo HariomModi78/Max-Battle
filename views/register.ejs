@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#007bff">
 </head>
 <body>
+    <div class="loader"></div>
     <main>
         <div class="topBar">Max Battle</div>
         <pre class="quate">"Show your gameplay
@@ -50,6 +51,20 @@
         </div>
         
     </main>
+    <script>
+        let loader = document.querySelector(".loader");
+        window.addEventListener("submit",function(){
+            document.querySelector("main").style.display = "none";
+            loader.style.display = "block";
+            setTimeout(function(){
+                document.querySelector("main").style.display = "flex";
+                loader.style.display = "none";
+            },4000)
+        })
+        
+
+
+     </script>
     <script src="/javaScripts/register.js"></script>
     <script src="/javaScripts/boiler.js"></script>
     <script src="/script.js"></script>
