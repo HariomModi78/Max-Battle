@@ -48,7 +48,7 @@ function sendMail(to,sub,msg){
 <p>Contact us: maxBattle@gmail.com</p>
 `
     }).catch(function(e){
-        console.log("error aya ")
+        //.log("error aya ")
     })
 }
 
@@ -72,6 +72,15 @@ function isAdmin(user){
     }
 }
 app.get("/",async function(req,res){
+    // await userDataBase.updateMany({},{
+    //     totalBalance:0,
+    //     winning:0,
+    //     monthlyWinning:0,
+    //     deposited:0,
+    //     bonus:0,
+    //     totalKill:0,
+    //     totalMatch:0
+    // })
     if(req.cookies.token){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
@@ -304,7 +313,7 @@ app.get("/tournament/upcomming/:modeType/:matchType/:userId",async function(req,
     try{
     let user = await userDataBase.findOne({_id:req.params.userId});
     let tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming"}).sort({dateAndTime:1});
-    // console.log(tournament);
+    // //.log(tournament);
     let heading;
     if(req.params.modeType=="fullmap"){
         heading = "FUll MAP";
@@ -330,7 +339,7 @@ app.get("/tournament/slot/:userId/:tournamentId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     let tournamentTemp = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let bookedSlots;
-    // console.log(tournamentTemp)
+    // //.log(tournamentTemp)
     let matchType = tournamentTemp.matchType;
     let slots;
     if(matchType == "solo"){
@@ -344,7 +353,7 @@ app.get("/tournament/slot/:userId/:tournamentId",async function(req,res){
         slots = bookedSlots.map((slot)=>slot.slotId);
     }
     
-    console.log(slots);
+    //.log(slots);
 
     res.render("slot",{user:user,slots:slots,matchType:matchType,tournamentTemp:tournamentTemp});
     }catch(e){
@@ -389,7 +398,7 @@ app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
     try{
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
-    console.log(tournamentLeadboard.player)
+    //.log(tournamentLeadboard.player)
     let players = (tournamentLeadboard?.player || []).sort((a,b)=>b.kills-a.kills);
     res.render("tournamentLeadboard",{players:players,tournament:tournament});
     }catch(e){
@@ -400,13 +409,13 @@ app.get("/tournamentLeadboard/cs/:tournamentId",async function(req,res){
     try{
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
     let usersTemp = tournament.slots.filter((user)=>user!=null);
-    // console.log(users);
+    // //.log(users);
     let users = await userDataBase.find({_id:usersTemp});
-    console.log(users);
+    //.log(users);
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId});
     let players = (tournamentLeadboard?.player || [])
     players = players.map((player)=>String(player.userId));
-    console.log(players);
+    //.log(players);
     res.render("tournamentLeadboard",{players:players,tournament:tournament,users:users});
     }catch(e){
         res.redirect("/error");
@@ -478,11 +487,11 @@ app.get("/otp",function(req,res){
 app.post("/verifyOtp",async function(req,res){
     try{
     let secret = jwt.verify(req.cookies.secret,process.env.PIN);
-    console.log(secret);
+    //.log(secret);
     if(secret.otp==req.body.otp){
         bcrypt.genSalt(10,function(err,salt){
             bcrypt.hash(req.body.newPassword,salt,async function(err,hash){
-                console.log(hash);
+                //.log(hash);
                 await userDataBase.findOneAndUpdate({email:secret.email},{
                 password:hash
         })
@@ -651,7 +660,7 @@ app.get("/adminPrizeDistribute/:adminId/:tournamentId",async function(req,res){
     } 
 
     if(tournament.modeType == "cs"){
-        console.log(user);
+        //.log(user);
         let team1 = user.filter((user)=>user.teamId=="team1");
         let team2 = user.filter((user)=>user.teamId=="team2");
         return res.render("teamBasedPrizeDistribution",{user:user,tournament:tournament,admin:admin,team1:team1,team2:team2});
@@ -668,7 +677,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
         return res.redirect(`/adminPanel/${req.params.adminId}`);
     }
     let users = JSON.parse(req.body.users);
-    console.log(users.sort((a,b)=>{b-a}));
+    //.log(users.sort((a,b)=>{b-a}));
     for(let i=0;i<users.length;i++){
         if(i==0){
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
@@ -719,8 +728,8 @@ app.post("/adminPrizeDistribution/cs/:adminId/:tournamentId",async function(req,
         return res.redirect(`/adminPanel/${req.params.adminId}`);
     }
     let users = JSON.parse(req.body.users);
-    console.log(users);
-    console.log(users.sort((a,b)=>{b-a}));
+    //.log(users);
+    //.log(users.sort((a,b)=>{b-a}));
     let amount = tournament.prizePool;
     for(let i=0;i<users.length;i++){
         if(tournament.matchType == "solo"){
@@ -1062,7 +1071,7 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
       return res.status(400).json({ error: "Invalid signature" });
     }
   } catch (err) {
-    console.error("Webhook error:", err);
+    //.error("Webhook error:", err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
