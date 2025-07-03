@@ -483,9 +483,14 @@ app.post("/resetPassword/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
     bcrypt.compare(req.body.oldPassword,user.password,async function(err,result){
         if(result){
-            await userDataBase.findOneAndUpdate({_id:user._id},{
-                password:req.body.newPassword
+            bcrypt.genSalt(10,function(err,salt){
+            bcrypt.hash(req.body.newPassword,salt,async function(err,hash){
+                //.log(hash);
+                await userDataBase.findOneAndUpdate({_id:req.params.userId},{
+                password:hash
+        })
             })
+        })
             res.send("Password is successfuly changed")
         }else{
             res.send("Old Password is incorrect")
