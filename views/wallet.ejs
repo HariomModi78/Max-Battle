@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/wallet.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    
+        
+    <main>
+        <div class="header">
+            <div class="logo back" id="">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="greet">
+                <p class="big">My Wallet</p>
+            </div>
+            <div class="notification">
+                <!-- <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="page">
+            <div class="part1">
+            <div class="amount">
+                <img loading="lazy" class="smallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                <%=user.totalBalance%></div>
+            <div class="options">
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=user.deposited%></div>
+                    <div class="optionName1">Deposited</div>
+                </div>
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=user.winning%></div>
+                    <div class="optionName1">Winning</div>
+                </div>
+                <div class="option1">
+                    <div class="optionAmount1">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=user.bonus%></div>
+                    <div class="optionName1">Bonus</div>
+                </div>
+            </div>
+        </div>
+        <div class="option add" id="deposit/<%=user._id%>">
+            <div class="optionLogo">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/15222/15222005.png" alt="">
+            </div>
+            <div class="optionName">Add Coins</div>
+            <div class="optionArrow">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+        <div class="option withdraw" id="withdraw/<%=user._id%>">
+            <div class="optionLogo">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/4293/4293211.png" alt="">
+            </div>
+            <div class="optionName">Withdraw Coins</div>
+            <div class="optionArrow">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+        <div class="option transaction" id="transaction/<%=user._id%>">
+            <div class="optionLogo">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/3621/3621029.png" alt="">
+            </div>
+            <div class="optionName">Transaction</div>
+            <div class="optionArrow">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="">
+            </div>
+        </div>
+        </div>
+        
+
+        <div class="fakeFooter"></div>
+        <div class="footer"> 
+            
+            <div class="footerBox home" id="home/<%=user._id%>">
+                <img loading="lazy"  src="/images/home.webp" id="home/<%=user._id%>" alt="">
+                <p id="home/<%=user._id%>" >Home</p>
+            </div>
+            <div class="footerBox wallet" id="wallet/<%=user._id%>">
+                <img loading="lazy"  src="/images/wallet.webp" id="wallet/<%=user._id%>" alt="">
+                <p id="wallet/<%=user._id%>">Wallet</p>
+            </div>
+            <div class="footerBox leadboard" id="leadboard/<%=user._id%>">
+                <img loading="lazy"  src="/images/leadboard.webp" id="leadboard/<%=user._id%>" alt="">
+                <p id="leadboard/<%=user._id%>">Leadboard</p>
+            </div>
+            <div class="footerBox profile" id="profile/<%=user._id%>">
+                <img loading="lazy"  src="/images/profile.webp" id="profile/<%=user._id%>" alt="">
+                <p id="profile/<%=user._id%>">Profile</p>
+            </div>
+        </div>
+
+        </div>
+    </main>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/back.js"></script>
+    <script>
+        let greet = document.querySelector(".big");
+        let option = document.getElementsByClassName("option");
+       for(let i=0;i<option.length;i++){
+            option[i].addEventListener("click",function(){
+                if(option[i].classList[1]=="add"){
+                    greet.innerText = "Buy Coins";
+                }else if(option[i].classList[1]=="withdraw"){
+                    greet.innerText = "Withdraw Coins";
+                }else{
+                    greet.innerText = "Transaction";
+                }
+        
+        document.querySelector(".page").style.display = "none";
+        document.getElementById("pageLoader").style.display = "flex";
+
+        setTimeout(function(){
+            document.querySelector(".page").style.display = "block";
+            document.getElementById("pageLoader").style.display = "none";
+            greet.innerText = "My Wallet"
+        },1500);
+            window.location.href = `/${option[i].id}`;
+        })
+       }
+        
+       
+    </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script src="/script.js"></script>
+
+</body>
+</html>
