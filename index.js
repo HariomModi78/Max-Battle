@@ -347,7 +347,7 @@ app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async functi
     }else{
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
     }
-    res.render("result",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType});
+    res.render("result",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
         res.redirect("/error");
     }
@@ -371,7 +371,7 @@ app.get("/tournament/upcomming/:modeType/:matchType/:variable/:userId",async fun
     }else if(req.params.modeType=="cs"){
         heading = "CLASH SQUAD"
     }
-    res.render("upcomming",{user:user,tournament:tournament,heading:heading,modeType:req.params.modeType,matchType:req.params.matchType});
+    res.render("upcomming",{user:user,tournament:tournament,heading:heading,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
         res.redirect("/error");
     }
@@ -387,7 +387,7 @@ app.get("/tournament/ongoing/:modeType/:matchType/:variable/:userId",async funct
     }else{
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
     }
-    res.render("ongoing",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType});
+    res.render("ongoing",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
         res.redirect("/error");
     }
