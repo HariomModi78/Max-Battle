@@ -107,6 +107,9 @@ function isAdmin(user){
         return false;
     }
 }
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
+});
 app.get("/",async function(req,res){
     // await userDataBase.updateMany({},{
     //     totalBalance:0,
