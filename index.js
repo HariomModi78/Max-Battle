@@ -329,19 +329,34 @@ app.get("/myCompleted/:userId",async function(req,res){
         res.redirect("/error");
     }
 })
-app.get("/tournament/result/:modeType/:matchType/:userId",async function(req,res){
+app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed"}).sort({dateAndTime:1});
+    let tournament
+    if(req.params.variable=="free"){
+         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:0}).sort({dateAndTime:1});
+    }else if(req.params.variable=="1rs"){
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:1}).sort({dateAndTime:1});
+    }else{
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
+    }
     res.render("result",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType});
     }catch(e){
         res.redirect("/error");
     }
 })
-app.get("/tournament/upcomming/:modeType/:matchType/:userId",async function(req,res){
+app.get("/tournament/upcomming/:modeType/:matchType/:variable/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming"}).sort({dateAndTime:1});
+    let tournament
+    if(req.params.variable=="free"){
+         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:0}).sort({dateAndTime:1});
+    }else if(req.params.variable=="1rs"){
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:1}).sort({dateAndTime:1});
+    }else{
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
+    }
+     
     // //.log(tournament);
     let heading;
     if(req.params.modeType=="fullmap"){
@@ -354,10 +369,17 @@ app.get("/tournament/upcomming/:modeType/:matchType/:userId",async function(req,
         res.redirect("/error");
     }
 })
-app.get("/tournament/ongoing/:modeType/:matchType/:userId",async function(req,res){
+app.get("/tournament/ongoing/:modeType/:matchType/:variable/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId});
-    let tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing"}).sort({dateAndTime:1});
+    let tournament
+    if(req.params.variable=="free"){
+         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:0}).sort({dateAndTime:1});
+    }else if(req.params.variable=="1rs"){
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:1}).sort({dateAndTime:1});
+    }else{
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
+    }
     res.render("ongoing",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType});
     }catch(e){
         res.redirect("/error");
