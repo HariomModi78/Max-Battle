@@ -69,7 +69,7 @@ app.use(helmet({
 app.use(hpp());
 app.use(cors());
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 10 * 60 * 1000, // 15 minutes
   max: 50,                 // allow 500 requests per IP
   standardHeaders: true,
   legacyHeaders: false,
@@ -832,6 +832,20 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
     }catch(e){
         res.redirect("/error");
     }
+})
+app.post("/adminRefund/:adminId/:tournamentId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId});
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId});
+    let players = tournament.slots.filter((userId)=>userId!==null);
+    for(let i=0;i<players.length;i++){
+        await userDataBase.findOneAndUpdate({_id:players[i]},{
+            totalBalance:tournament.entryFee
+        })
+    }
+    res.redirect(`/adminPanel/${admin._id}`);
 })
 app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(req,res){
     const session = await mongoose.startSession();
