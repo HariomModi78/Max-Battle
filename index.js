@@ -244,6 +244,7 @@ app.get("/home/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();
         let notification = await notificationDataBase.find({userId:req.params.userId,seen:false}).lean();
+        console.log(notification.length)
         res.render("home",{user:user,notification:notification.length});
     }catch(e){
         res.redirect("/error");
