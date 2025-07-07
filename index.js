@@ -224,6 +224,22 @@ app.post("/seenTrue", async function (req, res) {
     res.status(500).json({ error: "Failed to update notification" });
   }
 });
+
+app.post("/deleteMessage", async function (req, res) {
+  try {
+    console.log("🔥 /deleteMessage route hit");
+    const userId = new mongoose.Types.ObjectId(req.body.userId);
+    console.log(userId);
+    await notificationDataBase.deleteMany({userId:userId,seen:true});
+
+    res.json({ message: "✅ Marked as seen" });
+  } catch (err) {
+    console.error("❌ Error in /deleteMessage:", err.message);
+    res.status(500).json({ error: "Failed to update notification" });
+  }
+});
+
+
 app.get("/home/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();
