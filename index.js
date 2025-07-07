@@ -165,7 +165,7 @@ app.post("/sendNotification",async function(req,res){
     try {
     const { userId, title, body } = req.body;
 
-    const user = await userDataBase.findById("6863a4035cca87b70a0e3d26");
+    const user = await userDataBase.findById(userId);
     if (!user || !user.fcmToken) {
       return res.status(404).json({ error: "User or FCM token not found" });
     }
