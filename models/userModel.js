@@ -70,7 +70,8 @@ const userSchema = mongoose.Schema({
         type:Date,
         default:Date.now
     },
-    isEighteenPlus:Boolean
+    isEighteenPlus:Boolean,
+    fcmToken:String
 });
 
 module.exports = mongoose.model("user",userSchema)
