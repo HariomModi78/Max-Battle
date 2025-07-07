@@ -298,7 +298,9 @@ app.post("/withdraw/:userId",async function(req,res){
                 winning:-Number(req.body.amount),
             },
         })
+        let random = Date.now()
         await transactionDataBase.create({
+                paymentId:random,
               upiId:req.body.upiId,
               amount: req.body.amount,
               status: "withdraw",                   
@@ -307,11 +309,12 @@ app.post("/withdraw/:userId",async function(req,res){
         await notificationDataBase.create({
                 title:"Withdraw🎉",
                 message: `⚙️ Hi ${user.username}, your ₹${req.body.amount} withdrawal is being processed. You'll be notified once it's completed. 🕒`,
-                userId:user._id
+                userId:req.params.userId
             })
     }
     res.redirect(`/wallet/${req.params.userId}`);
     }catch(e){
+        console.log(e);
         res.redirect("/error");
     }
 })
