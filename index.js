@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-const admin = require("firebase-admin");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
@@ -9,8 +8,6 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const helmet = require("helmet");
-// const xssClean = require("xss-clean");
-// const mongoSanitize = require("express-mongo-sanitize");
 const hpp = require("hpp");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -84,45 +81,6 @@ const authLimiter = rateLimit({
    message: "Too many attempts. Try again after 10 minutes."
 });
 
-if (!admin.apps.length) {
-  
-admin.initializeApp({
-  credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-  })
-});
-}
-
-
-
-// Function to send push notification
-const sendPushV1 = async ({ token, title, body, clickAction }) => {
-  const message = {
-    token,
-    notification: {
-      title,
-      body,
-    },
-    webpush: {
-      notification: {
-        icon: "https://max-battle.onrender.com/images/icon.png",
-        click_action: `https://max-battle.onrender.com${clickAction || "/"}`
-      }
-    }
-  };
-
-  try {
-    const response = await admin.messaging().send(message);
-    console.log("✅ Push sent:", response);
-  } catch (error) {
-    console.error("❌ Failed to send push:", error.message);
-  }
-};
-
-
-
 // Apply to auth routes only
 app.use("/login", authLimiter);
 app.use("/register", authLimiter);
@@ -150,39 +108,7 @@ function isAdmin(user){
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
-app.post("/saveFcmToken",async function(req,res){
-    try{
-        let user = await userDataBase.findOneAndUpdate({email:jwt.verify(req.cookies.token,process.env.PIN).email},{
-        fcmToken:req.body.token
-    });
-    res.json({ message: "FCM token saved successfully" });
-    }catch(e){
-        res.status(500).json({ error: "Failed to save token" });
-    }
-    
-})
-app.post("/sendNotification",async function(req,res){
-    try {
-    const { userId, title, body } = req.body;
 
-    const user = await userDataBase.findById(userId);
-    if (!user || !user.fcmToken) {
-      return res.status(404).json({ error: "User or FCM token not found" });
-    }
-
-    await sendPushV1({
-      token: user.fcmToken,
-      title: title || "🔔 Max Battle",
-      body: body || "A new tournament is waiting for you!",
-      clickAction: "/tournaments"
-    });
-
-    res.json({ message: "✅ Notification sent" });
-  } catch (err) {
-    console.error("❌ Push Error:", err.message);
-    res.status(500).json({ error: "Failed to send push notification" });
-  }
-})
 app.get("/",async function(req,res){
     // await userDataBase.updateMany({},{
     //     totalBalance:0,
@@ -314,7 +240,7 @@ app.get("/leadboard/:userId",async function(req,res){
 })
 app.get("/notification/:userId",async function(req,res){
     try{
-        let user = await userDataBase.findOne({_id:req.params.userId}).lean();
+        let user = await userDataBase.findOne({_id:req.params.userId}).lean();    
     let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
     res.render("notification",{user:user,notification:notification});
     }catch(e){
