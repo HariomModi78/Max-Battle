@@ -167,8 +167,10 @@
                 <p id="wallet/<%=user._id%>">Wallet</p>
             </div>
             <div class="footerBox notification" id="notification/<%=user._id%>">
-                <img loading="lazy"  src="https://cdn-icons-png.flaticon.com/128/1827/1827504.png" id="notification/<%=user._id%>" alt="">
-                <div class="notificationNumber" id="notification/<%=user._id%>"><%=notification%></div>
+                <img loading="lazy"  src="https://cdn-icons-png.flaticon.com/128/4991/4991422.png" id="notification/<%=user._id%>" alt="">
+                <%if(notification!=0){%>
+                    <div class="notificationNumber" id="notification/<%=user._id%>"><%=notification%></div>
+                <%}%>
                 <p id="notification/<%=user._id%>">Inbox</p>
             </div>
             <div class="footerBox leadboard" id="leadboard/<%=user._id%>">
