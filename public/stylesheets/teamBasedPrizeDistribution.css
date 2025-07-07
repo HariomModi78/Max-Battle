@@ -1,0 +1,58 @@
+.teamBox{
+    height: fit-content;
+    width: 95%;
+    place-self: center;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    margin: 1rem;
+}
+.heading{
+    height: 3rem;
+    width: 100%;
+    border-bottom: 1px solid whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+.player{
+    height: 2.5rem;
+    width: 100%;
+    /* border: 1px solid white; */
+    display: flex;
+    align-items: center;
+}
+.name{
+    height: 2.5rem;
+    width: 75%;
+    display: flex;
+    align-items: center;
+    padding-left: 0.3rem;
+    color: white;
+    /* border: 1px solid white; */
+}
+.delete{
+    height: 2rem;
+    width: 25%;
+    border-radius: 7px;
+    background-color: rgb(218, 0, 0);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.winner{
+    height: 2.5rem;
+    width: 9rem;
+    background-color: rgb(2, 240, 2);
+    font-weight: 600;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    place-self: center;
+}

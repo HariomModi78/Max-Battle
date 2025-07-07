@@ -1,0 +1,40 @@
+.issueCover{
+    width: 100%;
+    max-width: 22rem;
+    height: fit-content;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.222); */
+
+}
+.issueHeading{
+    width: 100%;
+    max-width: 22rem;
+    font-size: 1.2rem;
+    height: 4rem;
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+}
+
+details{
+    padding-top: 1rem;
+    width: 100%;
+    /* min-width: fit-content; */
+    max-width: 22rem;
+    font-size: 1.2rem;
+    height: 3rem;
+    /* border: 1px solid black; */
+    font-size: 0.8rem;
+    
+}
+details[open] {
+    height: fit-content;
+    padding: 20px; /* Increased padding */
+    background-color: #f0f0f0;
+}
+details p{
+    padding-top: 1rem;
+}
