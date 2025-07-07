@@ -85,11 +85,17 @@ const authLimiter = rateLimit({
 });
 
 if (!admin.apps.length) {
-  const serviceAccount = require(path.resolve(__dirname, "./firebaseServiceAccount.json"));
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+  })
+});
 }
+
+
 
 // Function to send push notification
 const sendPushV1 = async ({ token, title, body, clickAction }) => {
