@@ -154,7 +154,10 @@ app.post("/register",async function(req,res){
                 isEighteenPlus: isEighteenPlus
             })
             let token = jwt.sign({email:req.body.email,role:"user"},`${process.env.PIN}`);
-    res.cookie("token",token);
+    res.cookie("token",token, {
+  maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+  httpOnly: true
+});
             await notificationDataBase.create({
                 title:"Welcome",
                 message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
@@ -190,7 +193,10 @@ app.post("/login",async function(req,res){
         bcrypt.compare(req.body.password,user.password,function(err,result){
         if(result){
             let token = jwt.sign({email:req.body.email,role:"user"},`${process.env.PIN}`);
-            res.cookie("token",token);
+            res.cookie("token",token, {
+  maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+  httpOnly: true
+});
             res.redirect(`/home/${user._id}`);
         }else{
             res.redirect("/login");
@@ -626,7 +632,10 @@ app.post("/verifyOtp",async function(req,res){
         })
         
         let token = jwt.sign({email:secret.email,role:"user"},`${process.env.PIN}`);
-        res.cookie("token",token);
+        res.cookie("token",token, {
+  maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+  httpOnly: true
+});
         res.redirect(`/`);
     }else{
         res.redirect("/otp")
@@ -922,7 +931,8 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
         totalSlots:req.body.totalSlots,
         map:req.body.map,
         firstPrize:req.body.firstPrize,
-        secondPrize:req.body.secondPrize
+        secondPrize:req.body.secondPrize,
+        modeType:req.body.modeType
     })
     }
     
