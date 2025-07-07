@@ -67,8 +67,15 @@
             <div class="events">
                 <form action="/adminEditTournament/<%=admin._id%>/<%=tournament._id%>" method="post">
                     <div class="inputBox">
-                        <input class="input" required type="text" name="description"  placeholder="" id="description" value="<%=tournament.description%>">
-                        <label for="description">Description</label>
+                        <select name="description" id="" required>
+                            <option value="FULL MAP SOLO TOURNAMENT">FULL MAP SOLO TOURNAMENT</option>
+                            <option value="FULL MAP DUO TOURNAMENT">FULL MAP DUO TOURNAMENT</option>
+                            <option value="CLASH SQUAD 1v1">CLASH SQUAD 1v1</option>
+                            <option value="CLASH SQUAD 2v2">CLASH SQUAD 2v2</option>
+                            <option value="CLASH SQUAD 4v4">CLASH SQUAD 4v4</option>
+                            <option value="FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)">FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)</option>
+                            <option value="FULL MAP duo TOURNAMENT (SUNDAY SPECIAL 🎁)">FULL MAP duo TOURNAMENT (SUNDAY SPECIAL 🎁)</option>
+                        </select>
                     </div>
                     <div class="inputBox">
                         <input class="input" required type="datetime-local" name="dateAndTime" placeholder="" id="date" value="<%=tournament.dateAndTime%>">
@@ -87,8 +94,11 @@
                         <label for="prizePool">Price Pool</label>
                     </div>
                     <div class="inputBox">
-                        <input class="input" required type="text" name="matchType" placeholder="" id="matchType" value="<%=tournament.matchType%>">
-                        <label for="matchType">Match Type(like solo,duo,squad)</label>
+                        <select  name="matchType" id="" required>
+                            <option value="solo">solo</option>
+                            <option value="duo">duo</option>
+                            <option value="squad">squad</option>
+                        </select>
                     </div>
                     <div class="inputBox">
                         <input class="input" required type="number" name="totalSlots" placeholder="" id="totalSlots" value="<%=tournament.totalSlots%>">
