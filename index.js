@@ -215,9 +215,9 @@ app.get("/error",function(req,res){
 })
 app.post("/seenTrue", async function (req, res) {
   try {
-    console.log("🔥 /seenTrue route hit");
+    //.log("🔥 /seenTrue route hit");
     const notificationId = new mongoose.Types.ObjectId(req.body.notificationId);
-    console.log("✅ Converted ID:", notificationId);
+    //.log("✅ Converted ID:", notificationId);
 
     await notificationDataBase.findOneAndUpdate(
       { _id: notificationId },
@@ -226,21 +226,21 @@ app.post("/seenTrue", async function (req, res) {
 
     res.json({ message: "✅ Marked as seen" });
   } catch (err) {
-    console.error("❌ Error in /seenTrue:", err.message);
+    //.error("❌ Error in /seenTrue:", err.message);
     res.status(500).json({ error: "Failed to update notification" });
   }
 });
 
 app.post("/deleteMessage", async function (req, res) {
   try {
-    console.log("🔥 /deleteMessage route hit");
+    //.log("🔥 /deleteMessage route hit");
     const userId = new mongoose.Types.ObjectId(req.body.userId);
-    console.log(userId);
+    //.log(userId);
     await notificationDataBase.deleteMany({userId:userId,seen:true});
 
     res.json({ message: "✅ Marked as seen" });
   } catch (err) {
-    console.error("❌ Error in /deleteMessage:", err.message);
+    //.error("❌ Error in /deleteMessage:", err.message);
     res.status(500).json({ error: "Failed to update notification" });
   }
 });
@@ -250,7 +250,7 @@ app.get("/home/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();
         let notification = await notificationDataBase.find({userId:req.params.userId,seen:false}).lean();
-        console.log(notification.length)
+        //.log(notification.length)
         res.render("home",{user:user,notification:notification.length});
     }catch(e){
         res.redirect("/error");
@@ -337,7 +337,7 @@ app.post("/withdraw/:userId",async function(req,res){
     }
     res.redirect(`/wallet/${req.params.userId}`);
     }catch(e){
-        console.log(e);
+        //.log(e);
         res.redirect("/error");
     }
 })
@@ -661,9 +661,9 @@ app.get("/adminPanel/:adminId",async function(req,res){
             return false;
         }
     })
-    let transaction = await transactionDataBase.find({paymentId:{$ne:null}});
+    let transaction = await transactionDataBase.find({upiId:null});
     
-    res.render("adminPanel",{user:user.length,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length,withdraw:withdraw.length,transaction:transaction});
+    res.render("adminPanel",{user:user,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length,withdraw:withdraw.length,transaction:transaction});
     }catch(e){
         res.redirect("/error");
     }
