@@ -42,9 +42,9 @@
         <div class="image">
             <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/4202/4202839.png" alt="">
         </div>
-        <form action="/sendNotification" method="post">
+        <form action="/changeDetail/<%=user._id%>" method="post">
             <div class="inputBox">
-                <input class="input" type="text" name="userId" id="gameName" placeholder="" value="<%=user._id%>">
+                <input class="input" type="text" name="gameName" id="gameName" placeholder="" value="<%=user.gameName%>">
                 <label for="gameName">Game Name</label>
             </div>
             <div class="inputBox">
