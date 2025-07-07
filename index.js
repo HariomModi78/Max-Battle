@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-
+const admin = require("firebase-admin");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
@@ -31,7 +31,9 @@ const transactionDataBase = require("./models/transactionModel.js");
 const soloDataBase = require("./models/soloModel.js");
 const duoDataBase = require("./models/duoModel.js");
 const squadDataBase = require("./models/squadModel.js");
+const notificationDataBase = require("./models/notification.js");
 const nodemailer = require("nodemailer");
+const notification = require("./models/notification.js");
 
 const transporter = nodemailer.createTransport({
     secure:true,
@@ -71,8 +73,7 @@ app.use(compression({
 app.use(helmet({
   contentSecurityPolicy: false
 }));
-// app.use(require("xss-clean")());
-// app.use(mongoSanitize());
+
 app.use(hpp());
 app.use(cors());
 const authLimiter = rateLimit({
@@ -82,6 +83,39 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
    message: "Too many attempts. Try again after 10 minutes."
 });
+
+if (!admin.apps.length) {
+  const serviceAccount = require(path.resolve(__dirname, "./firebaseServiceAccount.json"));
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+// Function to send push notification
+const sendPushV1 = async ({ token, title, body, clickAction }) => {
+  const message = {
+    token,
+    notification: {
+      title,
+      body,
+    },
+    webpush: {
+      notification: {
+        icon: "https://max-battle.onrender.com/images/icon.png",
+        click_action: `https://max-battle.onrender.com${clickAction || "/"}`
+      }
+    }
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log("✅ Push sent:", response);
+  } catch (error) {
+    console.error("❌ Failed to send push:", error.message);
+  }
+};
+
+
 
 // Apply to auth routes only
 app.use("/login", authLimiter);
@@ -110,6 +144,39 @@ function isAdmin(user){
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
+app.post("/saveFcmToken",async function(req,res){
+    try{
+        let user = await userDataBase.findOneAndUpdate({email:jwt.verify(req.cookies.token,process.env.PIN).email},{
+        fcmToken:req.body.token
+    });
+    res.json({ message: "FCM token saved successfully" });
+    }catch(e){
+        res.status(500).json({ error: "Failed to save token" });
+    }
+    
+})
+app.post("/sendNotification",async function(req,res){
+    try {
+    const { userId, title, body } = req.body;
+
+    const user = await userDataBase.findById("6863a4035cca87b70a0e3d26");
+    if (!user || !user.fcmToken) {
+      return res.status(404).json({ error: "User or FCM token not found" });
+    }
+
+    await sendPushV1({
+      token: user.fcmToken,
+      title: title || "🔔 Max Battle",
+      body: body || "A new tournament is waiting for you!",
+      clickAction: "/tournaments"
+    });
+
+    res.json({ message: "✅ Notification sent" });
+  } catch (err) {
+    console.error("❌ Push Error:", err.message);
+    res.status(500).json({ error: "Failed to send push notification" });
+  }
+})
 app.get("/",async function(req,res){
     // await userDataBase.updateMany({},{
     //     totalBalance:0,
@@ -120,6 +187,8 @@ app.get("/",async function(req,res){
     //     totalKill:0,
     //     totalMatch:0
     // })
+
+    
     if(req.cookies.token){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
@@ -154,6 +223,11 @@ app.post("/register",async function(req,res){
             })
             let token = jwt.sign({email:req.body.email,role:"user"},`${process.env.PIN}`);
     res.cookie("token",token);
+            await notificationDataBase.create({
+                title:"Welcome",
+                message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
+                userId:newUser._id,
+            })
     res.redirect(`/home/${newUser._id}`);
         })
     
@@ -204,7 +278,9 @@ app.get("/error",function(req,res){
 app.get("/home/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-        res.render("home",{user:user});
+        console.log(user);
+        let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
+        res.render("home",{user:user,notification:notification.length});
     }catch(e){
         res.redirect("/error");
     }
@@ -213,7 +289,8 @@ app.get("/home/:userId",async function(req,res){
 app.get("/profile/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-    res.render("profile",{user:user});
+    let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
+    res.render("profile",{user:user,notification:notification.length});
     }catch(e){
         res.redirect("/error");
     }
@@ -222,8 +299,18 @@ app.get("/leadboard/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let users = await userDataBase.find().sort({monthlyWinning:-1}).lean();
+    let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
     //.log(users)
-    res.render("leadboard",{user:user,users:users});
+    res.render("leadboard",{user:user,users:users,notification:notification.length});
+    }catch(e){
+        res.redirect("/error");
+    }
+})
+app.get("/notification/:userId",async function(req,res){
+    try{
+        let user = await userDataBase.findOne({_id:req.params.userId}).lean();
+    let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
+    res.render("notification",{user:user,notification:notification});
     }catch(e){
         res.redirect("/error");
     }
@@ -231,7 +318,8 @@ app.get("/leadboard/:userId",async function(req,res){
 app.get("/wallet/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-    res.render("wallet",{user:user});
+    let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
+    res.render("wallet",{user:user,notification:notification.length});
     }catch(e){
         res.redirect("/error");
     }
@@ -1155,4 +1243,3 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
