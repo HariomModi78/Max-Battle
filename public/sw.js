@@ -1,29 +1,3 @@
-importScripts("https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.1.0/firebase-messaging-compat.js");
-
-// Your Firebase config again
-firebase.initializeApp({
-  apiKey: "AIzaSyCzQDzn_oEhFwws2rEQXszF51tgSmxNIdM",
-  authDomain: "maxbattle-12a70.firebaseapp.com",
-  projectId: "maxbattle-12a70",
-  storageBucket: "maxbattle-12a70.firebasestorage.app",
-  messagingSenderId: "964263252113",
-  appId: "1:964263252113:web:d5b7854f4de30300e82f30",
-  measurementId: "G-WT0HNT517L"
-});
-
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/icon.png" // ✅ Replace with your logo
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
 const CACHE_NAME = "maxBattle-cache-v1";
 const urlsToCache = [
   "/",
