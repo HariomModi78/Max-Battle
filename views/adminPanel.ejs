@@ -50,7 +50,7 @@
                 <div class="event" id="adminTotalUser/<%=admin._id%>">
                     <div class="eventPart1">
                         <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/166/166258.png" alt="">
-                        <button class="join view"><%=user%></button>
+                        <button class="join view"><%=user.length%></button>
                     </div>
                     <div class="eventPart2">
                         <div class="eventDetail">Total Users</div>
@@ -98,6 +98,23 @@
                     </div>
                     <div class="eventPart2">
                         <div class="eventDetail">Revenue</div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="eventPart1">
+                        <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2448/2448365.png" alt="">
+                        <button class="join view">
+                            <% sum = 0;
+                            user.forEach(function(val){
+                                sum =sum + val.winning;
+                            }) %>
+                            <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                            <%=sum%>
+                            
+                        </button>
+                    </div>
+                    <div class="eventPart2">
+                        <div class="eventDetail">Want to Pay anytime</div>
                     </div>
                 </div>
                 <div class="event">
