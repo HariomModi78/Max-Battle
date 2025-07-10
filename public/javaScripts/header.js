@@ -1,7 +1,5 @@
 let  walletAmount = document.querySelector(".walletAmount");
-let footerBox = document.getElementsByClassName("footerBox");
-let pageLoader = document.getElementById("pageLoader");
-let mainHeader = document.querySelector(".header");
+
 walletAmount.addEventListener("click",function(){
     localStorage.setItem("wallet",1)
             mainHeader.style.display = "none";
