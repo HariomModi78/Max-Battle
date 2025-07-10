@@ -378,12 +378,12 @@ app.get("/faq",function(req,res){
     res.render("faq");
 })
 
-app.get("/myUpcomming/:userId",async function(req,res){
+app.get("/myupcoming/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-    let tournament = await tournamentDataBase.find({status:"upcomming"});
+    let tournament = await tournamentDataBase.find({status:"upcoming"});
 
-    res.render("myUpcomming",{user:user,tournament:tournament});
+    res.render("myupcoming",{user:user,tournament:tournament});
     }catch(e){
         res.redirect("/error");
     }
@@ -422,16 +422,16 @@ app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async functi
         res.redirect("/error");
     }
 })
-app.get("/tournament/upcomming/:modeType/:matchType/:variable/:userId",async function(req,res){
+app.get("/tournament/upcoming/:modeType/:matchType/:variable/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let tournament
     if(req.params.variable=="free"){
-         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:0}).sort({dateAndTime:1});
+         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:0}).sort({dateAndTime:1});
     }else if(req.params.variable=="1rs"){
-        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:1}).sort({dateAndTime:1});
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:1}).sort({dateAndTime:1});
     }else{
-        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcomming",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
     }
      
     // //.log(tournament);
@@ -441,7 +441,7 @@ app.get("/tournament/upcomming/:modeType/:matchType/:variable/:userId",async fun
     }else if(req.params.modeType=="cs"){
         heading = "CLASH SQUAD"
     }
-    res.render("upcomming",{user:user,tournament:tournament,heading:heading,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
+    res.render("upcoming",{user:user,tournament:tournament,heading:heading,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
         res.redirect("/error");
     }
@@ -652,7 +652,7 @@ app.get("/adminPanel/:adminId",async function(req,res){
     }
     let user = await userDataBase.find();
     let tournament = await tournamentDataBase.find();
-    let upcommingTournament = await tournamentDataBase.find({status:"upcomming"});
+    let upcomingTournament = await tournamentDataBase.find({status:"upcoming"});
     let withdraw = await transactionDataBase.find({status:"withdraw",flag:false});
     let ongoing = tournament.filter(function(val){
         if(val.status =="ongoing"){
@@ -663,7 +663,7 @@ app.get("/adminPanel/:adminId",async function(req,res){
     })
     let transaction = await transactionDataBase.find({upiId:null});
     
-    res.render("adminPanel",{user:user,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcommingTournament:upcommingTournament.length,withdraw:withdraw.length,transaction:transaction});
+    res.render("adminPanel",{user:user,tournament:tournament.length,ongoing:ongoing.length,admin:admin,upcomingTournament:upcomingTournament.length,withdraw:withdraw.length,transaction:transaction});
     }catch(e){
         res.redirect("/error");
     }
@@ -696,7 +696,18 @@ app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
     let tournament = await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
         roomId:req.body.roomId,
         roomPassword:req.body.roomPassword
-    });
+    },{new:true});
+    let users = tournament.slots.filter(val=>val!=null);
+    users = await userDataBase.find({_id:users});
+    console.log(users);
+    for(let i=0;i<users.length;i++){
+        await notificationDataBase.create({
+            title:"Room id & pass😊",
+            message: `👋Hi ${users[i].username},your room id is ${req.body.roomId} and password is ${req.body.roomPassword} for ${tournament.description} join fast⏩`,
+            userId:users[i]._id,
+        })
+    }
+    
     //.log(tournament);
     res.redirect(`/adminEditTournament/${req.params.adminId}/${req.params.tournamentId}`);
     }catch(e){
@@ -762,8 +773,8 @@ app.get("/admin/tournament/:status/:adminId",async function(req,res){
     let tournament;
     if(req.params.status=="total"){
         tournament = await tournamentDataBase.find().sort({dateAndTime:1});
-    }else if(req.params.status=="upcomming"){
-        tournament = await tournamentDataBase.find({status:"upcomming"}).sort({dateAndTime:1});
+    }else if(req.params.status=="upcoming"){
+        tournament = await tournamentDataBase.find({status:"upcoming"}).sort({dateAndTime:1});
     }else if(req.params.status=="ongoing"){
         tournament = await tournamentDataBase.find({status:"ongoing"}).sort({dateAndTime:1});
     }
