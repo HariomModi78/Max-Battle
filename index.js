@@ -383,7 +383,7 @@ app.get("/myupcoming/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let tournament = await tournamentDataBase.find({status:"upcoming"});
 
-    res.render("myupcoming",{user:user,tournament:tournament});
+    res.render("myUpcoming",{user:user,tournament:tournament});
     }catch(e){
         res.redirect("/error");
     }
