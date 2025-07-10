@@ -699,7 +699,7 @@ app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
     },{new:true});
     let users = tournament.slots.filter(val=>val!=null);
     users = await userDataBase.find({_id:users});
-    console.log(users);
+    //.log(users);
     for(let i=0;i<users.length;i++){
         await notificationDataBase.create({
             title:"Room id & pass😊",
