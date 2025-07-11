@@ -138,6 +138,65 @@ app.get("/",async function(req,res){
 app.get("/register",async function(req,res){
     res.render("register");
 })
+app.get("/registerOtp",function(req,res){
+    res.render("registerOtp");
+})
+app.post("/registerOtp",async function(req,res){
+    try{
+    let user = await userDataBase.findOne({email:req.body.email}).lean();
+    let otp = (Math.random()*9999+1000).toFixed(0);
+    let usec = jwt.sign({email:req.body.email,otp:otp,gameName:req.body.gameName,gameId:req.body.gameId,username:req.body.username,password:req.body.password,age:req.body.age},process.env.PIN);
+    sendMail(req.body.email,"OTP FOR VERIFICATION",otp);
+    res.cookie("usec",usec);
+    res.redirect("/registerOtp");
+    }catch(e){
+        res.redirect("/error");
+    }
+})
+app.post("/verifyRegisterOtp",async function(req,res){
+    try{
+    let secret = jwt.verify(req.cookies.usec,process.env.PIN);
+    //.log(secret);
+    if(secret.otp==req.body.otp){
+         let oldUser = await userDataBase.findOne({email:secret.email}).lean();
+        if(!oldUser){
+        var newUser;
+        bcrypt.genSalt(10,function(err,salt){
+        bcrypt.hash(secret.password,salt,async function(err,hash){
+            let isEighteenPlus = secret.age === "on";
+            newUser =  await userDataBase.create({
+                gameName:secret.gameName,
+                gameId:secret.gameId,
+                username:secret.username,
+                email:secret.email,
+                password:hash,
+                isEighteenPlus: isEighteenPlus
+            })
+            let token = jwt.sign({email:secret.email,role:"user"},`${process.env.PIN}`);
+            res.cookie("token",token, {
+            maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+            httpOnly: true
+            });
+            await notificationDataBase.create({
+                title:"Welcome",
+                message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
+                userId:newUser._id,
+            })
+            res.redirect(`/home/${newUser._id}`);
+            })
+    
+    })
+    
+    }else{
+        res.redirect("/register");
+    }
+    }else{
+        res.redirect("/registerOtp")
+    }
+    }catch(e){
+        res.redirect("/error");
+    }
+})
 app.post("/register",async function(req,res){
     let oldUser = await userDataBase.findOne({email:req.body.email}).lean();
     if(!oldUser){
@@ -174,16 +233,17 @@ app.post("/register",async function(req,res){
     
 })
 app.get("/login",async function(req,res){
+    try{
     if(req.cookies.token){
-        try{
            var token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
-        }catch(e){
-            res.render("login");
-        }
+        
         let user = await userDataBase.findOne({email:token.email}).lean();
         res.redirect(`/home/${user._id}`);
     }else{
         res.render("login");
+    }
+    }catch(e){
+            res.render("login");
     }
 })
 app.post("/login",async function(req,res){
@@ -954,11 +1014,21 @@ app.post("/adminRefund/:adminId/:tournamentId",async function(req,res){
     }
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
     let players = tournament.slots.filter((userId)=>userId!==null);
+    //.log(players);
     for(let i=0;i<players.length;i++){
         await userDataBase.findOneAndUpdate({_id:players[i]},{
-            totalBalance:tournament.entryFee
+            $inc:{
+                totalBalance:tournament.entryFee,
+                bonus:tournament.entryFee
+            }
         })
+        await notificationDataBase.create({
+                title:"Tournament Cancelled😞",
+                message: `We're sorry! The tournament has been cancelled. Your entry fee of ₹${tournament.entryFee} has been successfully refunded to your wallet.`,
+                userId:players[i],
+            })
     }
+    await tournamentDataBase.findOneAndDelete({_id:req.params.tournamentId});
     res.redirect(`/adminPanel/${admin._id}`);
 })
 app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(req,res){
