@@ -435,13 +435,8 @@ app.get("/tournament/upcoming/:modeType/:matchType/:variable/:userId",async func
     }
      
     // //.log(tournament);
-    let heading;
-    if(req.params.modeType=="fullmap"){
-        heading = "FUll MAP";
-    }else if(req.params.modeType=="cs"){
-        heading = "CLASH SQUAD"
-    }
-    res.render("upcoming",{user:user,tournament:tournament,heading:heading,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
+    
+    res.render("upcoming",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
         res.redirect("/error");
     }
