@@ -24,12 +24,23 @@
 }
 .option{
     height: 2rem;
-    width: calc(100%/3);
+    width: calc(100%/4);
     display: flex;
     align-items: center;
     justify-content: center;
+    /* border: 1px solid black; */
+    font-size: 0.8rem;
+}
+.position{
+    width: calc(100%/5);
 }
 .option img{
     height: 2rem;
     width: 2rem;
+}
+#small{
+    height: 1rem;
+    width: 1rem;
+    margin-bottom: 0.1rem;
+    margin-right: 0.1rem;
 }
