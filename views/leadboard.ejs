@@ -18,8 +18,8 @@
             <div class="logo">
                 <img loading="lazy" id="icon" loading="lazy"  src="/images/logo.webp" alt="">
             </div>
-            <a href="https://freefirebattel.netlify.app/" class="support" >
-                <img loading="lazy" loading="lazy"  src="/images/support.webp" alt="">
+            <a href="https://wa.me/7898488935" class="support" >
+                <img loading="lazy"  src="/images/support.webp" alt="">
             </a>
             <div class="greet">
                 <p>Wellcome Back,</p>
@@ -48,13 +48,14 @@
             <div class="month">Monthly</div>
         </div>
         <div class="optionHeading">
-            <div class="option">Position</div>            
+            <div class="option position">Position</div>            
             <div class="option">Player Name</div>            
             <div class="option">Winning</div>            
+            <div class="option">Reward</div>            
         </div>
         <% for(let i=0;i< Math.min(users.length,10);i++){ %>
             <div class="playerDetail">
-                <div class="option">
+                <div class="option position">
                 <%if(i==0){%>
                     <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/1021/1021218.png" alt="">
                 <%}else if(i==1){%>
@@ -67,6 +68,22 @@
                 </div>
                 <div class="option"><%=users[i].gameName%></div>
                 <div class="option"><%=users[i].monthlyWinning%></div>
+                <div class="option">
+                    
+                    <%if(i==0){%>
+                        <img loading="lazy" id="small" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                    30
+                <%}else if(i==1){%>
+                    <img loading="lazy" id="small" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                    20
+                <%}else if(i==2){%>
+                    <img loading="lazy" id="small" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                    20
+                <%}else{%>
+                    ---
+                <%}%> 
+                </div>
+                
             </div>
         <% } %>
         </div>
