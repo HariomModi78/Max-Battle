@@ -46,7 +46,10 @@
         <div class="page">
             <div class="timeOption">
                 <div class="month">Monthly</div>
-                <a href="/monthlyPrizeDistribution/verification/<%=user._id%>" class="month">Distribute</a>
+                <%if(user.role =="admin"){%>
+                    <a href="/monthlyPrizeDistribution/verification/<%=user._id%>" class="month">Distribute</a>
+                <%}%>
+                
                 <div class="timeLeft">
                     ⏳
                     <%
