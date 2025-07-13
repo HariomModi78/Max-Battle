@@ -1019,7 +1019,8 @@ app.post("/adminRefund/:adminId/:tournamentId",async function(req,res){
         await userDataBase.findOneAndUpdate({_id:players[i]},{
             $inc:{
                 totalBalance:tournament.entryFee,
-                bonus:tournament.entryFee
+                bonus:tournament.entryFee,
+                totalMatch:-1
             }
         })
         await notificationDataBase.create({
