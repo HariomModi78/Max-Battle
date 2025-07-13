@@ -1163,11 +1163,112 @@ app.post("/tournament/setOngoing/:tournamentId/:adminId",async function(req,res)
         res.redirect("/error");
     }
 })
+app.get("/monthlyPrizeDistribution/verification/:adminId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId}).lean();
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+    let otp = (Math.random()*9999+1000).toFixed(0);
+    var token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
+    sendMail(process.env.email,"OTP FOR MONTHLY PRIZE DISTRIBUTION",otp);
+    let pri = jwt.sign({otp:otp},process.env.PIN);
+    res.cookie("pri",pri);
+    res.render("monthlyPrizeDistributionVerification",{admin:admin});
+})
+app.post("/monthlyPrizeDistribution/:adminId",async function(req,res){
+    let admin = await userDataBase.findOne({_id:req.params.adminId}).lean();
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
+
+    let otp = jwt.verify(req.cookies.pri,process.env.PIN);
+    console.log(req.cookies.pri);
+    console.log(req.body.otp);
+    console.log(otp.otp);
+
+    if(String(req.body.otp) != String(otp.otp)){
+        return res.redirect(`/monthlyPrizeDistribution/verification/${admin._id}`);
+    }
+    let users = await userDataBase.find().sort({monthlyWinning:-1}).lean();
+    for(let i=0;i<users.length;i++){
+        if(users[i].monthlyWinning>100){
+            if(i==0){
+            await userDataBase.findOneAndUpdate({_id:users[i]._id},{
+                $inc:{
+                    totalBalance:30,
+                    bonus:30
+                },
+            })
+            await notificationDataBase.create({
+                title:"🎉 Monthly Leaderboard Winners! 🎉",
+                message: `🎉 Congratulations ${users[i].username}!
+You are the #1 Champion of this month's leaderboard! 🏆
+Your gameplay was outstanding—keep ruling the battlefield! 💪🔥
+💰 Reward: ₹30 has been added to your wallet.`,
+                userId:users[i]._id,
+            })
+        }else if(i==1){
+            await userDataBase.findOneAndUpdate({_id:users[i]._id},{
+                $inc:{
+                    totalBalance:20,
+                    bonus:20
+                },
+            })
+            await notificationDataBase.create({
+                title:"🎉 Monthly Leaderboard Winners! 🎉",
+                message: `👏 Well done ${users[i].username}!
+You secured 2nd place in this month's leaderboard! 🥈
+A little more push and the crown could be yours next time! 🚀
+💰 Reward: ₹20 has been added to your wallet.`,
+                userId:users[i]._id,
+            })
+        }else if(i==2){
+            await userDataBase.findOneAndUpdate({_id:users[i]._id},{
+                $inc:{
+                    totalBalance:20,
+                    bonus:20
+                },
+            })
+             await notificationDataBase.create({
+                title:"🎉 Monthly Leaderboard Winners! 🎉",
+                message: `🙌 Nice work ${users[i].username}!
+You made it to 3rd place on the leaderboard! 🥉
+Great effort—keep grinding and aim for the top next month! 🎮💥
+💰 Reward: ₹20 has been added to your wallet.
+`,
+                userId:users[i]._id,
+            })
+        }
+    }
+    await notificationDataBase.create({
+                title:"🎉 Monthly Leaderboard Winners! 🎉",
+                message: `🥇 1st Place : ${users[0].username} - ₹30
+🥈 2nd Place : ${users[1].username} - ₹20
+🥉 3rd Place : ${users[2].username} - ₹20
+💪 You gave a tough fight!
+Your performance was awesome, but the top 3 grabbed the crown this time.
+
+🔥 Don't worry — a new month means a new chance!
+Play more matches, score high, and your name could be on the leaderboard next time!
+
+⚔️ Keep battling, keep rising!
+— Team Max Battle
+`,
+                userId:users[i]._id,
+            })
+            await userDataBase.findOneAndUpdate({_id:users[i]._id},{
+                monthlyWinning:0
+            })
+    } 
+
+    res.send("Monthly prize successfuly distributed✅");
+})
 
 app.get("/logout",function(req,res){
     res.clearCookie("token");
     res.redirect("/login");
 })
+
 
 
 const razorpay = new Razorpay({
