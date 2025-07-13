@@ -1182,9 +1182,9 @@ app.post("/monthlyPrizeDistribution/:adminId",async function(req,res){
     }
 
     let otp = jwt.verify(req.cookies.pri,process.env.PIN);
-    console.log(req.cookies.pri);
-    console.log(req.body.otp);
-    console.log(otp.otp);
+    //.log(req.cookies.pri);
+    //.log(req.body.otp);
+    //.log(otp.otp);
 
     if(String(req.body.otp) != String(otp.otp)){
         return res.redirect(`/monthlyPrizeDistribution/verification/${admin._id}`);
