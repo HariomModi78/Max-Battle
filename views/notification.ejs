@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/wallet.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    
+        
+    <main>
+        <div class="header">
+            <div class="logo back" id="">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="greet">
+                <p class="big">Notification</p>
+            </div>
+            <div class="notification delete" id="<%=user._id%>">
+                <img style="height: 2rem;width: 2rem;" src="https://cdn-icons-png.flaticon.com/128/14360/14360493.png" alt="">
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="page" style="display: flex;flex-direction: column;gap: 0.3rem;">
+                <%notification.forEach(function(val,index){%>
+                    <%if(val.seen){%>
+                        <div class="messageCover">
+                    <%}else{%>
+                        <div class="messageCover" id="<%=val._id%>">
+                    <%}%>
+                    
+                    <details>
+                    <summary style="margin-bottom: 1rem;"><%=val.title%>
+                        <%let date = new Date(val.createdAt).toLocaleDateString()%>
+                        <%let time = new Date(val.createdAt).toLocaleTimeString()%>
+                        <div class="messageTime"><%=date%> <%=time%></div>
+                        <%if(!val.seen){%>
+                            <div class="messageStatus"></div>
+                        <%}%>
+                        
+                    </summary>
+                    <p><%=val.message%></p>
+                </details>
+                    </div>
+                <%})%>
+        </div>
+            
+        
+
+        <div class="fakeFooter"></div>
+        
+    </main>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/back.js"></script>
+    <script>
+        let messageCover = document.getElementsByClassName("messageCover");
+        let del = document.querySelector(".delete");
+        let page = document.querySelector(".page");
+        del.addEventListener("click",function(){
+            let flag = confirm("🚨You want to delete all seen messages🚨");
+            let userId = del.id;
+            console.log(flag)
+            if(flag){
+                fetch("/deleteMessage",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({userId})
+                }).then(res=>res.json())
+                .catch(err=>console.log(err))
+                alert("Messages are succesfully deleted");
+                page.innerHTML = ""
+            }
+        })
+        for(let i=0;i<messageCover.length;i++){
+            messageCover[i].addEventListener("click",function(){
+                if(this.id){
+                    let notificationId = this.id;
+                console.log("Sending ID:", notificationId);
+                fetch("/seenTrue",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({notificationId})
+                }).then(res=>res.json())
+                .catch(err=>console.log(err))
+
+                let statusDiv = this.querySelector(".messageStatus");
+        if (statusDiv) {
+          statusDiv.remove();
+        }
+                }
+                
+            })
+        }
+        
+       
+    </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
