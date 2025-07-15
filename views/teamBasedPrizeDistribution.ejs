@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/adminPanel.css">
+    <link rel="stylesheet" href="/stylesheets/prizeDistribution.css">
+    <link rel="stylesheet" href="/stylesheets/teamBasedPrizeDistribution.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <main>
+        <div class="sideBar">
+            <div class="esportText">Admin Panel</div>
+            <div class="option" id="adminPanel">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/8323/8323511.png" class="home" alt="">
+                <div class="optionName home">Dashboard</div>
+            </div>
+            <div class="option">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/9743/9743061.png" class="profile" alt="">
+                <div class="optionName profile">Tournaments</div>
+            </div>
+            <div class="option">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/476/476863.png" class="login" alt="">
+                <div class="optionName login">Users</div>
+            </div>
+            <div class="option">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/6811/6811049.png" class="myTournament" alt="">
+                <div class="optionName myTournament">Pending Results</div>
+            </div>
+            <div class="option">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/7653/7653930.png" class="support" alt="">
+                <div class="optionName support">Announcements</div>
+            </div>
+            <div class="option">
+                <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/4400/4400828.png" class="privacyPolicy" alt="">
+                <div class="optionName privacyPolicy">Logout</div>
+            </div>
+        </div>
+        <div class="page">
+            <div class="topBar">
+                <div class="mobileMenu">
+                    <img loading="lazy" class="mobileMenu" src="https://cdn-icons-png.flaticon.com/128/2099/2099125.png" alt="">
+                </div>
+                Prize Distribution
+            </div>
+            <%for(let i=1;i<= 2;i++){%>
+                <div class="teamBox">
+                <div class="heading">Team <%=i%></div>
+                <%if(tournament.matchType=="solo"){%>
+                    <div class="player">
+                        <div class="name"><%=user[i-1]?.gameName%></div>
+                        <div class="delete">Delete</div>
+                    </div>  
+                <%}else{%>
+                    <%if(i==1){%>
+                        <%team1.forEach(function(player){%>
+                        <div class="player team1" id="<%=player.userId%>">
+                            <div class="name"><%=player.gameName%></div>
+                            <div class="delete">Delete</div>
+                        </div>
+                    <%})%>
+                    <%}else{%>
+                        <%team2.forEach(function(player){%>
+                        <div class="player team2" id="<%=player.userId%>">
+                            <div class="name"><%=player.gameName%></div>
+                            <div class="delete">Delete</div>
+                        </div>
+                        <%})%>
+                    <%}%>
+                <%}%>
+                
+                
+                <div class="winner">Winner</div>
+            </div>
+            <%}%>
+            
+            
+            <form action="/adminPrizeDistribution/cs/<%=admin._id%>/<%=tournament._id%>" method="post">
+                <input style="display: none;" class="users" type="text" name="users" id="">
+                <input style="display: none;" class="finalButton" type="submit" value="Distribute Prize">
+            </form>
+            
+        </div>
+    </main>
+    <script>
+        let player = document.getElementsByClassName("player");
+        let del = document.getElementsByClassName("delete");
+        let input = document.querySelector(".users");
+        for(let i=0;i<del.length;i++){
+            del[i].addEventListener("click",function(){
+                player[i].id = "";
+                player[i].remove();
+                player[i].style.cssText = "text-decoration:double line-through;color:red";
+            })
+        }
+        let winner = document.getElementsByClassName("winner");
+        let teamBox = document.getElementsByClassName("teamBox");
+        let finalButton = document.querySelector(".finalButton");
+        let users = [];
+        for(let i=0;i<winner.length;i++){
+                winner[i].addEventListener("click",function(){
+                    if(i==0){
+                        winner[1].style.display = "none";
+                        teamBox[1].style.display = "none";
+                    }else if(i==1){
+                        winner[0].style.display = "none";
+                        teamBox[0].style.display = "none";
+                    }
+                    winner[i].style.display = "none"
+                    finalButton.style.display = "flex"
+                    for(let i=0;i<del.length;i++){
+                        del[i].style.cssText = "display:none";
+                    }
+                    if(i==0){
+                        let team1 = document.getElementsByClassName("team1");
+                        for(let i=0;i<team1.length;i++){
+                            users.push({
+                                userId:team1[i].id,
+                            })
+                        }
+                    }else if(i==1){
+                        let team2 = document.getElementsByClassName("team2");
+                        for(let i=0;i<team2.length;i++){
+                            users.push({
+                                userId:team2[i].id,
+                            })
+                        }
+                    }
+                
+                console.log(users);
+                input.value = JSON.stringify(users);
+        })
+        }
+        
+
+    </script>
+    <script src="/javaScripts/adminPanel.js"></script>
+    <script type="module" src="/script.js"></script>
+</body>
+</html>
