@@ -50,7 +50,7 @@
                 <div class="teamBox">
                 <div class="heading">Team <%=i%></div>
                 <%if(tournament.matchType=="solo"){%>
-                    <div class="player">
+                    <div class="player team<%=i%>" id="<%=user[i-1].userId%>">
                         <div class="name"><%=user[i-1]?.gameName%></div>
                         <div class="delete">Delete</div>
                     </div>  
@@ -79,7 +79,7 @@
             
             
             <form action="/adminPrizeDistribution/cs/<%=admin._id%>/<%=tournament._id%>" method="post">
-                <input style="display: none;" class="users" type="text" name="users" id="">
+                <input style="display: none;"  class="users" type="text" name="users" id="">
                 <input style="display: none;" class="finalButton" type="submit" value="Distribute Prize">
             </form>
             
