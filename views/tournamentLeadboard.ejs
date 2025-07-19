@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="/stylesheets/tournamentLeadboard.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#007bff">
-</head>
+</head> 
 <body>
     <main>
         <div class="header">
             <div class="heading">FFM SOLO TOURNAMENT (RYDEN BAN)</div>
-            <div class="date">Organised on 18/06/2025 at 11:00 PM</div>
+            <%let date = new Date(tournament.dateAndTime).toLocaleDateString()%>
+                    <%let time = new Date(tournament.dateAndTime).toLocaleTimeString()%>
+                    <div class="date">Organised on <%=date%> at <%=time%></div>
         </div>
         <div class="tournamentDetail">
                 <div class="detail">
