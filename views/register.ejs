@@ -61,9 +61,10 @@
     <script>
         let referralCode = document.querySelector("#referralCode");
         let apply = document.querySelector(".apply");
-        apply.addEventListener("click",async function(){
+        referralCode.addEventListener("input",async function(){
             apply.innerText = "";
-            apply.innerText = "checking..."
+            apply.innerText = "checking...";
+            apply.style.cssText = "background-color:orange"
             
             let response = await fetch("/referralCodes")
             let code  = await response.json();
