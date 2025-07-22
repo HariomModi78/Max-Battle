@@ -112,7 +112,6 @@ app.get("/ping", (req, res) => {
 });
 
 app.get("/",async function(req,res){ 
-    await tournamentDataBase.deleteMany({status:"upcoming"});  
     if(req.cookies.token){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
