@@ -131,17 +131,23 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
     if (!isAdmin(admin)) {
         return res.redirect("/");
     }
-    let date = new Date();
     let oldTournament = await tournamentDataBase.findOne({status:"upcoming"});
     if(oldTournament){
         return res.send("Please kal ke din try karna❌");
     }
+    let now = new Date();
     let tournament = {};
     for(let i=0;i<14;i++){
-        date.setHours(21);
-        date.setMinutes(40 + i*10);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
+    let date = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        21,
+        40 + i * 10,
+        0,
+        0
+    );
+        
         if(i==0){
             tournament = {
                 description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
