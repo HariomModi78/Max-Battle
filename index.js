@@ -146,7 +146,7 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
     if(oldTournament){
         return res.send("Please kal ke din try karna❌");
     }
-       let now = new Date(Date.now() + (5.5 * 60 * 60 * 1000)); // IST = UTC + 5:30
+       let now = new Date(); // IST = UTC + 5:30
 
     let tournament = {};
     for(let i=0;i<14;i++){
