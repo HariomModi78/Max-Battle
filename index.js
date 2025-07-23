@@ -111,6 +111,17 @@ app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
 
+// app.get("/message",async function(req,res){
+//     let users = await userDataBase.find();
+//     for(let i=0;i<users.length;i++){
+//         await notificationDataBase.create({
+//             title:`😔 Oops! Tournament Deleted - Join Again Now`,
+//             message:"We apologize for the inconvenience — due to a technical issue, our free tournament was accidentally deleted. You can now rejoin the tournament. Thank you for your understanding! 🙏",
+//             userId:users[i]
+//         })
+//     }
+//     res.send("Done")
+// })
 app.get("/",async function(req,res){ 
     if(req.cookies.token){
         try{
@@ -135,19 +146,22 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
     if(oldTournament){
         return res.send("Please kal ke din try karna❌");
     }
-    let now = new Date();
+       let now = new Date(Date.now() + (5.5 * 60 * 60 * 1000)); // IST = UTC + 5:30
+
     let tournament = {};
     for(let i=0;i<14;i++){
-    let date = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        21,
-        40 + i * 10,
-        0,
-        0
-    );
-        
+
+let date = new Date(
+  now.getUTCFullYear(),
+  now.getUTCMonth(),
+  now.getUTCDate(),
+  21,
+  40 + i * 10,
+  0,
+  0
+);
+
+
         if(i==0){
             tournament = {
                 description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
@@ -456,6 +470,7 @@ app.get("/notification/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();    
     let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
+    console.log(notification);
     res.render("notification",{user:user,notification:notification});
     }catch(e){
         res.redirect("/error");
@@ -1281,7 +1296,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
         await session.commitTransaction();
         session.endSession();
         
-    res.redirect(`/tournament/upcoming/${updatedTournament.modeType}/${updatedTournament.matchType}/${tournament.entryFee>0?"paid":"free"}/${req.params.userId}`);
+    res.redirect(`/tournament/upcoming/${updatedTournament.modeType}/${updatedTournament.matchType}/${tournament.entryFee>0?(tournament.entryFee==1?"1rs":"paid"):"free"}/${req.params.userId}`);
     }else{
         await session.abortTransaction();
         session.endSession()
