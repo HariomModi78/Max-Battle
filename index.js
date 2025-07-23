@@ -308,6 +308,12 @@ app.post("/verifyRegisterOtp",async function(req,res){
                 message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
                 userId:newUser._id,
             })
+            let admin = await userDataBase.findOne({email:process.env.email});
+            await notificationDataBase.create({
+                title:"New User Update👤",
+                message:`${newUser.username},is a new user on MAX BATTLE ` ,
+                userId:admin._id,
+            })
             if (secret.referredBy) {
   await userDataBase.findOneAndUpdate(
     { _id: secret.referredBy },
