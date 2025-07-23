@@ -68,8 +68,8 @@
                 </div>
                 <div class="part1Detail">
                     <div class="discription"><%=val.description%></div>
-                    <%let date = new Date(val.dateAndTime).toLocaleDateString()%>
-                    <%let time = new Date(val.dateAndTime).toLocaleTimeString()%>
+                    <%let date = new Date(val.dateAndTime).toLocaleDateString("en-IN")%>
+                    <%let time = new Date(val.dateAndTime).toLocaleTimeString("en-IN")%>
                     <div class="date">Time : <%=date%> at <%=time%></div>
                 </div>
             </div>
