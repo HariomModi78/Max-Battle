@@ -966,7 +966,7 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
         description:req.body.description,
         dateAndTime:req.body.dateAndTime,
         entryFee:req.body.entryFee,
-        perKillAmountAmount:req.body.perKillAmountAmount,
+        perKillAmount:req.body.perKillAmount,
         prizePool:req.body.prizePool,
         matchType:req.body.matchType,
         totalSlots:req.body.totalSlots,
@@ -1042,40 +1042,47 @@ app.get("/adminPrizeDistribute/:adminId/:tournamentId",async function(req,res){
 })
 app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res){
     try{
+        let admin = await userDataBase.findOne({_id:req.params.adminId}).lean();
+    if (!isAdmin(admin)) {
+        return res.redirect("/");
+    }
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
+    console.log(tournament);
     if(tournament.status == "completed"){
         return res.redirect(`/adminPanel/${req.params.adminId}`);
     }
     let users = JSON.parse(req.body.users);
     //.log(users.sort((a,b)=>{b-a}));
     for(let i=0;i<users.length;i++){
+
         if(i==0){
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
                 totalKill:users[i].kills,
-                winning:(users[i].kills*tournament.perKillAmountAmount)+tournament.firstPrize,
-                monthlyWinning:(users[i].kills*tournament.perKillAmountAmount)+tournament.firstPrize,
-                totalBalance:(users[i].kills*tournament.perKillAmountAmount)+tournament.firstPrize
+                winning:(users[i].kills*tournament.perKillAmount)+tournament.firstPrize,
+                monthlyWinning:(users[i].kills*tournament.perKillAmount)+tournament.firstPrize,
+                totalBalance:(users[i].kills*tournament.perKillAmount)+tournament.firstPrize
             }
         })
         }else if(i==1){
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
                 totalKill:users[i].kills,
-                winning:(users[i].kills*tournament.perKillAmountAmount)+tournament.secondPrize,
-                monthlyWinning:(users[i].kills*tournament.perKillAmountAmount)+tournament.secondPrize,
-                totalBalance:(users[i].kills*tournament.perKillAmountAmount)+tournament.secondPrize
+                winning:(users[i].kills*tournament.perKillAmount)+tournament.secondPrize,
+                monthlyWinning:(users[i].kills*tournament.perKillAmount)+tournament.secondPrize,
+                totalBalance:(users[i].kills*tournament.perKillAmount)+tournament.secondPrize
             }
         })
         }else{
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
                 totalKill:users[i].kills,
-                winning:users[i].kills*tournament.perKillAmountAmount,
-                monthlyWinning:users[i].kills*tournament.perKillAmountAmount,
-                totalBalance:users[i].kills*tournament.perKillAmountAmount
+                winning:users[i].kills*tournament.perKillAmount,
+                monthlyWinning:users[i].kills*tournament.perKillAmount,
+                totalBalance:users[i].kills*tournament.perKillAmount
             }
         })
+        console.log("Yahan aa gaya last main")
         }
         
     }
@@ -1158,7 +1165,7 @@ app.post("/adminEditTournament/:adminId/:tournamentId",async function(req,res){
         description:req.body.description,
         dateAndTime:req.body.dateAndTime,
         entryFee:req.body.entryFee,
-        perKillAmountAmount:req.body.perKillAmountAmount,
+        perKillAmount:req.body.perKillAmount,
         prizePool:req.body.prizePool,
         matchType:req.body.matchType,
         totalSlots:req.body.totalSlots,
