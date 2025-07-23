@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="stylesheet" href="/stylesheets/tournamentDetail.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+
+</head>
+<body>
+    <main class="flex">
+        <div class="header">
+            <div class="logo back" id="wallet">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="support">
+            </div>
+            <div class="greet">
+                <p class="big"></p>
+            </div>
+            <div class="notification">
+                <!-- <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <!-- <div class="fakeHeader"></div> -->
+        <div class="image">
+            <%if(tournament.matchType=="solo"){%>
+                    <img loading="lazy" src="/images/soloFullMap.webp" alt="">
+                <%}else if(tournament.matchType=="duo"){%>
+                    <img loading="lazy" src="/images/duoFullMap.webp" alt="">
+                <%}else if(tournament.matchType=="squad"){%>
+                    <img loading="lazy" src="/images/squadFullMap.webp" alt="">
+                <%}%>
+        </div>
+        <div class="discription">FFM SOLO TOURNAMENT [RYDEN BAN]</div>
+        <div class="box">
+            <%let date = new Date(tournament.dateAndTime).toLocaleDateString()%>
+            <%let time = new Date(tournament.dateAndTime).toLocaleTimeString()%>
+            Match Schedule : <%=date%>  <%=time%>
+        </div>
+    <%if(joined){%>
+        <div style="height: 5rem;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;">
+            <%if(tournament.roomId && tournament.roomPassword){%>
+                <p>Room id : <%=tournament.roomId%></p>
+                <p>Password: <%=tournament.roomPassword%></p>
+            <%}else{%>
+                <p>Room id : display here</p>
+                <p>Password:display here</p>
+            <%}%>
+            
+        </div>
+        <strong style="width: 95%;display:flex;place-self:center;font-size: 0.8rem;text-align: center;">Note: also check your email for room id and password (before 3-5min from match)</strong>
+    <%}%>
+        <%if(tournament.modeType=="fullmap"){%>
+            <div class="redHeading">Note: 
+                
+            </div>
+            <div class="normalText">"If less than 50% of the slots are booked, the tournament will be cancelled and your entry fee refunded automatically."</div>
+            <div class="headingText">Prize details :</div>
+        <div class="fullBox">
+            <p>1st : <%=tournament.firstPrize%> Max Coins</p>
+            <p>2nd : <%=tournament.secondPrize%> Max Coins</p>
+            <p>PRIZE ACCORDING TO SLOTS</p>
+        </div>
+        <div class="headingText">About this match :</div>
+        <div class="matchDetail">
+            <div class="redHeading">Full Map</div>
+            <div class="yellowSubheading">Must Follow Given Rules</div>
+            <div class="redSubheading">Eligibility</div>
+            <div class="normalText">1. FFM id must be level 40 or above</div>
+            <div class="normalText">2. Only mobile player are allowed</div>
+            <div class="normalText">3. Cs career headshort rate must not be above 70</div>
+            <div class="redSubheading">joining instruction</div>
+            <div class="normalText">1. Enter Account Name: Please enter your FF MAX account name accurately during registration</div>
+            <div class="normalText">Note: Changes to account name will not be allowed once submitted</div>
+            <div class="normalText">2. Verify Account Name: Ensure that the account name entered matches your registered in game name to avoid disqalificatin.</div>
+            <div class="normalText">3. Match Room ID & Passward: The match room id and passward will be provided 3-5 minutes before the match begins. Keep an eye on your notification or email for this information</div>
+            <div class="redSubheading">Room Setting</div>
+            <div class="normalText">1. Character skill : Yes</div>
+            <div class="normalText">2. Gun attributes : No</div>
+            <div class="normalText">3. Vehicle : Yes</div>
+            <div class="redSubheading">Prohibited Activities</div>
+            <div class="normalText">1. Using any type of panel/hack or third party application is prohibited</div>
+            <div class="normalText">2. Teaming up with opponents</div>
+            <div class="normalText">3. Inviting unregistered players</div>
+            <div class="normalText">4. M79 launcher not allowed</div>
+            <div class="normalText">5. Double vector not allowed</div>
+            <div class="normalText">6. Usng ryden character</div>
+            <div class="redSubheading">Gameplay Requirements</div>
+            <div class="normalText">1. Must record your gameplay</div>
+            <div class="normalText">2. Game replay can not be accepted as proof screen recording must be on.</div>
+            <div class="normalText">3.Blacklisted id player must do screen recording from joining to end</div>
+            <div class="redSubheading">Report Hacker or Contact</div>
+            <div class="normalText">1. Tell us about hacker on whatsapp</div>
+            <div class="normalText">2. You can visit our contact us for help</div>
+            <div class="redSubheading">Notes</div>
+            <div class="normalText">1. Violating any rules cause your penalty or no rewards or permanent account ban.</div>
+            <div class="normalText">2. After registration must join room if room id and Passward came,if you fail to join no refund</div>
+            <div class="normalText">3. Using abusing words against host may cause you penalty or kick from tournament</div>
+            <div class="normalText">MAX Battle have rights to modify rules and prize</div>
+        </div>
+        <%}else{%>
+            <div class="headingText">Prize details :</div>
+        <div class="fullBox">
+        </div>
+        <div class="headingText">About this match :</div>
+        <div class="matchDetail">
+            <div class="redHeading">Clash Squad Rules</div>
+            <div class="yellowSubheading">Must Follow Given Rules</div>
+            <div class="redSubheading">Eligibility</div>
+            <div class="normalText">1. FFM id must be level 40 or above</div>
+            <div class="normalText">2. Only mobile player are allowed</div>
+            <div class="normalText">3. Cs career headshort rate must not be above 70</div>
+            <div class="redSubheading">joining instruction</div>
+            <div class="normalText">1. Enter Account Name: Please enter your FF MAX account name accurately during registration</div>
+            <div class="normalText">Note: Changes to account name will not be allowed once submitted</div>
+            <div class="normalText">2. Verify Account Name: Ensure that the account name entered matches your registered in game name to avoid disqalificatin.</div>
+            <div class="normalText">3. Match Room ID & Passward: The match room id and passward will be provided 3-5 minutes before the match begins. Keep an eye on your notification or email for this information</div>
+            <div class="redSubheading">Room Setting</div>
+            <div class="normalText">1. Character skill : No</div>
+            <div class="normalText">2. Gun attributes : No</div>
+            <div class="normalText">3. Airdrop: No(Any Type)</div>
+            <div class="normalText">4. Limited Ammo: No</div>
+            <div class="redSubheading">Prohibited Activities</div>
+            <div class="normalText">1. Using any type of panel/hack or third party application is prohibited</div>
+            <div class="normalText">2. Prohibited throwable items: Grenade, smoke, flash freeze, flashbang, ets</div>
+            <div class="normalText">3. Inviting unregistered players</div>
+            <div class="normalText">4. Zone Pack</div>
+            <div class="normalText">5. Double vector not allowed</div>
+            <div class="redSubheading">Gameplay Requirements</div>
+            <div class="normalText">1. Must record your gameplay</div>
+            <div class="normalText">2. Game replay can not be accepted as proof screen recording must be on.</div>
+            <div class="normalText">3.Blacklisted id player must do screen recording from joining to end</div>
+            <div class="redSubheading">Report Hacker or Contact</div>
+            <div class="normalText">1. Tell us about hacker on whatsapp</div>
+            <div class="normalText">2. You can visit our contact us for help</div>
+            <div class="redSubheading">Notes</div>
+            <div class="normalText">1. Violating any rules cause your penalty or no rewards or permanent account ban.</div>
+            <div class="normalText">2. After registration must join room if room id and Passward came,if you fail to join no refund</div>
+            <div class="normalText">3. Using abusing words against host may cause you penalty or kick from tournament</div>
+            <div class="normalText">MAX Battle have rights to modify rules and prize</div>
+        </div>
+        <%}%>
+        
+        
+        <div class="fakeFooter"></div>
+    </main>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/tournamentDetail.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+    
+</body>
+</html>
