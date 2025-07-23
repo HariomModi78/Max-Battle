@@ -33,8 +33,8 @@
         <%transaction.forEach(function(val){%>
             <div class="option">
             <div class="optionPart1">
-                <%let date = new Date(val.createdAt).toLocaleDateString()%>
-                <%let time = new Date(val.createdAt).toLocaleTimeString()%>
+                <%let date = new Date(val.createdAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" }) %>
+                        <%let time = new Date(val.createdAt).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" }) %>
                 <div class="date"><%=date%> <div class="time"><%=time%></div></div>
                 <%if(!val.paymentId){%>
                         <%if(val.flag){%>
