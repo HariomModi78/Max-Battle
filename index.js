@@ -124,6 +124,7 @@ app.get("/ping", (req, res) => {
 // })
 app.get("/",async function(req,res){ 
     // await tournamentDataBase.deleteMany({status:"upcoming"});
+
     if(req.cookies.token){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
@@ -137,6 +138,12 @@ app.get("/",async function(req,res){
         res.render("start");
     }
 
+})
+app.get("/confirmBonus/:userId",async function(req,res){
+    await userDataBase.findOneAndUpdate({_id:req.params.userId},{
+        isApplyCode:false
+    })
+    res.json({done:"done"});
 })
 app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId}).lean();
@@ -340,7 +347,8 @@ app.post("/verifyRegisterOtp",async function(req,res){
                         $inc:{
                             totalBalance:5,
                             bonus:5
-                        }
+                        },
+                        isApplyCode:true
                     })
                     await notificationDataBase.create({
                 title:"Joining Bonus🎉",
@@ -1059,7 +1067,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
     //.log(users.sort((a,b)=>{b-a}));
     for(let i=0;i<users.length;i++){
 
-        if(i==0){
+        if(i==0 && users[i].kills>0){
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
                 totalKill:users[i].kills,
@@ -1068,7 +1076,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
                 totalBalance:(users[i].kills*tournament.perKillAmount)+tournament.firstPrize
             }
         })
-        }else if(i==1){
+        }else if(i==1 && users[i].kills>0){
             await userDataBase.findOneAndUpdate({_id:users[i].userId},{
             $inc:{
                 totalKill:users[i].kills,
