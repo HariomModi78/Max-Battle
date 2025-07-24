@@ -123,6 +123,7 @@ app.get("/ping", (req, res) => {
 //     res.send("Done")
 // })
 app.get("/",async function(req,res){ 
+    // await tournamentDataBase.deleteMany({status:"upcoming"});
     if(req.cookies.token){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
@@ -151,15 +152,15 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
     let tournament = {};
     for(let i=0;i<14;i++){
 
-let date = new Date(
+let date = new Date(Date.UTC(
   now.getUTCFullYear(),
   now.getUTCMonth(),
   now.getUTCDate(),
-  21,
-  40 + i * 10,
-  0,
+  16, // 21:30 IST == 16:00 UTC
+  10 + i * 10, // Adjust this according to your needs
   0
-);
+));
+
 
 
         if(i==0){
