@@ -161,9 +161,11 @@
                 <div class="teamBox">
                 <div class="heading">Team <%=i%></div>
                 <%if(tournament.matchType=="solo"){%>
-                    <div class="player team<%=i%>" id="<%=users[i-1].userId%>">
+                    <div class="user team<%=i%>" id="<%=users[i-1]?.userId%>">
+                        <div class="team"><%=users[i-1]?.slotNumber%></div>
                         <div class="name"><%=users[i-1]?.gameName%></div>
                     </div>  
+                    
                 <%}else{%>
                     <%if(i==1){%>
                         <%team1.forEach(function(player){%>
