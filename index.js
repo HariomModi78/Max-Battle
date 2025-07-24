@@ -314,7 +314,7 @@ app.post("/verifyRegisterOtp",async function(req,res){
                 message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
                 userId:newUser._id,
             })
-            let admin = await userDataBase.findOne({role:"admin"});
+            let admin = await userDataBase.find({role:"admin"});
             for(let i=0;i<admin.length;i++){
                 await notificationDataBase.create({
                 title:"New User Update👤",
