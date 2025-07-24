@@ -1,3 +1,31 @@
+.joiningBonus{
+    height: 21rem;
+    width: 15rem;
+    position: fixed;
+    top: 50%;
+  left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 100;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgb(46, 99, 242);
+    display: flex;
+    flex-direction: column;
+}
+.joiningBonus img{
+    height: 85%;
+    width: 100%;
+}
+.confirm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 15%;
+    width: 100%;
+    text-decoration: none;
+    /* border: 1px solid black; */
+}
 .noticeBoard{
     height: 14rem;
     width: 100%;
