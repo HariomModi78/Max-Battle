@@ -60,7 +60,13 @@
                 <%tournament.forEach(function(val){%>
             <div class="tournament" id="<%=val._id%>">
             <div class="image">
-                <img loading="lazy" src="https://theesports.club/_next/image?url=https%3A%2F%2Fcdn.theesports.club%2FBIG%2520banner%2520%25283%2529-831f3340-85be-4bd7-a5ad-659a16523a6c.png&w=1920&q=75" alt="">
+                <%if(val.matchType=="solo"){%>
+                    <img loading="lazy" src="/images/soloFullMap.webp" alt="">
+                <%}else if(val.matchType=="duo"){%>
+                    <img loading="lazy" src="/images/duoFullMap.webp" alt="">
+                <%}else if(val.matchType=="squad"){%>
+                    <img loading="lazy" src="/images/squadFullMap.webp" alt="">
+                <%}%>
             </div>
             <div class="part1">
                 <div class="part1Image">
