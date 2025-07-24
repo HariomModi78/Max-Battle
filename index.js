@@ -963,7 +963,8 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
     if (!isAdmin(admin)) {
         return res.redirect("/");
     }
-    let date = new Date(Date.UTC(req.body.dateAndTime));
+    let localDate = new Date(req.body.dateAndTime); // parses in local time (e.g., IST)
+    let date = new Date(localDate.toISOString()); // stores in proper UTC format
     let tournament = await tournamentDataBase.create({
         description:req.body.description,
         dateAndTime:date,
