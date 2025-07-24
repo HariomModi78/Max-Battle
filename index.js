@@ -963,9 +963,10 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
     if (!isAdmin(admin)) {
         return res.redirect("/");
     }
+    let date = new Date(Date.UTC(req.body.dateAndTime));
     let tournament = await tournamentDataBase.create({
         description:req.body.description,
-        dateAndTime:req.body.dateAndTime,
+        dateAndTime:date,
         entryFee:req.body.entryFee,
         perKillAmount:req.body.perKillAmount,
         prizePool:req.body.prizePool,
