@@ -262,7 +262,7 @@ app.get("/referralCodes",async function(req,res){
 })
 app.get("/tournamentUsers/:tournamentId",async function(req,res){
     let users = await tournamentDataBase.findOne({_id:req.params.tournamentId}).populate("slots");
-    console.log(users);
+    //.log(users);
     res.json(users);
 })
 app.post("/registerOtp",async function(req,res){
@@ -485,7 +485,7 @@ app.get("/notification/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();    
     let notification = await notificationDataBase.find({userId:req.params.userId}).lean();
-    console.log(notification);
+    //.log(notification);
     res.render("notification",{user:user,notification:notification});
     }catch(e){
         res.redirect("/error");
@@ -1051,7 +1051,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
         return res.redirect("/");
     }
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
-    console.log(tournament);
+    //.log(tournament);
     if(tournament.status == "completed"){
         return res.redirect(`/adminPanel/${req.params.adminId}`);
     }
@@ -1086,7 +1086,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
                 totalBalance:users[i].kills*tournament.perKillAmount
             }
         })
-        console.log("Yahan aa gaya last main")
+        //.log("Yahan aa gaya last main")
         }
         
     }
