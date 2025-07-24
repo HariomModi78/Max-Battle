@@ -256,7 +256,7 @@ app.get("/registerOtp",function(req,res){
 app.get("/referralCodes",async function(req,res){
     let referralCode = await userDataBase.find();
     referralCode = referralCode.map(user=>user.referralCode);
-    referralCode.push("NEW1")
+    referralCode.push("NEW5")
     //.log(referralCode);
     res.json(referralCode);
 })
@@ -273,7 +273,7 @@ app.post("/registerOtp",async function(req,res){
     let friend = await userDataBase.findOne({referralCode:req.body.referralCode}).lean();
     if(friend){
         usec = jwt.sign({email:req.body.email,otp:otp,gameName:req.body.gameName,gameId:req.body.gameId,username:req.body.username,password:req.body.password,age:req.body.age,referredBy:friend._id,referralCode:req.body.referralCode},process.env.PIN);
-    }if(req.body.referralCode=="NEW1"){
+    }if(req.body.referralCode=="NEW5"){
         usec = jwt.sign({email:req.body.email,otp:otp,gameName:req.body.gameName,gameId:req.body.gameId,username:req.body.username,password:req.body.password,age:req.body.age,referralCode:req.body.referralCode},process.env.PIN);
     }
     else{
@@ -314,12 +314,15 @@ app.post("/verifyRegisterOtp",async function(req,res){
                 message:`Welcome ${newUser.username}, new tournaments are waiting for you!"` ,
                 userId:newUser._id,
             })
-            let admin = await userDataBase.findOne({email:process.env.email});
-            await notificationDataBase.create({
+            let admin = await userDataBase.findOne({role:"admin"});
+            for(let i=0;i<admin.length;i++){
+                await notificationDataBase.create({
                 title:"New User Update👤",
                 message:`${newUser.username},is a new user on MAX BATTLE ` ,
-                userId:admin._id,
+                userId:admin[i]._id,
             })
+            }
+            
             if (secret.referredBy) {
   await userDataBase.findOneAndUpdate(
     { _id: secret.referredBy },
@@ -332,16 +335,16 @@ app.post("/verifyRegisterOtp",async function(req,res){
       }
     }
   );
-}else if(secret.referralCode=="NEW1"){
+}else if(secret.referralCode=="NEW5"){
                     await userDataBase.findOneAndUpdate({_id:newUser._id},{
                         $inc:{
-                            totalBalance:1,
-                            bonus:1
+                            totalBalance:5,
+                            bonus:5
                         }
                     })
                     await notificationDataBase.create({
                 title:"Joining Bonus🎉",
-               message: ` Hi ${newUser.username}, you earn 1 Max Coins as your joining bonus you can play matches from these coins`,
+               message: ` Hi ${newUser.username}, you earn 5 Max Coins as your joining bonus you can play matches from these coins`,
                 userId:newUser._id,
             })
                 }
@@ -963,11 +966,9 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
     if (!isAdmin(admin)) {
         return res.redirect("/");
     }
-    let localDate = new Date(req.body.dateAndTime); // parses in local time (e.g., IST)
-    let date = new Date(localDate.toISOString()); // stores in proper UTC format
     let tournament = await tournamentDataBase.create({
         description:req.body.description,
-        dateAndTime:date,
+        dateAndTime:req.body.dateAndTime,
         entryFee:req.body.entryFee,
         perKillAmount:req.body.perKillAmount,
         prizePool:req.body.prizePool,
