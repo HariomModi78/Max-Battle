@@ -78,8 +78,8 @@
         <div class="optionHeading">
             <div class="option position">Position</div>            
             <div class="option">Player Name</div>            
-            <div class="option">Winning</div>            
-            <div class="option">Reward</div>            
+            <div class="option winning">Winning</div>            
+            <div class="option reward">Reward</div>            
         </div>
         <% for(let i=0;i< Math.min(users.length,10);i++){ %>
             <div class="playerDetail">
@@ -95,8 +95,10 @@
                 <%}%>  
                 </div>
                 <div class="option"><%=users[i].gameName%></div>
-                <div class="option"><%=users[i].monthlyWinning%></div>
-                <div class="option">
+                <div class="option winning">
+                    <img loading="lazy" id="small" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                    <%=users[i].monthlyWinning%></div>
+                <div class="option reward">
                     
                     <%if(i==0){%>
                         <img loading="lazy" id="small" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
