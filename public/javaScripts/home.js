@@ -1,3 +1,11 @@
+let confirm = document.querySelector(".confirm");
+let joinBonus = document.querySelector(".joiningBonus");
+confirm.addEventListener("click",function(){
+    joinBonus.style.display = "none";
+    fetch(`/confirmBonus/${confirm.id}`,{
+        method:"GET"
+    })
+})
 let myOption = document.getElementsByClassName("myOption");
 let boardImage = document.getElementsByClassName("boardImage");
 for(let i=0;i<boardImage.length;i++){
