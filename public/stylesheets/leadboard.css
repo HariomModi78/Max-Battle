@@ -13,7 +13,7 @@
     height: 2.5rem;
     min-height: fit-content;
 }
-.week,.month{
+.month{
     height: 2rem;
     width: 40%;
     border-radius: 4px;
@@ -24,16 +24,20 @@
 }
 .option{
     height: 2rem;
-    width: calc(100%/4);
+    width: calc(100%/2.5);
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     white-space: nowrap;
     font-size:0.8rem;
-    overflow: hidden;
+    overflow: auto;
+    /* border: 1px solid black; */
+
 }
-.position{
-    width: calc(100%/5);
+.position,.winning,.reward{
+    min-width: fit-content;
+    width: calc(100%/7);
+    justify-content: center;
 }
 .option img{
     height: 2rem;
