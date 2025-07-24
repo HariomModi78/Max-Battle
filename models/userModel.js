@@ -86,6 +86,10 @@ const userSchema = mongoose.Schema({
             ref: "user"
         }],
     isEighteenPlus:Boolean,
+    isApplyCode:{
+        type:Boolean,
+        default:false
+    }
 });
 
 module.exports = mongoose.model("user",userSchema)
