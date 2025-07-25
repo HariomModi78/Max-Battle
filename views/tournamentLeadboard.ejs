@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/tournamentLeadboard.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head> 
+<body>
+    <main>
+        <div class="header">
+            <div class="heading">FFM SOLO TOURNAMENT (RYDEN BAN)</div>
+            <%let date = new Date(tournament.dateAndTime).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })%>
+                    <%let time = new Date(tournament.dateAndTime).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })%>
+                    <div class="date">Organised on <%=date%> at <%=time%></div>
+        </div>
+        <div class="tournamentDetail">
+                <div class="detail">
+                    <div class="detailPart">PRIZE POOL</div>
+                    <div class="detailPart">PER KILL</div>
+                    <div class="detailPart">ENTRY FEE</div>
+                </div>
+                <div class="detail">
+                    <div class="detailPart bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=tournament.prizePool%></div>
+                    <div class="detailPart bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=tournament.perKillAmount%></div>
+                    <div class="detailPart bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%=tournament.entryFee%></div>
+                </div>
+        </div>
+        <div class="result">
+            <div class="red">Match Result</div>
+            <div class="table">
+                <div class="tableHeading" id="blue">
+                    <div class="position" id="bold">Pos.</div>
+                    <div class="username " id="bold">Player Name</div>
+                    <div class="kill bd" id="bold">Kills</div>
+                    <div class="winning " id="bold">Winning</div>
+                </div>
+                <%if(tournament.modeType =="cs"){%>
+                    <%users.forEach(function(val,index){%>
+                        <div class="tableHeading">
+                    <div class="position" id="bold"><%=index+1%></div>
+                    <div class="username " id="bold"><%=val.gameName%></div>
+                    <div class="kill bd" id="bold">0</div>
+                    <div class="winning " id="bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%if(players.includes(String(val._id))){%>
+                            <%if(tournament.matchType=="solo"){%>
+                                <%=tournament.prizePool%>
+                            <%}else if(tournament.matchType=="duo"){%>
+                                <%=tournament.prizePool/2%>
+                            <%}else if(tournament.matchType=="squad"){%>
+                                <%=tournament.prizePool/4%>
+                            <%}%>
+                        <%}else{%>
+                            0
+                        <%}%>
+                    </div>
+                </div>
+                    <%})%>
+                <%}else{%>
+                    <%players.forEach(function(val,index){%>
+                    <div class="tableHeading">
+                    <div class="position" id="bold"><%=index+1%></div>
+                    <div class="username " id="bold"><%=val.userId.gameName%></div>
+                    <div class="kill bd" id="bold"><%=val.kills%></div>
+                    <div class="winning " id="bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%if(index==0){%>
+                            <%=val.kills*tournament.perKillAmount+tournament.firstPrize%>
+                        <%}else if(index==1){%>
+                            <%=val.kills*tournament.perKillAmount+tournament.secondPrize%>
+                        <%}else{%>
+                            <%=val.kills*tournament.perKillAmount%>
+                        <%}%>
+                    </div>
+                </div>
+                <%})%>
+                <%}%>
+                
+            </div>
+        </div>
+    </main>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
