@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
+
 const helmet = require("helmet");
 const hpp = require("hpp");
 const cors = require("cors");
@@ -55,7 +56,84 @@ function sendMail(to,sub,msg){
 <hr>
 <p>Best Regards,</p>
 <p><strong>Max Battle</strong></p>
-<p>Contact us: maxBattle@gmail.com</p>
+<p>Contact us: maxbattlehelp@gmail.com</p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
+
+function sendDeposit(to,sub,amount){
+    //.log("Sending deposit email to:", to);
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>Hello Player 👋,</p>
+
+            <p>We’re happy to inform you that <strong>₹${amount}</strong> has been successfully added to your <strong>Max Battle Wallet</strong>.</p>
+
+            <p>You can now use your wallet balance to join exciting tournaments and compete for rewards 🏆</p>
+
+            <p>If you did not authorize this transaction, please contact our support team immediately.</p>
+
+            <hr>
+            <p><strong>Best Regards,</strong></p>
+            <p><strong>Max Battle Team</strong></p>
+            <p>Contact us: maxbattlehelp@gmail.com</p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
+function sendRefund(to,sub,msg){
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>Hello Player,</p>
+
+                <p>${msg}</p>
+
+                <p>We understand this can be disappointing, and we appreciate your support.</p>
+
+                <hr>
+                <p><strong>Max Battle Team</strong></p>
+                <p>Contact us: maxbattlehelp@gmail.com</p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
+function sendIdPass(to,sub,id,pass){
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>Hello,</p>
+<p>Your Room id is: <strong>${id}</strong></p>
+<p>Your Room id is: <strong>${pass}</strong></p>
+<p>Join fast⏩⏩</p>
+<hr>
+<p>Best Regards,</p>
+<p><strong>Max Battle</strong></p>
+<p>Contact us: maxbattlehelp@gmail.com</p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
+function sendAlert(to,sub){
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>Good Morning Player 👋,</p>
+
+                    <p>We're excited to inform you that <strong>new tournaments are now live</strong> on the Max Battle platform!</p>
+
+                    <p>Don't miss your chance to show your skills and rise to the top of the leaderboard 🏆</p>
+
+                    <hr>
+                    <p><strong>Best of luck,</strong></p>
+                    <p><strong>Team Max Battle</strong></p>
+                    <p>Contact us: maxbattlehelp@gmail.com</p>
 `
     }).catch(function(e){
         //.log("error aya ")
@@ -88,6 +166,10 @@ app.use("/login", authLimiter);
 app.use("/register", authLimiter);
 app.use("/otp", authLimiter); 
 app.set('trust proxy', 1);
+
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
 
@@ -252,6 +334,11 @@ let date = new Date(Date.UTC(
         }
         await tournamentDataBase.create(tournament);
     }
+    let users = await userDataBase.find();
+    for(let i=0;i<users.length;i++){
+        sendAlert(users[i].email,"🎮 Good Morning! New Tournaments are Live on Max Battle")
+    }
+    
     res.send("All tournament are successful created✅");
 })
 app.get("/register",async function(req,res){
@@ -268,9 +355,14 @@ app.get("/referralCodes",async function(req,res){
     res.json(referralCode);
 })
 app.get("/tournamentUsers/:tournamentId",async function(req,res){
-    let users = await tournamentDataBase.findOne({_id:req.params.tournamentId}).populate("slots");
-    //.log(users);
-    res.json(users);
+    try{
+        let users = await tournamentDataBase.findOne({_id:req.params.tournamentId}).populate("slots");
+        //.log(users);
+        res.json(users);
+    }catch(e){
+        res.redirect("/error");
+    }
+    
 })
 app.post("/registerOtp",async function(req,res){
     try{
@@ -379,10 +471,15 @@ app.post("/verifyRegisterOtp",async function(req,res){
     }
 })
 app.get("/referAndEarn/:userId",async function(req,res){
-    let user = await userDataBase.findOne({_id:req.params.userId});
+    try{
+        let user = await userDataBase.findOne({_id:req.params.userId});
     let referrals = await userDataBase.find({referredBy:user._id});
     //.log(referrals);
     res.render("referAndEarn",{user:user,referrals:referrals});
+    }catch(e){
+        res.redirect("/error");
+    }
+    
 })
 app.get("/login",async function(req,res){
     try{
@@ -399,7 +496,8 @@ app.get("/login",async function(req,res){
     }
 })
 app.post("/login",async function(req,res){
-    let user = await userDataBase.findOne({email:req.body.email}).lean();
+    try{
+        let user = await userDataBase.findOne({email:req.body.email}).lean();
     ////.log(user)
     if(user){
         bcrypt.compare(req.body.password,user.password,function(err,result){
@@ -417,6 +515,10 @@ app.post("/login",async function(req,res){
     }else{
         res.redirect("/register")
     }
+    }catch(e){
+        res.redirect("/register")
+    }
+    
     
 })
 // app.get("/notification",function(req,res){
@@ -932,6 +1034,7 @@ app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
     users = await userDataBase.find({_id:users});
     //.log(users);
     for(let i=0;i<users.length;i++){
+        sendIdPass(users[i].email,"Max battle Room Id and Password",req.body.roomId,req.body.roomPassword);
         await notificationDataBase.create({
             title:"Room id & pass😊",
             message: `👋Hi ${users[i].username},your room id is ${req.body.roomId} and password is ${req.body.roomPassword} for ${tournament.description} join fast⏩`,
@@ -1209,6 +1312,11 @@ app.post("/adminRefund/:adminId/:tournamentId",async function(req,res){
                 totalMatch:-1
             }
         })
+        const user = await userDataBase.findOne({ _id: players[i] });
+        if (user && user.email) {
+            const refundMsg = `We're sorry! The tournament has been cancelled. Your entry fee of ₹${tournament.entryFee} has been successfully refunded to your wallet.`;
+            await sendRefund(user.email, "Tournament Cancelled 😞", refundMsg);
+        }
         await notificationDataBase.create({
                 title:"Tournament Cancelled😞",
                 message: `We're sorry! The tournament has been cancelled. Your entry fee of ₹${tournament.entryFee} has been successfully refunded to your wallet.`,
@@ -1602,10 +1710,10 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
 
         await notificationDataBase.create({
                 title:"Deposit💰",
-                message: `💸 Boom! ₹${payment.amount / 100} loaded to your wallet. Ready to conquer the battleground? 🔥`,
+                message: `₹${payment.amount / 100} added to your wallet. Ready to conquer the battleground? 🔥`,
                 userId:payment.notes.userId,
             })
-
+        
         await userDataBase.findOneAndUpdate(
           { _id: payment.notes.userId },
           {
@@ -1615,6 +1723,10 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
             }
           }
         );
+        let user = await userDataBase.findOne({ _id: payment.notes.userId });
+        if (user?.email) {
+            await sendDeposit(user.email, "Deposit💰", payment.amount / 100);
+        }
       }
 
       return res.status(200).json({ status: "ok" });
