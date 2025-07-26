@@ -39,8 +39,8 @@
         </div>
         <div class="discription">FFM SOLO TOURNAMENT [RYDEN BAN]</div>
         <div class="box">
-            <%let date = new Date(tournament.dateAndTime).toLocaleDateString()%>
-            <%let time = new Date(tournament.dateAndTime).toLocaleTimeString()%>
+            <%let date = new Date(val.dateAndTime).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })%>
+                    <%let time = new Date(val.dateAndTime).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })%>
             Match Schedule : <%=date%>  <%=time%>
         </div>
     <%if(joined){%>
