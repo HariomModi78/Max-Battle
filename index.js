@@ -136,6 +136,48 @@ function sendIdPass(to,sub,id,pass){
         //.log("error aya ")
     })
 }
+function sendSuccess(to,sub,amount){
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>👋 Hello Player,</p>
+
+<p>Your <strong>withdrawal of ₹${amount} has been successfully completed</strong> from the Max Battle platform!</p>
+
+<p>The amount has been transferred to your linked UPI.  
+Check your payment app for confirmation.</p>
+
+<p>Keep playing and winning more battles! 🏆  
+New tournaments are live — don't miss out!</p>
+
+                    <hr>
+                    <p><strong>Best of luck,</strong></p>
+                    <p><strong>Team Max Battle</strong></p>
+                    <p>Contact us: maxbattlehelp@gmail.com</p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
+function sendRequest(to,sub,detail){
+    transporter.sendMail({
+        to:to,
+        subject:sub,
+        html:`<p>🔔 <strong>New Withdrawal Request Received</strong></p>
+
+<p><strong>User Name:</strong> ${detail.username}</p>
+<p><strong>Requested Amount:</strong> ₹${detail.amount}</p>
+<p><strong>UPI ID:</strong> ${detail.upi}</p>
+<p><strong>email Id:</strong> ${detail.email}</p>
+
+<hr>
+<p>Please review and process the withdrawal as soon as possible.</p>
+<p><strong>Max Battle Admin Panel</strong></p>
+`
+    }).catch(function(e){
+        //.log("error aya ")
+    })
+}
 function sendAlert(to,sub){
     transporter.sendMail({
         to:to,
@@ -170,7 +212,7 @@ app.use(helmet({
 app.use(hpp());
 app.use(cors());
 const authLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 15 minutes
+  windowMs: 10 * 60 * 1000, // 10 minutes
   max: 50,                 // allow 500 requests per IP
   standardHeaders: true,
   legacyHeaders: false,
@@ -208,7 +250,42 @@ function isAdmin(user){
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
-
+app.post("/emailPermission/:userId",async function(req,res){
+    let flag;
+    //.log(req.body);
+    if(req.body.emailPermission){
+        flag = true;
+    }else{
+        flag = false;
+    }
+    await userDataBase.findOneAndUpdate({_id:req.params.userId},{
+        emailPermission:flag
+    })
+    res.send("Done");
+})
+app.post("/userUpi/:userId",async function(req,res){
+    //.log("hit to hua hai")
+    let user  = await userDataBase.findOne({_id:req.params.userId});
+    let alreadyExists = await userDataBase.findOne({upi:req.body.upi});
+    if(user.upi.length==0 && !alreadyExists){
+        await userDataBase.findOneAndUpdate({_id:user._id},{
+            $push:{
+                upi:req.body.upi
+            }
+        })
+        let admin = await userDataBase.find({role:"admin"});
+            for(let i=0;i<admin.length;i++){
+                await notificationDataBase.create({
+                title:"User bind ther upi",
+                message:`${user.username},with ${req.body.upi} on MAX BATTLE ` ,
+                userId:admin[i]._id,
+            })
+            }
+        return res.json(true);
+    }else{
+        return res.json(false);
+    }
+})
 // app.get("/message",async function(req,res){
 //     let users = await userDataBase.find();
 //     for(let i=0;i<users.length;i++){
@@ -259,7 +336,10 @@ app.post("/adminSendEmail/:adminId",async function(req,res){
     if(req.body.password==(process.env.email.split("@")[0]+"9")){
         let users = await userDataBase.find().lean();
     for(let i=0;i<users.length;i++){
-        sendAll(users[i].email,req.body.subject,req.body.message);
+        if(users[i].emailPermission){
+            sendAll(users[i].email,req.body.subject,req.body.message);
+        }
+        
     }
     res.send("Done✅");
     }else{
@@ -380,7 +460,9 @@ let date = new Date(Date.UTC(
     }
     let users = await userDataBase.find();
     for(let i=0;i<users.length;i++){
+        if(users[i].emailPermission){
         sendAlert(users[i].email,"🎮 Good Morning! New Tournaments are Live on Max Battle")
+        }
     }
     
     res.send("All tournament are successful created✅");
@@ -683,7 +765,7 @@ app.post("/withdraw/:userId",async function(req,res){
         let random = Date.now()
         await transactionDataBase.create({
                 paymentId:random,
-              upiId:req.body.upiId,
+              upiId:user.upi[0],
               amount: req.body.amount,
               status: "withdraw",                   
               userId: user._id,
@@ -693,8 +775,19 @@ app.post("/withdraw/:userId",async function(req,res){
                 message: `⚙️ Hi ${user.username}, your ₹${req.body.amount} withdrawal is being processed. You'll be notified once it's completed. 🕒`,
                 userId:req.params.userId
             })
+        let detail = {
+            amount:req.body.amount,
+            username:user.username,
+            upi:user.upi[0],
+            email:user.email
+        }
+        let admin = await userDataBase.find({role:"admin"});
+            for(let i=0;i<admin.length;i++){
+                sendRequest(admin[i].email,"New Withdrawal Request Received",detail)
+            }
+        
     }
-    res.redirect(`/wallet/${req.params.userId}`);
+    res.redirect(`/withdraw/${req.params.userId}`);
     }catch(e){
         //.log(e);
         res.redirect("/error");
@@ -1058,7 +1151,14 @@ app.post("/adminApproveWithdraw/:adminId/:transactionId",async function(req,res)
                 title:"withdraw Completed✅",
                 message: `🚀 ₹${transaction.amount} sent successfully! Withdrawal processed — check your account. 👍`,
                 userId:transaction.userId,
-            })
+        })
+    let user = await userDataBase.findOne({_id:transaction.userId});
+    if(user.email){
+        if(user.emailPermission){
+        sendSuccess(user.email,"Withdraw Successful",transaction.amount);
+        }
+    }
+    //////////////////
     res.redirect(`/pendingWithdrawRequest/${req.params.adminId}`);
     }catch(e){
         res.redirect("/error");
@@ -1078,7 +1178,9 @@ app.post("/adminSendRoomDetails/:adminId/:tournamentId",async function(req,res){
     users = await userDataBase.find({_id:users});
     //.log(users);
     for(let i=0;i<users.length;i++){
+        if(users[i].emailPermission){
         sendIdPass(users[i].email,"Max battle Room Id and Password",req.body.roomId,req.body.roomPassword);
+        }
         await notificationDataBase.create({
             title:"Room id & pass😊",
             message: `👋Hi ${users[i].username},your room id is ${req.body.roomId} and password is ${req.body.roomPassword} for ${tournament.description} join fast⏩`,
@@ -1358,8 +1460,10 @@ app.post("/adminRefund/:adminId/:tournamentId",async function(req,res){
         })
         const user = await userDataBase.findOne({ _id: players[i] });
         if (user && user.email) {
+            if(user.emailPermission){
             const refundMsg = `We're sorry! The tournament has been cancelled. Your entry fee of ₹${tournament.entryFee} has been successfully refunded to your wallet.`;
             await sendRefund(user.email, "Tournament Cancelled 😞", refundMsg);
+            }
         }
         await notificationDataBase.create({
                 title:"Tournament Cancelled😞",
@@ -1769,7 +1873,9 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
         );
         let user = await userDataBase.findOne({ _id: payment.notes.userId });
         if (user?.email) {
+            if(user.emailPermission){
             await sendDeposit(user.email, "Deposit💰", payment.amount / 100);
+            }
         }
       }
 
