@@ -120,4 +120,3 @@ async function spinWheel(){
     },3000)
 }
 button.addEventListener("click",spinWheel);
-point.addEventListener("click",spinWheel);
