@@ -114,7 +114,6 @@ async function spinWheel(){
     
     setTimeout(function(){
     spin.style.cssText = `transform: translate(-50%,-50%);transition:all 100ms`;
-    button.style.cssText = "display:flex"
     loss.style.display = "none";
     winning.style.display = "none";
     window.location.reload();
