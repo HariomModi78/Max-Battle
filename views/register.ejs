@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <div class="loader"></div>
+    <main>
+        <div class="topBar">Max Battle</div>
+        <pre class="quate">"Show your gameplay
+             and earn rewards"
+        </pre>
+        <div class="wellcome">Wellcome</div>
+        <form action="/registerOtp" method="post">
+            <div class="inputBox">
+                <input class="input" type="text" name="gameName" id="gameName" placeholder="" required>
+                <label for="gameName">FFM Game Name</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="text" name="gameId" id="gameId" placeholder="" required>
+                <label for="gameId">FFM Game Id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="text" name="username" id="username" placeholder="" required>
+                <label for="username"> Create Username</label>
+            </div>
+            
+            <div class="inputBox">
+                <input class="input" type="email" name="email" id="email" placeholder="" required>
+                <label for="email">Email-Id</label>
+            </div>
+            <div class="inputBox">
+                <input class="input" type="password" name="password" id="password" placeholder="" required>
+                <label for="password">Create Password</label>
+            </div>
+            <div class="inputBox">
+                
+                <input class="input" type="text" name="referralCode" id="referralCode" placeholder="">
+                <label for="referralCode">Referral Code (optional)</label>
+                <div class="apply">Apply</div>
+            </div>
+            <div class="inputBox borderNone" >
+                <input name="age" type="checkbox" required> I confirm that I am 18 years or older.
+            </div>
+            
+            <input  type="submit" value="Signup" class="payAndJoin"> 
+            
+        </form>
+
+        <div class="fakeButton">
+            <div class="lastOption"><p>Already a user? </p> <a href="/login"> login</a></div>
+        </div>
+        
+    </main>
+    <script src="/javaScripts/register.js"></script>
+    <script>
+        let referralCode = document.querySelector("#referralCode");
+        let apply = document.querySelector(".apply");
+        referralCode.addEventListener("input",async function(){
+            apply.innerText = "";
+            apply.innerText = "checking...";
+            apply.style.cssText = "background-color:orange"
+            
+            let response = await fetch("/referralCodes")
+            let code  = await response.json();
+            //.log(code);
+            if(code.includes(referralCode.value.trim())){
+                setTimeout(function(){
+                apply.innerText = "verified";
+                apply.style.cssText = "background-color:green"
+            },2000)
+            }else{
+                setTimeout(function(){
+                apply.innerText = "try again";
+                apply.style.cssText = "background-color:orange"
+            },2000)
+            }
+            
+        })
+        let loader = document.querySelector(".loader");
+
+form.addEventListener("submit", function() {
+    document.querySelector("main").style.display = "none";
+    loader.style.display = "block";
+});
+
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        document.querySelector("main").style.display = "flex";
+        loader.style.display = "none";
+    }
+});
+        
+
+
+     </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
