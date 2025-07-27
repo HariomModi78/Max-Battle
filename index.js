@@ -250,6 +250,62 @@ function isAdmin(user){
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
+app.get("/spin/:userId",async function(req,res){
+    let user = await userDataBase.findOne({_id:req.params.userId});
+    res.render("spin",{user:user});
+})
+app.get("/spinResult/:userId",async function(req,res){
+    try{
+        let user = await userDataBase.findOne({_id:req.params.userId});
+        if(user && user.spin>0){
+            let num = Math.floor(Math.pow(Math.random(), 2) * 6);
+            if(num==0){
+                await userDataBase.findOneAndUpdate({_id:user._id},{
+                    $inc:{
+                        totalBalance:0.5,
+                        bonus:0.5,
+                        spin:-1
+                    }
+                })
+            }else if(num==2){
+                await userDataBase.findOneAndUpdate({_id:user._id},{
+                    $inc:{
+                        totalBalance:1,
+                        bonus:1,
+                        spin:-1
+                    }
+                })
+            }else if(num==4){
+                await userDataBase.findOneAndUpdate({_id:user._id},{
+                    $inc:{
+                        totalBalance:2,
+                        bonus:2,
+                        spin:-1
+                    }
+                })
+            }else if(num==5){
+                await userDataBase.findOneAndUpdate({_id:user._id},{
+                    $inc:{
+                        totalBalance:5,
+                        bonus:5,
+                        spin:-1
+                    }
+                })
+            }else{
+                await userDataBase.findOneAndUpdate({_id:user._id},{
+                    $inc:{
+                        spin:-1
+                    }
+                })
+            }
+            return res.json({num:num});
+        }else{
+            return res.json(false);
+        }
+    }catch(e){
+        res.redirect("/error");
+    }
+})
 app.post("/emailPermission/:userId",async function(req,res){
     let flag;
     //.log(req.body);
