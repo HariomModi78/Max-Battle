@@ -360,6 +360,7 @@ app.get("/",async function(req,res){
         try{
             let token = jwt.verify(req.cookies.token,`${process.env.PIN}`);
             let user = await userDataBase.findOne({email:token.email}).lean();
+            res.cookie("ad","ad");
             res.redirect(`/home/${user._id}`);
         }catch(e){
             res.redirect("/register")
@@ -747,7 +748,12 @@ app.get("/home/:userId",async function(req,res){
         let user = await userDataBase.findOne({_id:req.params.userId}).lean();
         let notification = await notificationDataBase.find({userId:req.params.userId,seen:false}).lean();
         //.log(notification.length)
-        res.render("home",{user:user,notification:notification.length});
+        let ad = req.cookies.ad;
+        let adFlag = false;
+        if(ad=="ad"){
+            adFlag = true;
+        }
+        res.render("home",{user:user,notification:notification.length,adFlag:adFlag});
     }catch(e){
         res.redirect("/error");
     }
@@ -803,6 +809,7 @@ app.get("/deposit/:userId",async function(req,res){
 app.get("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
+    res.cookie("ad","ba");
     res.render("withdraw",{user:user});
     }catch(e){
         res.redirect("/error");
@@ -811,7 +818,7 @@ app.get("/withdraw/:userId",async function(req,res){
 app.post("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-    if(user.winning >=req.body.amount){
+    if(user.winning >=req.body.amount && req.body.amount >=10){
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-Number(req.body.amount),
