@@ -336,6 +336,9 @@ app.post("/userUpi/:userId",async function(req,res){
                 message:`${user.username},with ${req.body.upi} on MAX BATTLE ` ,
                 userId:admin[i]._id,
             })
+            sendAll(admin[i].email,"🎉🎉User Bind there UPI",
+            `<p><strong>Action Required:</strong></p><p>User <strong>${user.username}has successfully bound their UPI ID <strong>${req.body.upi}</strong>. Please send <strong>₹1</strong> to their account now.</p>`
+            )
             }
         return res.json(true);
     }else{
