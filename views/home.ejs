@@ -55,10 +55,13 @@
             <%}%>
             <%if(user.upi.length==0 && adFlag){%>
                 <div class="joiningBonus" >
+            <%}else{%>
+                <div style="display:none" class="joiningBonus">
+            <%}%>
                     <img src="/images/bindUpi.webp" alt="">
                 <a class="confirm1" href="/withdraw/<%=user._id%>">Bind</a>
                 </div>
-            <%}%>
+            
             
             <div class="confirm" style="display: none;"></div>
             <div class="noticeBoard">
