@@ -95,10 +95,7 @@ const userSchema = mongoose.Schema({
         type:Boolean,
         default:true
     },
-    spin:{
-        type:Number,
-        default:0
-    }
+    lastSpinTime:Date
 });
 
 module.exports = mongoose.model("user",userSchema)
