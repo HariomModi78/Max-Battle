@@ -29,6 +29,17 @@
         <div class="fakeHeader" id="/withdraw/<%=user._id%>"></div>
         
         <div class="page">
+            <%if(status){%>
+                <div class="withdrawCompleted">
+            <%}else{%>
+                <div class="withdrawCompleted" style="display: none;">
+            <%}%>
+               <p>Withdraw Completed</p>
+               <img src="https://img.icons8.com/?size=48&id=Mw4ZtZQHm38P&format=gif" alt=""> 
+               <p class="smallText">amount is sent within 48hr</p>
+               <h4>Thankyou</h4>
+               <div class="confirm1">Ok</div>
+            </div>
             <div class="part1">
             <div class="amount">
                 <img loading="lazy" class="smallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
@@ -76,7 +87,7 @@
                 <div class="bind" id="<%=user._id%>">
                     <img src="https://cdn-icons-png.flaticon.com/128/992/992482.png" alt="">
                     <p>Add your UPI</p>
-                    <p>Get ₹1 within 24hr</p>
+                    <p>Get ₹1 Instant</p>
                     <p>after this you unable to add new upi</p>
                 </div>
                 <div class="dummy" style="display: none;">
@@ -94,14 +105,17 @@
             </div>
             <br>
             <div class="confirm hidden blue" >Confirm</div>
-       
+       <div class="alert"></div>
         <strong id="<%=user.winning%>">
             Note:You can only withdraw winning maxcoins
-            <div class="note">(Minimum withdrawal amount: ₹10)</div>
+            <div class="note">(Minimum withdrawal amount: ₹3)</div>
         </strong>
         
     </main>
     <script>
+        window.addEventListener("click",function(){
+            document.querySelector(".withdrawCompleted").style.display = "none";
+        })
         let bind = document.querySelector(".bind");
         let hidden = document.getElementsByClassName("hidden");
         let upi1 = document.querySelector("#upiId1");
@@ -173,18 +187,25 @@
         let strong = document.querySelector("strong");
         let amount = document.querySelector("#amount");
         let button = document.querySelector("#input");
+        let alertText = document.querySelector(".alert");
+        amount.addEventListener("input",function(){
+            if(amount.value.trim().length>0){
+                button.classList.add("color");
+            }else{
+                button.classList.remove("color");
+            }
+        })
         button.addEventListener("click",function(e){
             
             if((amount.value).length>0){
-                if(parseInt(amount.value)<10){
+                if(parseInt(amount.value)<3){
                     e.preventDefault();
-                    alert(`minimum withdrawl is 10 Max Coins`);
+                    alertText.innerHTML = "minimum withdraw is ₹3";
                 }else{ 
                 if(parseFloat(strong.id)<parseFloat(amount.value)){
                     e.preventDefault();
-                    alert("You don't have sufficent balance")
+                    alertText.innerHTML = "You don't have sufficent balance";
                 }else{
-                    alert("Your withdrawal request is successfuly sent 🎉")
                     form1.action = fakeHeader.id;
                 }
             }
