@@ -813,12 +813,8 @@ app.get("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     res.cookie("ad","ba");
-    let status = false;
-    if(req.cookies.wi ==  "wi"){
-        status = true;
-        res.cookie("wi","iw");
-    }
-    res.render("withdraw",{user:user,status:status});
+    
+    res.render("withdraw",{user:user});
     }catch(e){
         res.redirect("/error");
     }
@@ -859,7 +855,7 @@ app.post("/withdraw/:userId",async function(req,res){
         
     }
     res.cookie("wi","wi");
-    res.redirect(`/withdraw/${req.params.userId}`);
+    res.redirect(`/transaction/${req.params.userId}`);
     }catch(e){
         //.log(e);
         res.redirect("/error");
@@ -885,7 +881,13 @@ app.get("/transaction/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let transaction = await transactionDataBase.find({userId:user._id}).sort({createdAt:-1});
-    res.render("transaction",{user:user,transaction:transaction});
+    let status = false;
+    if(req.cookies.wi ==  "wi"){
+        status = true;
+        res.cookie("wi","iw");
+    }
+    res.render("transaction",{user:user,transaction:transaction,status:status});
+    
     }catch(e){
         res.redirect("/error");
     }
