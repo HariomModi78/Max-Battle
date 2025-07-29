@@ -1,8 +1,16 @@
+window.addEventListener("pageshow", function(event) {
+    document.querySelector(".page").style.display = "block";
+            footer.style.display = "flex";
+            mainHeader.style.display = "flex";
+            pageLoader.style.display = "none";
+});
+
 let dailySpin = document.querySelector(".dailySpin");
 dailySpin.addEventListener("click",function(){
     document.querySelector(".page").style.display = "none";
         footer.style.display = "none";
         mainHeader.style.display = "none";
+        pageLoader.style.display = "block"
 
     window.location.href = `/spin/${dailySpin.id}`;
 })
@@ -23,6 +31,13 @@ let myOption = document.getElementsByClassName("myOption");
 let boardImage = document.getElementsByClassName("boardImage");
 for(let i=0;i<boardImage.length;i++){
     boardImage[i].addEventListener("click",function(){
+        if(boardImage[i].id != "#tournamentBox"){
+            pageLoader.style.display = "block"
+        document.querySelector(".page").style.display = "none";
+        footer.style.display = "none";
+        mainHeader.style.display = "none";
+        }
+        
         window.location.href = `${boardImage[i].id}`
     })
 }
@@ -64,12 +79,7 @@ for(let i=0;i<myOption.length;i++){
     })
     
 }
-window.addEventListener("pageshow", function(event) {
-    document.querySelector(".page").style.display = "block";
-            footer.style.display = "flex";
-            mainHeader.style.display = "flex";
-            pageLoader.style.display = "none";
-});
+
 let board = document.querySelector(".board");
 let slide = document.querySelector(".slide");
 let circle = document.getElementsByClassName("circle")
