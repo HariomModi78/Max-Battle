@@ -252,49 +252,71 @@ app.get("/ping", (req, res) => {
 });
 app.get("/spin/:userId",async function(req,res){
     let user = await userDataBase.findOne({_id:req.params.userId});
-    res.render("spin",{user:user});
+    const now = new Date();
+  const lastSpin = new Date(user.lastSpinTime || 0);
+  const hoursSinceLastSpin = (now - lastSpin) / (1000 * 60 * 60);
+    let timeLeft = false;
+  if (hoursSinceLastSpin < 5) {
+    const remaining = (5 - hoursSinceLastSpin).toFixed(2);
+    timeLeft = remaining * 60 * 60 * 1000;
+  }
+    res.render("spin",{user:user,timeLeft:timeLeft});
 })
 app.get("/spinResult/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId});
-        if(user && user.spin>0){
+        const now = new Date();
+  const lastSpin = new Date(user.lastSpinTime || 0);
+  const hoursSinceLastSpin = (now - lastSpin) / (1000 * 60 * 60);
+  //.log(hoursSinceLastSpin,"Abhe time hai lala");
+        if(user && hoursSinceLastSpin > 5){
+            const remaining = (5 - hoursSinceLastSpin).toFixed(2);
+            //.log("Working")
             let num = Math.floor(Math.pow(Math.random(), 2) * 6);
             if(num==0){
                 await userDataBase.findOneAndUpdate({_id:user._id},{
                     $inc:{
-                        totalBalance:0.5,
-                        bonus:0.5,
-                        spin:-1
+                        totalBalance:0.3,
+                        bonus:0.3,
+                    },
+                    $set:{
+                        lastSpinTime:new Date()
                     }
                 })
             }else if(num==2){
                 await userDataBase.findOneAndUpdate({_id:user._id},{
                     $inc:{
-                        totalBalance:1,
-                        bonus:1,
-                        spin:-1
+                        totalBalance:0.2,
+                        bonus:0.2,
+                        },
+                    $set:{
+                        lastSpinTime:new Date()
                     }
                 })
             }else if(num==4){
                 await userDataBase.findOneAndUpdate({_id:user._id},{
                     $inc:{
-                        totalBalance:2,
-                        bonus:2,
-                        spin:-1
+                        totalBalance:0.1,
+                        bonus:0.1,
+                        },
+                    $set:{
+                        lastSpinTime:new Date()
                     }
                 })
             }else if(num==5){
                 await userDataBase.findOneAndUpdate({_id:user._id},{
                     $inc:{
-                        totalBalance:5,
-                        bonus:5,
-                        spin:-1
+                        totalBalance:1,
+                        bonus:1,
+                        },
+                    $set:{
+                        lastSpinTime:new Date()
                     }
                 })
             }else{
                 await userDataBase.findOneAndUpdate({_id:user._id},{
-                    $inc:{
-                        spin:-1
+                    $set:{
+                        lastSpinTime:new Date()
                     }
                 })
             }
