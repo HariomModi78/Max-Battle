@@ -813,7 +813,12 @@ app.get("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     res.cookie("ad","ba");
-    res.render("withdraw",{user:user});
+    let status = false;
+    if(req.cookies.wi ==  "wi"){
+        status = true;
+        res.cookie("wi","iw");
+    }
+    res.render("withdraw",{user:user,status:status});
     }catch(e){
         res.redirect("/error");
     }
@@ -821,7 +826,7 @@ app.get("/withdraw/:userId",async function(req,res){
 app.post("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
-    if(user.winning >=req.body.amount && req.body.amount >=10){
+    if(user.winning >=req.body.amount && req.body.amount >=3){
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-Number(req.body.amount),
@@ -853,6 +858,7 @@ app.post("/withdraw/:userId",async function(req,res){
             }
         
     }
+    res.cookie("wi","wi");
     res.redirect(`/withdraw/${req.params.userId}`);
     }catch(e){
         //.log(e);
