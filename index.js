@@ -845,6 +845,7 @@ app.post("/withdraw/:userId",async function(req,res){
     try{
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     if(user.winning >=req.body.amount && req.body.amount >=3){
+        let charges = (req.body.amount*3)/100;
         await userDataBase.findOneAndUpdate({_id:user._id},{
             $inc:{
                 totalBalance:-Number(req.body.amount),
@@ -855,17 +856,17 @@ app.post("/withdraw/:userId",async function(req,res){
         await transactionDataBase.create({
                 paymentId:random,
               upiId:user.upi[0],
-              amount: req.body.amount,
+              amount: req.body.amount-charges,
               status: "withdraw",                   
               userId: user._id,
         })
         await notificationDataBase.create({
                 title:"Withdraw🎉",
-                message: `⚙️ Hi ${user.username}, your ₹${req.body.amount} withdrawal is being processed. You'll be notified once it's completed. 🕒`,
+                message: `⚙️ Hi ${user.username}, your ₹${req.body.amount-charges} withdrawal is being processed. You'll be notified once it's completed. 🕒`,
                 userId:req.params.userId
             })
         let detail = {
-            amount:req.body.amount,
+            amount:req.body.amount-charges,
             username:user.username,
             upi:user.upi[0],
             email:user.email
