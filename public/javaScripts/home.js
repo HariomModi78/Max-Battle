@@ -1,5 +1,9 @@
 let dailySpin = document.querySelector(".dailySpin");
 dailySpin.addEventListener("click",function(){
+    document.querySelector(".page").style.display = "none";
+        footer.style.display = "none";
+        mainHeader.style.display = "none";
+
     window.location.href = `/spin/${dailySpin.id}`;
 })
 let confirm = document.querySelector(".confirm");
@@ -134,16 +138,14 @@ tournament[i].addEventListener("click",function(){
             p.innerText = "CLASH SQUAD";
         }
         pageLoader.style.display = "flex";
-        setTimeout(function(){
-            document.querySelector(".page").style.display = "block";
+    window.location.href = `/tournament/upcoming/${tournament[i].classList[1]}/${tournament[i].id}`
+})
+window.addEventListener("pageshow",function(){
+    document.querySelector(".page").style.display = "block";
             footer.style.display = "flex";
             mainHeader.style.display = "flex";
             pageLoader.style.display = "none";
-        },3000);
-        console.log(tournament[i].classList[1])
-    window.location.href = `/tournament/upcoming/${tournament[i].classList[1]}/${tournament[i].id}`
 })
-
 let y = 0;
 window.addEventListener("scroll",function(event){
     if(window.scrollY>0 && window.scrollY>y){
