@@ -194,7 +194,9 @@
                     e.preventDefault();
                     alertText.innerHTML = "You don't have sufficent balance";
                 }else{
-                    
+                    button.style.display = "none";
+                    alertText.style.cssText = "color:green";
+                    alertText.innerHTML = "Processing..."
                     form1.action = fakeHeader.id;
                 }
             }
@@ -202,6 +204,8 @@
         })
         window.addEventListener("pageshow",()=>{
                 amount.value = "";
+                button.style.display = "flex";
+                alertText.innerHTML = ""
         })
     </script>
     <script src="/javaScripts/back.js"></script>
