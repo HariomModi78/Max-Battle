@@ -14,6 +14,17 @@
 </head>
 <body>
     <main>
+        <%if(status){%>
+                <div class="withdrawCompleted">
+            <%}else{%>
+                <div class="withdrawCompleted" style="display: none;">
+            <%}%>
+               <p>Withdraw Completed</p>
+               <img src="https://img.icons8.com/?size=48&id=Mw4ZtZQHm38P&format=gif" alt=""> 
+               <p class="smallText">amount is sent within 48hr</p>
+               <h4>Thankyou</h4>
+               <div class="confirm1">Ok</div>
+            </div>
         <div class="header">
             <div class="logo back" id="wallet">
                 <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
@@ -37,10 +48,13 @@
                         <%let time = new Date(val.createdAt).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" }) %>
                 <div class="date"><%=date%> <div class="time"><%=time%></div></div>
                 <%if(!isNaN(val.paymentId)){%>
+
                         <%if(val.flag){%>
                             <div class="status"><%=val.status%></div>
                         <%}else{%>
-                            <div class="status red"><%=val.status%></div>
+                            <div class="status red"><%=val.status%>
+                                <img src="https://img.icons8.com/?size=40&id=TmIKpxTOSBi7&format=gif" alt="">
+                            </div>
                         <%}%>
                         
                     <%}else{%>
@@ -75,6 +89,11 @@
         <%})%>
         <div class="fakeFooter"></div>
     </main>
+    <script>
+         window.addEventListener("click",function(){
+            document.querySelector(".withdrawCompleted").style.display = "none";
+        })
+    </script>
     <script src="/javaScripts/back.js"></script>
     <script src="/javaScripts/boiler.js"></script>
     <script type="module" src="/script.js"></script>
