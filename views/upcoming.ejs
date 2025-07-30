@@ -50,7 +50,8 @@
     </div>
     <div class="page">
         <%if(tournament.length==0){%>
-            <strong style="height: 60vh;width: 100vw;display: flex;justify-content: center;align-items: center;">No Data Found</strong>
+            <strong style="height: 60vh;width: 100vw;display: flex;flex-direction: column;text-align: center;justify-content: center;align-items: center;"><p>There are no upcomming matches currently.</p>
+            <p>Check back in come time</p></strong>
         <%}%>
         <%tournament.forEach(function(val){%>
             
