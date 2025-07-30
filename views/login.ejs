@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <div class="loader"></div>
+    <main>
+        
+        <div class="wellcome">
+            <div class="wellcomeText">Welcome to,</div>
+            <div class="wellcomeText">Login</div>
+        </div>
+        <form action="/login" method="post">
+                <input class="input" type="email" name="email" id="email" placeholder="Email" required>
+                <input class="input" type="password" name="password" id="password" placeholder="Password" required>
+
+                <a class="formatePassword" href="/formatePassword">Formate password</a>
+
+            <input type="submit" class="payAndJoin" value="Login">
+        </form>
+        
+        <div class="fakeButton">
+            
+            <div class="lastOption"><p>Don't have an account? </p> <a href="/register"> Register</a></div>
+        </div>
+    </main>
+     <script>
+        let loader = document.querySelector(".loader");
+
+form.addEventListener("submit", function() {
+    document.querySelector("main").style.display = "none";
+    loader.style.display = "block";
+});
+
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        document.querySelector("main").style.display = "flex";
+        loader.style.display = "none";
+    }
+});
+        
+
+
+     </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
