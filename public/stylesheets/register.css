@@ -12,83 +12,61 @@ main{
     flex-direction: column;
     min-height: fit-content;
 }
-.topBar{
-    height: 3rem;
-    width: 100%;
-    background-color: #2b2a2a;
-    color: white;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} 
-pre{
-    height: 5rem;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 700;
-     display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .wellcome{
-    height: 3rem;
+    height: 11rem;
+    padding-left: 1rem;
+    /* border: 1px solid black; */
     width: 100%;
+    max-width: 25rem;
+    place-self: center;
+    /* margin: auto; */
     display: flex;
-    align-items: center;
-    justify-content: center;
-
+    flex-direction: column;
+    /* align-items: flex-end; */
+    font-weight: 800;
+    justify-content: flex-end;
+    font-size: 1.6rem;
+    color: rgb(12, 179, 194);
+    /* justify-content: center; */
+    padding-bottom: 1rem;
+}
+.signupGreet{
+    height: 8rem;
 }
 form{
     height: fit-content;
     width: 100%;
     /* min-height: 20rem; */
-    /* border: 1px solid white; */
+    /* border: 1px solid black; */
+    padding: 1rem;
     display: flex;
     gap: 1rem;
     flex-direction: column;
     align-items: center;
     /* justify-content: space-evenly; */
 }
-.inputBox{
-    height: 3rem;
-    width: 20rem;
-    max-width: 100vw;
-    border-radius: 20px;
-    border: 1px solid black;
-}
-label{
-    position:relative;
-    top:-2.1rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    left:0.5rem;
-}
-.clickLabel{
-    position:relative;
-    top:-3.2rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    left:0.5rem; 
-    opacity: 0.6;
-}
-/* .clickInput{
-    border:1.5px solid black;
-} */
+
 input{
-    height: 3rem;
+    height: 2.8rem;
     width: 100%;
-    max-width: 19rem;
+    max-width: 25rem;
     border-radius: 6px;
-    background-color: rgba(255, 255, 255, 0.115);
+    background-color:transparent;
+    border-radius: 20px;
     outline: none;
     /* border: 1px solid rgba(247, 215, 2, 0.213); */
     border: none;
-    padding-left: 0.3rem;
+    /* background-color: green; */
+    padding-left: 0.8rem;
     font-size:0.9rem;
     font-weight: 600;
     /* color: white; */
+    /* box-shadow:inset 0 -1px 2px rgba(0, 0, 0, 0.297); */
+    border: 0.2px solid rgba(128, 128, 128, 0.955);
+    color: black;
+    background-color: white;
 }
+
 
 .fakeButton{
      height: 3rem;
@@ -108,20 +86,35 @@ input{
 }
 .lastOption p{
     padding: 0.3rem;
+    font-weight: 300;
+    opacity: 0.6;
+}
+.formatePassword{
+    height: 2rem;
+    width: 100%;
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+    color: black;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    justify-content: flex-end;
 }
 .payAndJoin{
-    height: 3.4rem;
-    width: 80%;
+    height: 3rem;
+    width: 100%;
     place-self: center;
     margin: auto;
     bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(12, 179, 194);
-    border: 2px solid rgb(12, 179, 194);
-    font-size: 1.4rem;
-    background-color: white;
+    background-color: rgb(12, 179, 194);
+    /* border: 2px solid rgb(12, 179, 194); */
+    font-size: 1rem;
+    padding: 0;
+    color: white;
+    /* background-color: white; */
 }
 
 
@@ -142,8 +135,23 @@ strong{
 .passwardForm{
     min-height: 10rem;
 }
+.inputBox{
+    height: 2.8rem;
+    max-width: 25rem;
+
+    width: 100%;
+    place-self: center;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    border-radius:20px ;
+    padding-right: 0.4rem;
+    border: 0.2px solid rgba(128, 128, 128, 0.955);
+    color: black;
+    background-color: white;
+}
 .apply{
-    height: 1.5rem;
+    height: 2rem;
     width: 5rem;
     background-color: orange;
     color: white;
@@ -152,10 +160,16 @@ strong{
     justify-content: center;
     border-radius: 20px;
     font-size: 0.8rem;
-    border: 1px solid black;
-    position: relative;
-    left: 70%;
-    bottom: 4.6rem;
+    font-weight: 800;
+    /* border: 1px solid black; */
+    /* position: relative;
+    left: 35%;
+    bottom: 11%; */
+}
+.heightFull{
+    min-height: 100%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 .light{
     font-size: 1rem;
@@ -164,9 +178,13 @@ strong{
     left: 25%;
     bottom: 1.1rem;
 }
+::-webkit-input-placeholder{
+    font-weight: 400;
+    font-size: 0.8rem;
+}
 input[type="checkbox"]{
-    height: 1rem;
-    width: 1rem;
+    height: 0.7rem;
+    width: 0.7rem;
 }
 .borderNone{
     border: none;
@@ -179,8 +197,9 @@ input[type="checkbox"]{
     /* border: 1px solid black; */
 }
 a{
-    color: blue;
+    color:black;
     text-decoration: none;
+    font-weight: 800;
 }
 
 /* HTML: <div class="loader"></div> */
