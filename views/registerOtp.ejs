@@ -11,21 +11,16 @@
 <body>
     <div class="loader"></div>
     <main>
-        <div class="topBar">Max Battle</div>
-        <pre class="quate" style="height: 10rem;">           After this
-          you are also 
-       a part of Max Battle😊
-        </pre>
-        
+        <div class="wellcome signupGreet">
+            <p>Create new,</p>
+            <p>Account verification</p>
+        </div>
         <form action="/verifyRegisterOtp" method="post">
             <% if (error) { %>
     <p style="color: red;font-size: 0.9rem;"><%= error %></p>
   <% } %>
-            <div class="inputBox">
-                <input class="input" type="number" name="otp" id="otp" placeholder="" required>
-                <label for="otp">OTP</label>
-            </div>            
-            <input type="submit" style="font-size: 1rem;" class="payAndJoin" value="Verify OTP ">
+                <input class="input" type="number" name="otp" id="otp" placeholder="OTP" required>
+                <input type="submit" style="font-size: 1rem;" class="payAndJoin" value="Verify OTP ">
         </form>
         
     </main>
