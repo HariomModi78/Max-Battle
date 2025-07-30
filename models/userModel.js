@@ -26,7 +26,6 @@ db.on("error", (err) => {
 
 const userSchema = mongoose.Schema({
     gameName:String,
-    gameId:String,
     username:{
         type:String,
     },
