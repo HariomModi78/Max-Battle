@@ -392,7 +392,7 @@ app.get("/",async function(req,res){
         }
         
     }else{
-        res.render("start");
+        res.render("login");
     }
 
 })
@@ -1167,22 +1167,28 @@ app.post("/resetPassword/:userId",async function(req,res){
     }
 })
 app.get("/formatePassword",function(req,res){
-    res.render("formatePassword");
+    let error = "";
+    res.render("formatePassword",{error});
 })
 app.post("/formatePassword",async function(req,res){
     try{
     let user = await userDataBase.findOne({email:req.body.email}).lean();
-    let otp = (Math.random()*9999+1000).toFixed(0);
+    if(user){
+        let otp = (Math.random()*9999+1000).toFixed(0);
     let secret = jwt.sign({email:req.body.email,otp:otp},process.env.PIN);
     sendMail(req.body.email,"OTP FOR PASSWORD FORMATE",otp);
     res.cookie("secret",secret);
     res.redirect("/otp");
+    }else{
+        res.render("formatePassword",{error:"Invalid Email"})
+    }
+    
     }catch(e){
         res.redirect("/error");
     }
 })
 app.get("/otp",function(req,res){
-    res.render("otp");
+    res.render("otp",{error:""});
 })
 app.post("/verifyOtp",async function(req,res){
     try{
@@ -1205,7 +1211,7 @@ app.post("/verifyOtp",async function(req,res){
 });
         res.redirect(`/`);
     }else{
-        res.redirect("/otp")
+        res.render("otp", { error: "Invalid OTP. Please try again." });
     }
     }catch(e){
         res.redirect("/error");
