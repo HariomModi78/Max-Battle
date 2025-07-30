@@ -11,42 +11,25 @@
 <body>
     <div class="loader"></div>
     <main>
-        <div class="topBar">Max Battle</div>
-        <pre class="quate">"Show your gameplay
-             and earn rewards"
-        </pre>
-        <div class="wellcome">Wellcome</div>
+        
+        <div class="wellcome signupGreet">
+            <p>Create new,</p>
+            <p>Account</p>
+        </div>
         <form action="/registerOtp" method="post">
-            <div class="inputBox">
-                <input class="input" type="text" name="gameName" id="gameName" placeholder="" required>
-                <label for="gameName">FFM Game Name</label>
-            </div>
-            <div class="inputBox">
-                <input class="input" type="text" name="gameId" id="gameId" placeholder="" required>
-                <label for="gameId">FFM Game Id</label>
-            </div>
-            <div class="inputBox">
-                <input class="input" type="text" name="username" id="username" placeholder="" required>
-                <label for="username"> Create Username</label>
-            </div>
-            
-            <div class="inputBox">
-                <input class="input" type="email" name="email" id="email" placeholder="" required>
-                <label for="email">Email-Id</label>
-            </div>
-            <div class="inputBox">
-                <input class="input" type="password" name="password" id="password" placeholder="" required>
-                <label for="password">Create Password</label>
-            </div>
-            <div class="inputBox">
-                
-                <input class="input" type="text" name="referralCode" id="referralCode" placeholder="">
-                <label for="referralCode">Referral Code (optional)</label>
+                <input class="input" type="text" name="gameName" id="gameName" placeholder="Game Name" required>
+                <input class="input" type="text" name="gameId" id="gameId" placeholder="Game id" required>
+                <input class="input" type="text" name="username" id="username" placeholder="Username" required>
+                <input class="input" type="email" name="email" id="email" placeholder="Email" required>
+                <input class="input" type="password" name="password" id="password" placeholder="Password" required>
+                <div class="inputBox">
+                    <input class="input borderNone heightFull" type="text" name="referralCode" id="referralCode" placeholder="Referal code (optional)">
                 <div class="apply">Apply</div>
-            </div>
+                </div>
+                
             
             <div class="inputBox borderNone" >
-                <input name="age" type="checkbox" required> <a href="/termsAndCondition">terms and conditions</a> 
+                <input name="age" type="checkbox" required> <a href="/termsAndCondition">Terms and Conditions</a> 
             </div>
             
             <input  type="submit" value="Signup" class="payAndJoin"> 
@@ -62,9 +45,10 @@
     <script>
         let referralCode = document.querySelector("#referralCode");
         let apply = document.querySelector(".apply");
-        referralCode.addEventListener("input",async function(){
+        
+        apply.addEventListener("click",async function(){
             apply.innerText = "";
-            apply.innerText = "checking...";
+            apply.innerText = "Checking...";
             apply.style.cssText = "background-color:orange"
             
             let response = await fetch("/referralCodes")
@@ -73,11 +57,15 @@
             if(code.includes(referralCode.value.trim())){
                 setTimeout(function(){
                 apply.innerText = "verified";
-                apply.style.cssText = "background-color:green"
+                apply.style.cssText = "background-color:green";
+                referralCode.addEventListener("input",function(){
+            apply.innerText = "Apply";
+                apply.style.cssText = "background-color:orange"
+        })
             },2000)
             }else{
                 setTimeout(function(){
-                apply.innerText = "try again";
+                apply.innerText = "Try again";
                 apply.style.cssText = "background-color:orange"
             },2000)
             }
