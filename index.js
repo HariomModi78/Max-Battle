@@ -1738,7 +1738,7 @@ app.get("/monthlyPrizeDistribution/verification/:adminId",async function(req,res
     sendMail(process.env.email,"OTP FOR MONTHLY PRIZE DISTRIBUTION",otp);
     let pri = jwt.sign({otp:otp},process.env.PIN);
     res.cookie("pri",pri);
-    res.render("monthlyPrizeDistributionVerification",{admin:admin});
+    res.render("monthlyPrizeDistributionVerification",{admin:admin,error:""});
 })
 app.post("/monthlyPrizeDistribution/:adminId",async function(req,res){
     let admin = await userDataBase.findOne({_id:req.params.adminId}).lean();
@@ -1752,7 +1752,7 @@ app.post("/monthlyPrizeDistribution/:adminId",async function(req,res){
     //.log(otp.otp);
 
     if(String(req.body.otp) != String(otp.otp)){
-        return res.redirect(`/monthlyPrizeDistribution/verification/${admin._id}`);
+        return res.render("monthlyPrizeDistributionVerification",{admin:admin,error:"❌ Invalid OTP. Please try again."});
     }
     let users = await userDataBase.find().sort({monthlyWinning:-1}).lean();
     for(let i=0;i<users.length;i++){
