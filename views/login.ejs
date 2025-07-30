@@ -11,26 +11,23 @@
 <body>
     <div class="loader"></div>
     <main>
-        <div class="topBar">Max Battle</div>
-        <pre class="quate">"Show your gameplay
-             and earn rewards"
-        </pre>
-        <div class="wellcome">Wellcome</div>
+        
+        <div class="wellcome">
+            <div class="wellcomeText">Welcome to,</div>
+            <div class="wellcomeText">Login</div>
+        </div>
         <form action="/login" method="post">
-            <div class="inputBox">
-                <input class="input" type="email" name="email" id="email" placeholder="" required>
-                <label for="email">Email-Id</label>
-            </div>
-            <div class="inputBox">
-                <input class="input" type="password" name="password" id="password" placeholder="" required>
-                <label for="password">Password</label>
-            </div>
+                <input class="input" type="email" name="email" id="email" placeholder="Email" required>
+                <input class="input" type="password" name="password" id="password" placeholder="Password" required>
+
+                <a class="formatePassword" href="/formatePassword">Formate password</a>
+
             <input type="submit" class="payAndJoin" value="Login">
         </form>
-        <a style="place-self: center;margin-top: 0.4rem;" href="/formatePassword">formate password</a>
+        
         <div class="fakeButton">
             
-            <div class="lastOption"><p>Don't have account? </p> <a href="/register"> Register</a></div>
+            <div class="lastOption"><p>Don't have an account? </p> <a href="/register"> Register</a></div>
         </div>
     </main>
     <script src="/javaScripts/register.js"></script>
