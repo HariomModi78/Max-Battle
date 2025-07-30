@@ -11,21 +11,16 @@
 <body>
     <div class="loader"></div>
     <main>
-        <div class="topBar">Max Battle</div>
-        <pre class="quate" style="height: 10rem;">           Dont worry 
-    we will set new password 
-           for you😊
-        </pre>
+        <div class="wellcome signupGreet">
+            Formate Password
+        </div>
         
         <form action="/verifyOtp" method="post">
-            <div class="inputBox">
-                <input class="input" type="number" name="otp" id="otp" placeholder="" required>
-                <label for="otp">OTP</label>
-            </div>
-            <div class="inputBox">
-                <input class="input" type="text" name="newPassword" id="newPassword" placeholder="" required>
-                <label for="newPassword">New Password</label>
-            </div>
+            <% if (error) { %>
+    <p style="color: red;font-size: 0.9rem;"><%= error %></p>
+  <% } %>
+                <input class="input" type="number" name="otp" id="otp" placeholder="OTP" required>
+                <input class="input" type="text" name="newPassword" id="newPassword" placeholder="New Password" required>
             
             <input type="submit" style="font-size: 1rem;" class="payAndJoin" value="Verify OTP & Change Password">
         </form>
