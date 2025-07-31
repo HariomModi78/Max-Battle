@@ -2,19 +2,41 @@ window.addEventListener("pageshow", function(event) {
     document.querySelector(".page").style.display = "block";
             footer.style.display = "flex";
             mainHeader.style.display = "flex";
-            pageLoader.style.display = "none";
+            pageLoader.style.display = "none"; 
 
+    
 
             
 });
 
 let dailySpin = document.querySelector(".dailySpin");
 dailySpin.addEventListener("click",function(){
-    document.querySelector(".page").style.display = "none";
+
+        document.querySelector(".page").style.display = "none";
         footer.style.display = "none";
         mainHeader.style.display = "none";
-        pageLoader.style.display = "block"
 
+        let header = document.createElement("div");
+            header.classList = "header";
+            let back = document.createElement("div");
+            back.classList = "logo";
+            let img = document.createElement("img");
+            img.src = "https://cdn-icons-png.flaticon.com/128/3114/3114883.png";
+            
+            let greet = document.createElement("div");
+            greet.classList = "greet";
+            let p = document.createElement("p");
+            p.classList = "big";
+            let notification = document.createElement("div");
+            notification.classList = "notification";
+            header.appendChild(back);
+            back.appendChild(img);
+            header.appendChild(greet);
+            greet.appendChild(p);
+            header.appendChild(notification); 
+            pageLoader.appendChild(header);
+            p.innerText = "Daily Spin";
+            pageLoader.style.display = "flex";
     window.location.href = `/spin/${dailySpin.id}`;
 })
 let confirm = document.querySelector(".confirm");
