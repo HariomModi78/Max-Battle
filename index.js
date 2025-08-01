@@ -445,14 +445,14 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
        let now = new Date(); // IST = UTC + 5:30
 
     let tournament = {};
-    for(let i=0;i<14;i++){
+    for(let i=0;i<9;i++){
 
 let date = new Date(Date.UTC(
   now.getUTCFullYear(),
   now.getUTCMonth(),
   now.getUTCDate(),
-  16, // 21:30 IST == 16:00 UTC
-  10 + i * 10, // Adjust this according to your needs
+  13, 
+  30 + i * 20, // Adjust this according to your needs
   0
 ));
 
@@ -462,9 +462,9 @@ let date = new Date(Date.UTC(
             tournament = {
                 description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
                 entryFee:1,
-                prizePool:200,
+                prizePool:100,
                 perKillAmount:2,
-                totalSlots:48,
+                totalSlots:100,
                 matchType:"solo",
                 modeType:"fullmap",
                 firstPrize:5,
@@ -485,57 +485,18 @@ let date = new Date(Date.UTC(
                 secondPrize:1,
                 dateAndTime:date,map:"Bermunda"  
             }
-        }else if(i==2 || i==6 || i==10){
+        }else{
             tournament = {
                 description:"FULL MAP SOLO TOURNAMENT ",
-                entryFee:10,
-                prizePool:384,
-                perKillAmount:8,
-                totalSlots:48,
+                entryFee:5,
+                prizePool:240,
+                perKillAmount:4,
+                totalSlots:20,
                 matchType:"solo",
                 modeType:"fullmap",
                 firstPrize:0,
                 secondPrize:0,
                 dateAndTime:date,map:"Bermunda" ,map:"Bermunda" 
-            }
-        }else if(i==3 || i==7 || i==11){
-            tournament = {
-                description:"CLASH SQUAD 1v1",
-                entryFee:25,
-                prizePool:45,
-                perKillAmount:0,
-                totalSlots:2,
-                matchType:"solo",
-                modeType:"cs",
-                firstPrize:0,
-                secondPrize:0,
-                dateAndTime:date,map:"Bermunda" 
-            }
-        }else if(i==4 || i==8 || i==12){
-            tournament = {
-                description:"CLASH SQUAD 2v2",
-                entryFee:20,
-                prizePool:70,
-                perKillAmount:0,
-                totalSlots:4,
-                matchType:"duo",
-                modeType:"cs",
-                firstPrize:0,
-                secondPrize:0,
-                dateAndTime:date,map:"Bermunda" 
-            }
-        }else if(i==5 || i==9 || i==13){
-            tournament = {
-                description:"CLASH SQUAD 4v4",
-                entryFee:10,
-                prizePool:70,
-                perKillAmount:0,
-                totalSlots:8,
-                matchType:"squad",
-                modeType:"cs",
-                firstPrize:0,
-                secondPrize:0,
-                dateAndTime:date,map:"Bermunda" 
             }
         }
         await tournamentDataBase.create(tournament);
@@ -1034,6 +995,9 @@ app.get("/tournament/slot/:userId/:tournamentId",async function(req,res){
 })
 app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(req,res){
     try{
+    // if(req.cookies.id == req.params.tournamentId){
+    //     return res.redirect("/");
+    // }
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let slotNumber = req.params.slotNumber;
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
@@ -1047,7 +1011,7 @@ app.get("/tournament/payment/:userId/:tournamentId/:slotNumber",async function(r
         slot = await squadDataBase.findOne({tournamentId:tournament._id,slotId: req.params.slotNumber}).lean();
     }
     if(slot){
-        return res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
+        return res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
     }
     let alreadyJoined;
     if(tournament.matchType == "solo"){
@@ -1703,11 +1667,11 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
                 userId:user.referredBy,
             }],{session})
         }
-
+        
         await session.commitTransaction();
         session.endSession();
-        
-    res.redirect(`/tournament/upcoming/${updatedTournament.modeType}/${updatedTournament.matchType}/${tournament.entryFee>0?(tournament.entryFee==1?"1rs":"paid"):"free"}/${req.params.userId}`);
+        res.cookie("id",req.params.tournamentId);
+    res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
     }else{
         await session.abortTransaction();
         session.endSession()
