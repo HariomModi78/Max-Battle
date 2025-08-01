@@ -1291,24 +1291,22 @@ app.post("/adminCreateTournament/:adminId",async function(req,res){
     if (!isAdmin(admin)) {
         return res.redirect("/");
     }
+    let date = new Date(req.body.dateAndTime);
     
-    console.log(new Date(req.body.dateAndTime).toLocaleTimeString());
-    console.log(new Date(req.body.dateAndTime).toLocaleDateString());
-    console.log(new Date(req.body.dateAndTime));
-    // let tournament = await tournamentDataBase.create({
-    //     description:req.body.description,
-    //     dateAndTime:req.body.dateAndTime,
-    //     entryFee:req.body.entryFee,
-    //     perKillAmount:req.body.perKillAmount,
-    //     prizePool:req.body.prizePool,
-    //     matchType:req.body.matchType,
-    //     totalSlots:req.body.totalSlots,
-    //     map:req.body.map,
-    //     firstPrize:req.body.firstPrize,
-    //     secondPrize:req.body.secondPrize,
-    //     modeType:req.body.modeType,
-    //     slots: Array(Number(req.body.totalSlots)).fill(null),
-    // })
+    let tournament = await tournamentDataBase.create({
+        description:req.body.description,
+        dateAndTime:date,
+        entryFee:req.body.entryFee,
+        perKillAmount:req.body.perKillAmount,
+        prizePool:req.body.prizePool,
+        matchType:req.body.matchType,
+        totalSlots:req.body.totalSlots,
+        map:req.body.map,
+        firstPrize:req.body.firstPrize,
+        secondPrize:req.body.secondPrize,
+        modeType:req.body.modeType,
+        slots: Array(Number(req.body.totalSlots)).fill(null),
+    })
     res.redirect(`/adminCreateTournament/${admin._id}`);
     }catch(e){
         res.redirect("/error");
