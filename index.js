@@ -476,13 +476,13 @@ let date = new Date(Date.UTC(
             tournament = {
                 description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
                 entryFee:0,
-                prizePool:50,
+                prizePool:24,
                 perKillAmount:1,
-                totalSlots:48,
+                totalSlots:20,
                 matchType:"solo",
                 modeType:"fullmap",
                 firstPrize:2,
-                secondPrize:1,
+                secondPrize:2,
                 dateAndTime:date,map:"Bermunda"  
             }
         }else{
@@ -1771,22 +1771,22 @@ Great effort—keep grinding and aim for the top next month! 🎮💥
             })
         }
     }
-    await notificationDataBase.create({
-                title:"🎉 Monthly Leaderboard Winners! 🎉",
-                message: `🥇 1st Place : ${users[0].username} - ₹30
-🥈 2nd Place : ${users[1].username} - ₹20
-🥉 3rd Place : ${users[2].username} - ₹20
-💪 You gave a tough fight!
-Your performance was awesome, but the top 3 grabbed the crown this time.
+//     await notificationDataBase.create({
+//                 title:"🎉 Monthly Leaderboard Winners! 🎉",
+//                 message: `🥇 1st Place : ${users[0].username} - ₹30
+// 🥈 2nd Place : ${users[1].username} - ₹20
+// 🥉 3rd Place : ${users[2].username} - ₹20
+// 💪 You gave a tough fight!
+// Your performance was awesome, but the top 3 grabbed the crown this time.
 
-🔥 Don't worry — a new month means a new chance!
-Play more matches, score high, and your name could be on the leaderboard next time!
+// 🔥 Don't worry — a new month means a new chance!
+// Play more matches, score high, and your name could be on the leaderboard next time!
 
-⚔️ Keep battling, keep rising!
-— Team Max Battle
-`,
-                userId:users[i]._id,
-            })
+// ⚔️ Keep battling, keep rising!
+// — Team Max Battle
+// `,
+//                 userId:users[i]._id,
+//             })
             await userDataBase.findOneAndUpdate({_id:users[i]._id},{
                 monthlyWinning:0
             })
