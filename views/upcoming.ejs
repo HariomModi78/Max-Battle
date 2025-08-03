@@ -136,11 +136,13 @@
     %>
     
         <%if(flag){%>
+            
         <div class="join" id="<%=user._id%>/<%=val._id%>">JOINED</div>
         <div class="joinButton disable" id="<%=user._id%>/<%=val._id%>">JOIN</div>
         <%flag = false%>
     <%}else{%>
         <%if(val.totalSlots==val.slotsFilled){%>
+            <div style="display: none;" class="joinButton" id="<%=user._id%>/<%=val._id%>"></div>
             <div class="join matchFull" id="<%=user._id%>/<%=val._id%>">Match Full</div>
         <%}else{%>
                 <div class="joinButton" id="<%=user._id%>/<%=val._id%>">JOIN</div>
