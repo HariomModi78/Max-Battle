@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/tournamentDetail.css">
     <link rel="stylesheet" href="/stylesheets/tournamentLeadboard.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#007bff">
@@ -38,21 +39,57 @@
         <div class="result">
             <div class="red">Match Result</div>
             <div class="table">
-                <div class="tableHeading" id="blue">
+                
+                
+                <%if(tournament.modeType =="fullmap"){%>
+                    <div class="tableHeading" id="blue">
                     <div class="position" id="bold">Pos.</div>
                     <div class="username " id="bold">Player Name</div>
                     <div class="kill bd" id="bold">Kills</div>
                     <div class="winning " id="bold">Winning</div>
                 </div>
-                <%if(tournament.modeType =="cs"){%>
-                    <%users.forEach(function(val,index){%>
-                        <div class="tableHeading">
+                    <%players.forEach(function(val,index){%>
+                    <div class="tableHeading">
                     <div class="position" id="bold"><%=index+1%></div>
-                    <div class="username " id="bold"><%=val.gameName%></div>
-                    <div class="kill bd" id="bold">0</div>
+                    <div class="username " id="bold"><%=val.userId.gameName%></div>
+                    <div class="kill bd" id="bold"><%=val.kills%></div>
                     <div class="winning " id="bold">
                         <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
-                        <%if(players.includes(String(val._id))){%>
+                        <%if(index==0){%>
+                             <%=val.kills*tournament.perKillAmount+tournament.firstPrize%>
+                        <%}else if(index==1){%>
+                            <%=val.kills*tournament.perKillAmount+tournament.secondPrize%>
+                        <%}else{%>
+                            <%=val.kills*tournament.perKillAmount%>
+                        <%}%>
+                    </div>
+                </div>
+                <%})%>
+                <%}%>
+                
+
+                <%if(tournament.modeType == "cs"){%>
+                <%for(let i=1;i<= 2;i++){%>
+                <div class="teamBox">
+                <div class="heading">Team <%=i%></div>
+                <%if(tournament.matchType=="solo"){%>
+                    <div class="user team<%=i%>" id="<%=users[i-1]?.userId%>">
+                        <div class="team"><%=users[i-1]?.slotNumber%></div>
+                        <div class="name"><%=users[i-1]?.gameName%></div>
+
+
+                    </div>  
+                    
+                <%}else{%>
+                     <%if(i==1){%>
+                        <%team1.forEach(function(player){%>
+                        <div class="user team1" id="<%=player.userId%>">
+                            <div class="team"><%=player.slotId%></div>
+                            <div class="name"><%=player.gameName%></div>
+                            
+                            <div class="winning " id="bold">
+                        <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                        <%if(players.includes(String(player.userId))){%>
                             <%if(tournament.matchType=="solo"){%>
                                 <%=tournament.prizePool%>
                             <%}else if(tournament.matchType=="duo"){%>
@@ -64,28 +101,38 @@
                             0
                         <%}%>
                     </div>
-                </div>
+
+                        </div>
                     <%})%>
-                <%}else{%>
-                    <%players.forEach(function(val,index){%>
-                    <div class="tableHeading">
-                    <div class="position" id="bold"><%=index+1%></div>
-                    <div class="username " id="bold"><%=val.userId.gameName%></div>
-                    <div class="kill bd" id="bold"><%=val.kills%></div>
-                    <div class="winning " id="bold">
+                    <%}else{%>
+                        <%team2.forEach(function(player){%>
+                        <div class="user team2" id="<%=player.userId%>">
+                            <div class="team"><%=player.slotId%></div>
+                            <div class="name"><%=player.gameName%></div>
+                            <div class="winning " id="bold">
                         <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
-                        <%if(index==0){%>
-                            <%=val.kills*tournament.perKillAmount+tournament.firstPrize%>
-                        <%}else if(index==1){%>
-                            <%=val.kills*tournament.perKillAmount+tournament.secondPrize%>
+                        <%if(players.includes(String(player.userId))){%>
+                            <%if(tournament.matchType=="solo"){%>
+                                <%=tournament.prizePool%>
+                            <%}else if(tournament.matchType=="duo"){%>
+                                <%=tournament.prizePool/2%>
+                            <%}else if(tournament.matchType=="squad"){%>
+                                <%=tournament.prizePool/4%>
+                            <%}%>
                         <%}else{%>
-                            <%=val.kills*tournament.perKillAmount%>
+                            0
                         <%}%>
                     </div>
-                </div>
-                <%})%>
+
+                        </div>
+                        <%})%>
+                    <%}%>
                 <%}%>
                 
+                
+            </div>
+            <%}%>
+            <%}%>
             </div>
         </div>
     </main>
@@ -94,3 +141,4 @@
 
 </body>
 </html>
+
