@@ -921,7 +921,7 @@ app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async functi
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let tournament
     if(req.params.variable=="free"){
-         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:0}).sort({dateAndTime:1});
+         tournament = await tournamentDataBase.find({status:"completed",entryFee:0}).sort({dateAndTime:1});
     }else if(req.params.variable=="1rs"){
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:1}).sort({dateAndTime:1});
     }else{
@@ -956,7 +956,7 @@ app.get("/tournament/ongoing/:modeType/:matchType/:variable/:userId",async funct
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let tournament
     if(req.params.variable=="free"){
-         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:0}).sort({dateAndTime:1});
+         tournament = await tournamentDataBase.find({status:"ongoing",entryFee:0}).sort({dateAndTime:1});
     }else if(req.params.variable=="1rs"){
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"ongoing",entryFee:1}).sort({dateAndTime:1});
     }else{
@@ -1418,7 +1418,7 @@ app.post("/adminPrizeDistribution/:adminId/:tournamentId",async function(req,res
     }
     await tournamentLeadboardDataBase.create({
         tournamentId:tournament._id,
-        player:users
+        player:users,
     })
     await tournamentDataBase.findOneAndUpdate({_id:req.params.tournamentId},{
         status:"completed"
