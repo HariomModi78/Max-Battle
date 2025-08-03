@@ -12,7 +12,7 @@
 <body>
     <main>
         <div class="header">
-            <div class="heading">FFM SOLO TOURNAMENT (RYDEN BAN)</div>
+            <div class="heading"><%=tournament.description%></div>
             <%let date = new Date(tournament.dateAndTime).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })%>
                     <%let time = new Date(tournament.dateAndTime).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })%>
                     <div class="date">Organised on <%=date%> at <%=time%></div>
