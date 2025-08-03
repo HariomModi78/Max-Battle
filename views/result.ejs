@@ -54,7 +54,7 @@
             <strong style="height: 60vh;width: 100vw;display: flex;justify-content: center;align-items: center;">No Data Found</strong>
         <%}%>
         <% tournament.forEach(function(val) { %>
-            <%if(modeType=="cs"){%>
+            <%if(val.modeType=="cs"){%>
                 <div class="tournamentResult" id="/tournamentLeadboard/cs/<%=val._id%>">
             <%}else{%>
                 <div class="tournamentResult" id="/tournamentLeadboard/<%=val._id%>">
