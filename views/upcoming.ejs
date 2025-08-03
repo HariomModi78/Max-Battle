@@ -57,11 +57,11 @@
             
                 <div class="tournament" id="<%=user._id%>/<%=val._id%>">
             <div class="image">
-                <%if(matchType=="solo"){%>
+                <%if(val.matchType=="solo"){%>
                     <img loading="lazy" src="/images/soloFullMap.webp" alt="">
-                <%}else if(matchType=="duo"){%>
+                <%}else if(val.matchType=="duo"){%>
                     <img loading="lazy" src="/images/duoFullMap.webp" alt="">
-                <%}else if(matchType=="squad"){%>
+                <%}else if(val.matchType=="squad"){%>
                     <img loading="lazy" src="/images/squadFullMap.webp" alt="">
                 <%}%>
                 
