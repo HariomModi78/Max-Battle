@@ -1046,15 +1046,29 @@ app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
 app.get("/tournamentLeadboard/cs/:tournamentId",async function(req,res){
     try{
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
-    let usersTemp = tournament.slots.filter((user)=>user!=null);
-    // //.log(usersTemp);
-    let users = await userDataBase.find({_id:usersTemp});
+    let users;
+    if(tournament.matchType == "solo"){
+        users = await soloDataBase.find({tournamentId:tournament._id}).sort({slotId:-1});
+    }else if(tournament.matchType == "duo"){
+        users = await duoDataBase.find({tournamentId:tournament._id}).lean();
+    }else if(tournament.matchType == "squad"){
+        users = await squadDataBase.find({tournamentId:tournament._id}).lean();
+    } 
     //.log(users);
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).lean();
     let players = (tournamentLeadboard?.player || [])
     players = players.map((player)=>String(player.userId));
     //.log(players);
-    res.render("tournamentLeadboard",{players:players,tournament:tournament,users:users});
+
+
+        // //.log(users);
+        let team1 = users.filter((user)=>user.teamId=="team1");
+        let team2 = users.filter((user)=>user.teamId=="team2");
+        // //.log(team1)
+        // //.log(team2)
+        
+
+    res.render("tournamentLeadboard",{players:players,tournament:tournament,users:users,team1:team1,team2:team2});
     }catch(e){
         res.redirect("/error");
     }
@@ -1084,9 +1098,10 @@ app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
     } 
 
     if(tournament.modeType == "cs"){
-        //.log(user);
+        //.log(users);
         let team1 = users.filter((user)=>user.teamId=="team1");
         let team2 = users.filter((user)=>user.teamId=="team2");
+        //.log(team1)
         res.render("tournamentDetail",{tournament:tournament,user:user,joined:joined,team1:team1,team2:team2,users:users});
     }else{
         res.render("tournamentDetail",{tournament:tournament,user:user,joined:joined,users:users});
