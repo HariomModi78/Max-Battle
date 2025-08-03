@@ -922,7 +922,7 @@ app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async functi
     let tournament;
     if(req.params.variable=="free"){
          tournament = await tournamentDataBase.find({status:"completed",entryFee:0}).sort({dateAndTime:-1});  
-         console.log(tournament);
+         //.log(tournament);
     }else if(req.params.variable=="1rs"){
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:1}).sort({dateAndTime:1});
     }else{
@@ -1035,9 +1035,9 @@ app.get("/tournamentLeadboard/:tournamentId",async function(req,res){
     try{
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).populate("player.userId");
-    // console.log(tournamentLeadboard.player)
+    // //.log(tournamentLeadboard.player)
     let players = (tournamentLeadboard?.player || []).sort((a,b)=>b.kills-a.kills);
-    // console.log(players);
+    // //.log(players);
     res.render("tournamentLeadboard",{players:players,tournament:tournament});
     }catch(e){
         res.redirect("/error");
@@ -1047,7 +1047,7 @@ app.get("/tournamentLeadboard/cs/:tournamentId",async function(req,res){
     try{
     let tournament = await tournamentDataBase.findOne({_id:req.params.tournamentId}).lean();
     let usersTemp = tournament.slots.filter((user)=>user!=null);
-    // console.log(usersTemp);
+    // //.log(usersTemp);
     let users = await userDataBase.find({_id:usersTemp});
     //.log(users);
     let tournamentLeadboard = await tournamentLeadboardDataBase.findOne({tournamentId:req.params.tournamentId}).lean();
