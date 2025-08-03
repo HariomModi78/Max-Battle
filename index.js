@@ -937,7 +937,7 @@ app.get("/tournament/upcoming/:modeType/:matchType/:variable/:userId",async func
     let user = await userDataBase.findOne({_id:req.params.userId}).lean();
     let tournament
     if(req.params.variable=="free"){
-         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:0}).sort({dateAndTime:1});
+         tournament = await tournamentDataBase.find({status:"upcoming",entryFee:0}).sort({dateAndTime:1});
     }else if(req.params.variable=="1rs"){
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:1}).sort({dateAndTime:1});
     }else{
