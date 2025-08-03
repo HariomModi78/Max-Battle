@@ -445,14 +445,14 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
        let now = new Date(); // IST = UTC + 5:30
 
     let tournament = {};
-    for(let i=0;i<9;i++){
+    for(let i=0;i<5;i++){
 
 let date = new Date(Date.UTC(
   now.getUTCFullYear(),
   now.getUTCMonth(),
   now.getUTCDate(),
   13, 
-  30 + i * 20, // Adjust this according to your needs
+  30 + i * 30, // Adjust this according to your needs
   0
 ));
 
@@ -460,29 +460,29 @@ let date = new Date(Date.UTC(
 
         if(i==0){
             tournament = {
-                description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
-                entryFee:1,
-                prizePool:100,
-                perKillAmount:2,
-                totalSlots:100,
-                matchType:"solo",
-                modeType:"fullmap",
-                firstPrize:5,
-                secondPrize:5,
+                description:"CLASH SQUAD 4v4 (FREE 🎁)",
+                entryFee:0,
+                prizePool:20,
+                perKillAmount:0,
+                totalSlots:8,
+                matchType:"squad",
+                modeType:"cs",
+                firstPrize:0,
+                secondPrize:0,
                 dateAndTime:date,map:"Bermunda"  
             }
             
         }else if(i==1){
             tournament = {
-                description:"FULL MAP SOLO TOURNAMENT (SUNDAY SPECIAL 🎁)",
+                description:"CLASH SQUAD 4v4 (FREE 🎁)",
                 entryFee:0,
-                prizePool:24,
-                perKillAmount:1,
-                totalSlots:20,
-                matchType:"solo",
-                modeType:"fullmap",
-                firstPrize:2,
-                secondPrize:2,
+                prizePool:20,
+                perKillAmount:0,
+                totalSlots:8,
+                matchType:"squad",
+                modeType:"cs",
+                firstPrize:0,
+                secondPrize:0,
                 dateAndTime:date,map:"Bermunda"  
             }
         }else{
@@ -1676,7 +1676,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
     res.redirect(`/tournament/detail/${req.params.userId}/${req.params.tournamentId}`);
     }else{
         await session.abortTransaction();
-        session.endSession()
+        session.endSession();
         res.redirect(`/tournament/slot/${req.params.userId}/${req.params.tournamentId}`);
     }
         
