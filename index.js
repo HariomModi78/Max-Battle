@@ -940,7 +940,7 @@ app.get("/tournament/upcoming/:modeType/:matchType/:variable/:userId",async func
     if(req.params.variable=="free"){
          tournament = await tournamentDataBase.find({status:"upcoming",entryFee:0}).sort({dateAndTime:1});
     }else if(req.params.variable=="1rs"){
-        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:1}).sort({dateAndTime:1});
+        tournament = await tournamentDataBase.find({status:"upcoming",entryFee:1}).sort({dateAndTime:1});
     }else{
         tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"upcoming",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
     }
@@ -1667,7 +1667,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
                message: `👋 Hi ${user.username}, your slot number is ${req.params.slotNumber} for "${tournament.description}". Be in the room before time ⏰. ❌ You’ll be responsible.`,
                 userId:user._id,
             }],{session})
-        if(tournament.slotsFilled == tournament.totalSlots/2){
+        if(tournament.slotsFilled != tournament.totalSlots/2){
             let users = await userDataBase.find({_id:{$nin:[...tournament.slots,req.params.userId]}});
             //.log(users.length);
             //.log("Han yahe hai users")
@@ -1994,4 +1994,3 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
