@@ -41,7 +41,7 @@
         <div class="box">
             <%let date = new Date(tournament.dateAndTime).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })%>
                     <%let time = new Date(tournament.dateAndTime).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })%>
-            Match Schedule : <%=date%>  <%=time%>
+             Match Schedule : <%=date%>  <%=time%>
         </div>
     <%if(joined){%>
         <div style="height: 5rem;
@@ -87,7 +87,7 @@
                     </div>  
                     
                 <%}else{%>
-                    <%if(i==1){%>
+                     <%if(i==1){%>
                         <%team1.forEach(function(player){%>
                         <div class="user team1" id="<%=player.userId%>">
                             <div class="team"><%=player.slotId%></div>
@@ -257,18 +257,7 @@
     <script src="/javaScripts/back.js"></script>
     <script src="/javaScripts/tournamentDetail.js"></script>
     <script>
-        if (localStorage.getItem("paymentDone") === "true") {
-    localStorage.removeItem("paymentDone");
-
-    // Replace history and push new state
-    window.history.replaceState(null, "", window.location.href);
-    window.history.pushState(null, "", window.location.href);
-
-    // Redirect to home if back button pressed
-    window.addEventListener("popstate", function () {
-      window.location.href = "/";
-    });
-  }
+        
     </script>
     <script src="/javaScripts/boiler.js"></script>
     <script type="module" src="/script.js"></script>
