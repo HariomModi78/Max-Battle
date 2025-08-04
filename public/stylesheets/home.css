@@ -177,11 +177,25 @@
     width: 100%;
 }
 .tournamentPart1 p{
-    /* border: 1px solid black; */
+    border: 1px solid black;
     height: 1.3rem;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.length{
+    height: 1rem;
+    width: 1rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: red;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 0.5rem;
 }
 .tournamentPart2{
     height: 20%;
