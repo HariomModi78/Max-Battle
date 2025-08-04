@@ -747,7 +747,7 @@ app.get("/home/:userId",async function(req,res){
             csSquad:await tournamentDataBase.find({matchType:"squad",modeType:"cs",status:"upcoming",entryFee:{$nin:[0,1]}}),
             perKill:await tournamentDataBase.find({modeType:"fullmap",status:"upcoming",entryFee:{$nin:[0,1]}}),
         }
-        console.log(tournament)
+        //.log(tournament)
         res.render("home",{user:user,notification:notification.length,adFlag:adFlag,tournament:tournament});
     }catch(e){
         res.redirect("/error");
