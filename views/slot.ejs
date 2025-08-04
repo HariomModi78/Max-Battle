@@ -156,15 +156,21 @@
         document.querySelector(".next").addEventListener("click",function(){
             if(slotNumber){
                 page.style.display = "none";
-                pageLoader.style.display = "block"
+                pageLoader.style.display = "block";
                 window.location.href = `/tournament/payment/${document.querySelector(".next").id}/${slotNumber}`
             }
             
         })
         window.addEventListener("pageshow", function(event) {
-            page.style.display = "flex";
-            pageLoader.style.display = "none";
+            if (localStorage.getItem("paymentDone") == "<%=tournamentTemp._id%>") {
+      window.location.href = "/home/<%=user._id%>";
+            }else{
+                page.style.display = "flex";
+                pageLoader.style.display = "none";
+            }
+            
         });
+        
     </script>
     <script src="/javaScripts/boiler.js"></script>
     <script type="module" src="/script.js"></script>
