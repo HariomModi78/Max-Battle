@@ -190,7 +190,9 @@ window.addEventListener("scroll",function(event){
         profile.style.cssText = "animation:move linear forwards 500ms;"
         footer.style.cssText = "animation:move linear forwards 500ms;"
         y = window.scrollY;
+        dailySpin.style.display = "none";
         console.log("y = ",y);
+
     }
     else{
         home.style.cssText = "animation:move1 linear forwards 500ms;"
@@ -199,6 +201,7 @@ window.addEventListener("scroll",function(event){
         profile.style.cssText = "animation:move1 linear forwards 500ms;"
         footer.style.cssText = "animation:move1 linear forwards 500ms;"
             y =0;
+        dailySpin.style.display = "block";
         
 
     }
