@@ -177,7 +177,7 @@
     width: 100%;
 }
 .tournamentPart1 p{
-    border: 1px solid black;
+    /* border: 1px solid black; */
     height: 1.3rem;
     width: 100%;
     display: flex;
