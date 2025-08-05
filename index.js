@@ -947,9 +947,9 @@ app.get("/tournament/result/:modeType/:matchType/:variable/:userId",async functi
          tournament = await tournamentDataBase.find({status:"completed",entryFee:0}).sort({dateAndTime:-1});  
          //.log(tournament);
     }else if(req.params.variable=="1rs"){
-        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:1}).sort({dateAndTime:1});
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:1}).sort({dateAndTime:-1});
     }else{
-        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:{$nin:[0,1]}}).sort({dateAndTime:1});
+        tournament = await tournamentDataBase.find({modeType:req.params.modeType,matchType:req.params.matchType,status:"completed",entryFee:{$nin:[0,1]}}).sort({dateAndTime:-1});
     }
     res.render("result",{user:user,tournament:tournament,modeType:req.params.modeType,matchType:req.params.matchType,variable:req.params.variable});
     }catch(e){
