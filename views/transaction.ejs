@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/transaction.css">
-    
+     
     <link rel="stylesheet" href="/stylesheets/boiler.css">
     <link rel="stylesheet" href="/stylesheets/header.css">
     <link rel="stylesheet" href="/stylesheets/footer.css">
@@ -53,7 +53,7 @@
                 <%if(!isNaN(val.paymentId)){%>
 
                         <%if(val.flag){%>
-                            <div class="status"><%=val.status%></div>
+                            <div class="status">Completed</div>
                         <%}else{%>
                             <div class="status red"><%=val.status%>
                                 <img src="https://img.icons8.com/?size=40&id=TmIKpxTOSBi7&format=gif" alt="">
@@ -92,6 +92,62 @@
         <%})%>
         <div class="fakeFooter"></div>
     </main>
+    <!-- Popup Elements -->
+<div id="popupOverlay"></div>
+<div id="transactionPopup">
+    <h3>Transaction Details</h3>
+    <div id="popupContent"></div>
+    <div id="closePopup">Close</div>
+</div>
+
+<script>
+    const overlay = document.getElementById("popupOverlay");
+    const popup = document.getElementById("transactionPopup");
+    const popupContent = document.getElementById("popupContent");
+    const closeBtn = document.getElementById("closePopup");
+
+    document.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+            const type = option.querySelector(".type")?.innerText || "N/A";
+            const paymentId = option.querySelector(".paymentId")?.innerText || "N/A";
+            const date = option.querySelector(".date")?.childNodes[0]?.nodeValue?.trim() || "N/A";
+            const time = option.querySelector(".time")?.innerText || "N/A";
+            const statusText = option.querySelector(".status")?.innerText.trim().toLowerCase() || "";
+
+            let statusFormatted = "Pending";
+            if (statusText.includes("completed")) {
+                statusFormatted = "Completed";
+            }
+
+            const amount = option.querySelector(".second")?.innerText.trim() || "N/A";
+
+            popupContent.innerHTML = `
+                <strong>Type:</strong> ${type}<br>
+                <strong>Payment Id: ${paymentId.split(":")[1]}</strong><br>
+                <strong>Status:</strong> ${statusFormatted}<br>
+                <strong>Date:</strong> ${date}<br>
+                <strong>Time:</strong> ${time}<br>
+                <strong>Amount:</strong> ${amount}
+            `;
+
+            popup.style.display = "flex";
+            overlay.style.display = "block";
+        });
+    });
+
+    closeBtn.addEventListener("click", () => {
+        popup.style.display = "none";
+        overlay.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+            popup.style.display = "none";
+            overlay.style.display = "none";
+        }
+    });
+</script>
+
     <script>
          window.addEventListener("click",function(){
             document.querySelector(".withdrawCompleted").style.display = "none";
