@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/register.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    <div class="loader"></div>
+    <main>
+        <div class="disconnect">
+            <img src="/images/disconnect.webp" alt="">
+        </div>
+        <div class="wellcome signupGreet">
+            <p>Create new,</p>
+            <p>Account verification</p>
+        </div>
+        <form action="/verifyRegisterOtp" method="post">
+            <% if (error) { %>
+    <p style="color: red;font-size: 0.9rem;"><%= error %></p>
+  <% } %>
+                <input class="input" type="number" name="otp" id="otp" placeholder="OTP" required>
+                <input type="submit" style="font-size: 1rem;" class="payAndJoin" value="Verify OTP ">
+        </form>
+        
+    </main>
+    <!-- <script src="/javaScripts/register.js"></script> -->
+    <script>
+        let loader = document.querySelector(".loader");
+        let form = document.querySelector("form");
+form.addEventListener("submit", function() {
+    document.querySelector("main").style.display = "none";
+    loader.style.display = "block";
+});
+
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        document.querySelector("main").style.display = "flex";
+        loader.style.display = "none";
+    }
+});
+        
+
+
+     </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
