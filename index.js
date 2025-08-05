@@ -520,6 +520,7 @@ app.get("/referralCodes",async function(req,res){
     let referralCode = await userDataBase.find();
     referralCode = referralCode.map(user=>user.referralCode);
     referralCode.push("NEW5")
+    referralCode.push("NEW1")
     //.log(referralCode);
     res.json(referralCode);
 })
@@ -541,7 +542,7 @@ app.post("/registerOtp",async function(req,res){
     let friend = await userDataBase.findOne({referralCode:req.body.referralCode}).lean();
     if(friend){
         usec = jwt.sign({email:req.body.email,otp:otp,gameName:req.body.gameName,gameId:req.body.gameId,username:req.body.username,password:req.body.password,age:req.body.age,referredBy:friend._id,referralCode:req.body.referralCode},process.env.PIN);
-    }if(req.body.referralCode=="NEW5"){
+    }if(req.body.referralCode=="NEW5" || req.body.referralCode=="NEW1"){
         usec = jwt.sign({email:req.body.email,otp:otp,gameName:req.body.gameName,gameId:req.body.gameId,username:req.body.username,password:req.body.password,age:req.body.age,referralCode:req.body.referralCode},process.env.PIN);
     }
     else{
@@ -616,7 +617,20 @@ app.post("/verifyRegisterOtp",async function(req,res){
                message: ` Hi ${newUser.username}, you earn 5 Max Coins as your joining bonus you can play matches from these coins`,
                 userId:newUser._id,
             })
-                }
+        }else if(secret.referralCode=="NEW1"){
+                    await userDataBase.findOneAndUpdate({_id:newUser._id},{
+                        $inc:{
+                            totalBalance:1,
+                            bonus:1
+                        },
+                        isApplyCode:true
+                    })
+                    await notificationDataBase.create({
+                title:"Joining Bonus🎉",
+               message: ` Hi ${newUser.username}, you earn 1 Max Coins as your joining bonus you can play matches from these coins`,
+                userId:newUser._id,
+            })
+        }
 
             let token = jwt.sign({email:secret.email,role:"user"},`${process.env.PIN}`);
             res.cookie("token",token, {
