@@ -6,4 +6,12 @@ window.addEventListener("resize",function(e){
     }
 })
 
+let disconnect = document.querySelector(".disconnect");
+
+window.addEventListener("online",function(){
+    disconnect.style.display = "none";
+})
+window.addEventListener("offline",function(){
+    disconnect.style.display = "flex";
+})
 
