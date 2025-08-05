@@ -105,33 +105,103 @@ for(let i=0;i<myOption.length;i++){
     
 }
 
-let board = document.querySelector(".board");
 let slide = document.querySelector(".slide");
-let circle = document.getElementsByClassName("circle")
+let circle = document.getElementsByClassName("circle");
+let images = document.querySelectorAll(".boardImage");
+let totalSlides = images.length;
 
+let x = 0;
 let interval;
-let x=100;
-circle[0].classList.add("activeImage");
-function autoSlide(){
-    slide.style.cssText = `transform:translateX(-${x}%)`;
-    
-    let num = x/100;
-    if(num!=0){
-        circle[num-1].classList.remove("activeImage");
-    }else{
-        circle[5].classList.remove("activeImage");   
-    }
-    circle[num].classList.add("activeImage");
-    x = x+100;
 
-    if(x==600){
-        x=0;
-    }
-    
+function updateSlide(index) {
+    x = index * 100;
+    slide.style.transform = `translateX(-${x}%)`;
 
+    for (let i = 0; i < totalSlides; i++) {
+        circle[i].classList.remove("activeImage");
+    }
+    circle[index].classList.add("activeImage");
 }
 
-interval = setInterval(autoSlide,4000);
+function autoSlide() {
+    let currentIndex = x / 100;
+    let nextIndex = (currentIndex + 1) % totalSlides;
+    updateSlide(nextIndex);
+}
+
+interval = setInterval(autoSlide, 4000);
+
+// Circle click
+for (let i = 0; i < circle.length; i++) {
+    circle[i].addEventListener("click", () => {
+        clearInterval(interval);
+        updateSlide(i);
+        interval = setInterval(autoSlide, 4000);
+    });
+}
+
+// Image click (based on ID as link)
+images.forEach((img) => {
+    img.style.cursor = "pointer";
+    img.addEventListener("click", () => {
+        let target = img.id;
+        if (target) {
+            if (target.startsWith("http")) {
+                window.open(target, "_blank");
+            } else {
+                window.location.href = target;
+            }
+        }
+    });
+});
+
+// ✅ Swipe / Drag Support
+let startX = 0;
+let endX = 0;
+
+// Touch (mobile)
+slide.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+});
+slide.addEventListener("touchend", (e) => {
+    endX = e.changedTouches[0].clientX;
+    handleSwipe();
+});
+
+// Mouse (desktop drag)
+slide.addEventListener("mousedown", (e) => {
+    startX = e.clientX;
+});
+slide.addEventListener("mouseup", (e) => {
+    endX = e.clientX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    let deltaX = endX - startX;
+
+    if (Math.abs(deltaX) < 50) return; // Ignore small movement
+
+    clearInterval(interval);
+    let currentIndex = x / 100;
+
+    if (deltaX > 0) {
+        // Swipe right (previous)
+        let prev = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlide(prev);
+    } else {
+        // Swipe left (next)
+        let next = (currentIndex + 1) % totalSlides;
+        updateSlide(next);
+    }
+
+    interval = setInterval(autoSlide, 4000);
+}
+
+// Init
+updateSlide(0);
+
+
 
 
 let home = document.querySelector(".home");
