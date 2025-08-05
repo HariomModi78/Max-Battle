@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/wallet.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="stylesheet" href="/stylesheets/referAndEarn.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    
+        
+    <main>
+        <div class="disconnect">
+            <img src="/images/disconnect.webp" alt="">
+        </div>
+        <div class="header">
+            <div class="logo back" id="">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="greet">
+                <p class="big">Refer and Earn</p>
+            </div>
+            <div class="notification delete" id="<%=user._id%>">
+                <!--  -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="page" style="display: flex;flex-direction:column;align-items: center;">
+        <img src="https://cdn-icons-png.flaticon.com/128/3437/3437346.png" alt="" >
+        <h2>Refer Code:</h2>
+        <div class="referCode">
+            <p><%=user.referralCode%></p>
+        </div>
+        <p>Refer your friend and earn <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">5/- per refer</p>
+        <strong>Rules</strong>
+        <ol>
+            <li>when your friend register and apply your refer code</li>
+            <li> and when your friend join a paid match</li>
+            <li>You will get 
+                5 Max Coins  in your wallet </li>
+        </ol>
+        <h1 style="height: 5rem;display: flex;align-items: center;">My referals</h1>
+        <div class="friend ">
+            <div class="heading">Name</div>
+            <div class="heading">Status</div>
+            <div class="heading">Earning</div>
+        </div>
+        <%if(referrals.length>0){%>
+            <%referrals.forEach(function(val){%>
+                <div class="friend">
+            <div class="name detail"><%=val.username%></div>
+            <div class="status detail">
+                <%if(val.isReferred){%>
+                    Completed
+                <%}else{%>
+                    Processing
+                <%}%>
+            </div>
+            <div class="earning detail">
+                <img loading="lazy" class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                <%if(val.isReferred){%>
+                    5
+                <%}else{%>
+                    0
+                <%}%>
+            </div>
+        </div>
+            <%})%>
+        <%}else{%>
+            <strong>zero referrals</strong>
+        <%}%>
+        
+        <!--  -->
+        <div class="fakeFooter"></div>
+        <div class="fakeFooter"></div>
+        </div>
+            
+        
+
+        <div class="fakeFooter"></div>
+        
+    </main>
+    <script src="/javaScripts/back.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
