@@ -6,6 +6,8 @@
     user-select: none;
     scrollbar-width: none;
     
+    font-family: 'Poppins', sans-serif;
+
 }
 body{
     height: 100vh;
