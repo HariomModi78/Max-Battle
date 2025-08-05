@@ -1694,8 +1694,9 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
             let users = await userDataBase.find({_id:{$nin:[...tournament.slots,req.params.userId]}});
             //.log(users.length);
             //.log("Han yahe hai users")
-            if(users[i].emailPermission){
+            
                 for(let i=0;i<users.length;i++){
+                    if(users[i].emailPermission){
                 sendAll(users[i].email,"Max Battle🏆",
                     `<div style="padding: 20px; background: linear-gradient(90deg, #fceabb, #f8b500); border-radius: 10px; font-family: 'Segoe UI', sans-serif; color: #333; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
   <strong style="font-size: 18px;">🚨 50% Slots Booked!</strong><br>
