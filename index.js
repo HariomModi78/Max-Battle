@@ -1690,13 +1690,12 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
                message: `👋 Hi ${user.username}, your slot number is ${req.params.slotNumber} for "${tournament.description}". Be in the room before time ⏰. ❌ You’ll be responsible.`,
                 userId:user._id,
             }],{session})
-        if(Number(tournament.slotsFilled) == Number((tournament.totalSlots)/2)){
-            let users = await userDataBase.find({_id:{$nin:[...tournament.slots,req.params.userId]}});
+        if(Number(tournament.slotsFilled)-1 == Number((tournament.totalSlots)/2)){
+            let users = await userDataBase.find({emailPermission:true});
             //.log(users.length);
             //.log("Han yahe hai users")
             
                 for(let i=0;i<users.length;i++){
-                    if(users[i].emailPermission){
                 sendAll(users[i].email,"Max Battle🏆",
                     `<div style="padding: 20px; background: linear-gradient(90deg, #fceabb, #f8b500); border-radius: 10px; font-family: 'Segoe UI', sans-serif; color: #333; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
   <strong style="font-size: 18px;">🚨 50% Slots Booked!</strong><br>
@@ -1711,7 +1710,7 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
 </div>
 `
                 )
-                }}
+                }
             
         }
         if(user.referredBy && !user.isReferred && tournament.entryFee >0){
