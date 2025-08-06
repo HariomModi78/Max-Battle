@@ -1713,6 +1713,29 @@ app.post("/roomIdAndPassword/:userId/:tournamentId/:slotNumber",async function(r
                 }
             
         }
+        if(Number(tournament.slotsFilled)+1 == Number((tournament.totalSlots)-1)){
+            let users = await userDataBase.find({emailPermission:true});
+            //.log(users.length);
+            //.log("Han yahe hai users")
+            
+                for(let i=0;i<users.length;i++){
+                sendAll(users[i].email,"Max Battle🏆",
+                    `<div style="padding: 20px; background: linear-gradient(90deg, #fceabb, #f8b500); border-radius: 10px; font-family: 'Segoe UI', sans-serif; color: #333; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
+  <strong style="font-size: 18px;">🚨  Only one slot left!</strong><br>
+  The tournament is filling up fast. <strong>Join now</strong> to confirm your slot before it's full!
+  <br><br>
+
+
+
+  <a href="max-battle.onrender.com/tournament/${tournament.status}/${tournament.modeType}/${tournament.matchType}/${tournament.entryFee==0?"free":(tournament.entryFee==1)?"1rs":"paid"}/${user._id}" style="padding: 10px 20px; background-color: #ff6f00; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+    🔥 Join Now
+  </a>
+</div>
+`
+                )
+                }
+            
+        }
         if(user.referredBy && !user.isReferred && tournament.entryFee >0){
             await userDataBase.findOneAndUpdate({_id:user._id},{
                 isReferred:true
@@ -2019,4 +2042,3 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
