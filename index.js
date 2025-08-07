@@ -1116,11 +1116,11 @@ app.get("/tournament/detail/:userId/:tournamentId",async function(req,res){
 
     let users;
     if(tournament.matchType == "solo"){
-        users = await soloDataBase.find({tournamentId:tournament._id}).sort({slotId:-1});
+        users = await soloDataBase.find({tournamentId:tournament._id}).sort({slotNumber:1});
     }else if(tournament.matchType == "duo"){
-        users = await duoDataBase.find({tournamentId:tournament._id}).lean();
+        users = await duoDataBase.find({tournamentId:tournament._id}).lean().sort({slotId:1});
     }else if(tournament.matchType == "squad"){
-        users = await squadDataBase.find({tournamentId:tournament._id}).lean();
+        users = await squadDataBase.find({tournamentId:tournament._id}).lean().sort({slotId:1});
     } 
 
     if(tournament.modeType == "cs"){
