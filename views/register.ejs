@@ -43,12 +43,15 @@
         <div class="fakeButton">
             <div class="lastOption"><p>Already a user? </p> <a href="/login"> login</a></div>
         </div>
+        <div class="error">
+
+        </div>
         
     </main>
     <script>
         let referralCode = document.querySelector("#referralCode");
         let apply = document.querySelector(".apply");
-        
+        let email = document.querySelector("#email");
         apply.addEventListener("click",async function(){
             apply.innerText = "";
             apply.innerText = "Applying...";
@@ -76,9 +79,17 @@
         })
         let loader = document.querySelector(".loader");
         let form = document.querySelector("form");
-form.addEventListener("submit", function() {
-    document.querySelector("main").style.display = "none";
-    loader.style.display = "block";
+        let error = document.querySelector(".error");
+form.addEventListener("submit", function(e) {
+    if("@"+(email.value).split("@")[1] != "@gmail.com"){
+        error.innerText = "Please enter correct email"
+        console.log("@"+(email.value).split("@")[1]);
+        e.preventDefault();
+    }else{
+        document.querySelector("main").style.display = "none";
+        loader.style.display = "block";
+    }
+    
 });
 
 window.addEventListener("pageshow", function(event) {
