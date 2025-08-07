@@ -73,7 +73,18 @@ input{
      display: flex;
      justify-content: center;
      align-items: center;
-    width:100vw;
+    /* width:100vw; */
+}
+.error{
+    height: 2rem;
+    /* border: 1px solid white; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: red;
 }
 .lastOption{
     height: 2rem;
