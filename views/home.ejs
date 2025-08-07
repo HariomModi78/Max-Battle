@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/home.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+</head>
+<body>
+   
+    <main>
+        <div class="disconnect">
+            <img src="/images/disconnect.webp" alt="">
+        </div>
+        <div class="header">
+            <div class="logo">
+                <img id="icon" loading="lazy"  src="/images/logo.webp" alt="">
+            </div>
+            <a href="https://wa.me/7898488935" class="support" >
+                <img loading="lazy"  src="/images/support.webp" alt="">
+            </a>
+            <div class="greet">
+                <p>Wellcome Back,</p>
+                
+                <p class="big">Max Battle</p>
+            </div>
+            <div class="walletAmount" id="wallet/<%=user._id%>">
+                <img class="verySmallCoin" src="https://cdn-icons-png.flaticon.com/128/9382/9382295.png" alt="">
+                <div class="number"><%=user.totalBalance.toLocaleString("en-IN")%></div>
+            </div>
+        </div> 
+        <div class="fakeHeader"></div>
+        <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div> 
+        <div class="page">
+            <%if(user.isApplyCode){%>
+                <div class="joiningBonus">
+                    <img src="/images/joiningBonus.webp" alt="">
+                <div class="confirm" id="<%=user._id%>">Confirm</div>
+                </div>
+            <%}%>
+            <%if(user.upi.length==0 && adFlag){%>
+                <div class="joiningBonus" >
+            <%}else{%>
+                <div style="display:none" class="joiningBonus">
+            <%}%>
+                    <img src="/images/bindUpi.webp" alt="">
+                <a class="confirm1" href="/withdraw/<%=user._id%>">Bind</a>
+                </div>
+            
+            
+            <div class="confirm" style="display: none;"></div>
+            <div class="noticeBoard">
+            <div class="board">
+                <div class="slide">
+                    <img loading="lazy"  class="boardImage" id="https://wa.me/7898488935%>" src="/images/banner1.webp" alt="">
+                    <img loading="lazy" class="boardImage"  id="https://youtu.be/0uVHqTwcE0E?si=w57R-tg-MjOEyfKW" src="/images/banner4.webp" alt="">
+                    <img loading="lazy"  class="boardImage" id="/leadboard/<%=user._id%>" src="/images/banner3.webp" alt="">
+                    <img loading="lazy"  class="boardImage"  src="/images/banner5.webp" alt="">
+                    <img loading="lazy"  class="boardImage" id="#tournamentBox" src="/images/banner6.webp" alt="">
+                    
+                    <img loading="lazy"  class="boardImage" id="https://wa.me/7898488935" src="/images/banner2.webp" alt="fgsefd">
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+                
+            </div>
+            <div class="imageTracker">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+        
+        <div class="heading">My Matches</div>
+        <div class="myMatch">
+            <div class="myOption ongoing" id="myOngoing/<%=user._id%>">
+                <img loading="lazy"  src="/images/ongoing.webp" alt="" id="myOngoing">
+                <p id="myOngoing/">Ongoing</p>
+            </div>
+            <div class="myOption upcoming" id="myupcoming/<%=user._id%>">
+                <img loading="lazy"  src="/images/upcoming.webp" alt="" id="myupcoming">
+                <p id="myupcoming">Upcoming</p>
+            </div>
+            <div class="myOption completed" id="myCompleted/<%=user._id%>">
+                <img loading="lazy"  src="/images/completed.webp" alt="" id="myCompleted">
+                <p id="myCompleted">Completed</p>
+            </div>
+        </div>
+        <div class="heading">Esports Games</div>
+        <div class="tournamentBox" id="tournamentBox">
+            <div class="tournament fullmap/solo/free" id="<%=user._id%>">
+                
+                <div class="tournamentPart1">
+                    <div class="image fit">
+                        <img loading="lazy"  src="/images/freeMatch.webp" alt="">
+                    </div>
+                    
+                    <p>All</p>
+                </div>
+                <div class="tournamentPart2">
+                    FREE
+                    <div class="length"><%=tournament.free.length%></div>
+                </div>
+                <dotlottie-wc class="freeAnimation"
+  src="https://lottie.host/ec559621-f5cd-4d27-85b9-9233c1ccc38a/pyTGvpfOJA.lottie"
+  speed="0.4"
+  autoplay
+  loop
+></dotlottie-wc>
+            </div>
+
+            <div class="tournament fullmap/solo/1rs" id="<%=user._id%>">
+                <div class="tournamentPart1">
+                    <div class="image fit">
+                        <img loading="lazy"  src="/images/1rsMatch.webp" alt="">
+                    </div>
+                    
+                    <p>FULL MAP</p>
+                </div>
+                <div class="tournamentPart2">
+                    SOLO
+                    <div class="length"><%=tournament.oneRs.length%></div>
+                </div>
+            </div>
+
+            <div class="tournament fullmap/solo/paid" id="<%=user._id%>">
+                <div class="tournamentPart1">
+                    <div class="image">
+                        <img loading="lazy"  src="/images/solo.webp" alt="">
+                    </div>
+                    
+                    <p>FULL MAP
+                        
+                    </p>
+                </div>
+                <div class="tournamentPart2">
+                    SOLO
+                        <div class="length"><%=tournament.perKill.length%></div>
+
+                </div>
+            </div>
+            
+            <div class="tournament cs/solo/paid" id="<%=user._id%>">
+                <div class="tournamentPart1">
+                    <div class="image">
+                        <img loading="lazy"  src="/images/1v1.webp" alt="">
+                    </div>
+                    
+                    <p>CLASH SQUAD</p>
+                </div>
+                <div class="tournamentPart2">
+                    Cs 1v1
+                    <div class="length"><%=tournament.csSolo.length%></div>
+                </div>
+            </div>
+            
+            <div class="tournament cs/duo/paid" id="<%=user._id%>">
+                <div class="tournamentPart1">
+                    <div class="image">
+                        <img loading="lazy"  src="/images/2v2.webp" alt="">
+                        
+                        
+                    </div>
+                    
+                    <p>CLASH SQUAD</p>
+                </div>
+                <div class="tournamentPart2">
+                    Cs 2v2
+                    <div class="length"><%=tournament.csDuo.length%></div>
+                </div>
+            </div>
+            <div class="tournament cs/squad/paid" id="<%=user._id%>">
+                <div class="tournamentPart1">
+                    <div class="image">
+                        <img loading="lazy"  src="/images/4v4.webp" alt="">
+                    </div>
+                    
+                    <p>CLASH SQUAD</p>
+                </div>
+                <div class="tournamentPart2">
+                    Cs 4v4
+                    <div class="length"><%=tournament.csSquad.length%></div>
+
+                </div>
+            </div>
+            
+            
+            
+        </div>
+
+    </div>
+        
+
+            
+<dotlottie-wc class="dailySpin" id="<%=user._id%>"
+  src="https://lottie.host/ace11316-8dc7-465b-be51-e2a6f4b6f3e9/S98CeTVYp7.lottie"
+  speed="1"
+  autoplay
+  loop
+></dotlottie-wc>
+        </div>
+        <div class="fakeFooter"></div>
+        <div class="footer"> 
+            
+            <div class="footerBox home" id="home/<%=user._id%>">
+                <img loading="lazy"  src="/images/home.webp" id="home/<%=user._id%>" alt="">
+                <p id="home/<%=user._id%>" >Home</p>
+            </div>
+            <div class="footerBox wallet" id="wallet/<%=user._id%>">
+                <img loading="lazy"  src="/images/wallet.webp" id="wallet/<%=user._id%>" alt="">
+                <p id="wallet/<%=user._id%>">Wallet</p>
+            </div>
+            <div class="footerBox notification" id="notification/<%=user._id%>">
+                <img loading="lazy"  src="https://cdn-icons-png.flaticon.com/128/4991/4991422.png" id="notification/<%=user._id%>" alt="">
+                <%if(notification!=0){%>
+                    <div class="notificationNumber" id="notification/<%=user._id%>"><%=notification%></div>
+                <%}%>
+                
+                <p id="notification/<%=user._id%>">Inbox</p>
+            </div>
+            <div class="footerBox leadboard" id="leadboard/<%=user._id%>">
+                <img loading="lazy"  src="/images/leadboard.webp" id="leadboard/<%=user._id%>" alt="">
+                <p id="leadboard/<%=user._id%>">Leadboard</p>
+            </div>
+            <div class="footerBox profile" id="profile/<%=user._id%>">
+                <img loading="lazy"  src="/images/profile.webp" id="profile/<%=user._id%>" alt="">
+                <p id="profile/<%=user._id%>">Profile</p>
+            </div>
+        </div>
+    </main>
+    <script src="/javaScripts/header.js"></script>
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/home.js"></script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+
+</body>
+</html>
+
