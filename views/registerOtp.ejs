@@ -19,6 +19,7 @@
             <p>Create new,</p>
             <p>Account verification</p>
         </div>
+        <div class="lastOption">Otp is sent on this email <%=email%></div>
         <form action="/verifyRegisterOtp" method="post">
             <% if (error) { %>
     <p style="color: red;font-size: 0.9rem;"><%= error %></p>
