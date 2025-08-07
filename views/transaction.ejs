@@ -61,18 +61,21 @@
                         <%}%>
                         
                     <%}else{%>
-                        <div class="status"><%=val.status%></div>
+                        <div class="status">Completed</div>
                     <%}%>
                 
             </div>
             <div class="optionPart2">
                 <div class="first">
-                    <div class="type">Add To Wallet</div>
-                    <%if(!val.paymentId){%>
-                        <div class="paymentId">#UPI id : <%=val.upiId%></div>
+                    <%if(val.status == "captured"){%>
+                        <div class="type">Add to wallet</div>
                     <%}else{%>
-                        <div class="paymentId">#id : <%=val.paymentId%></div>
+                        <div class="type"><%=val.status%></div>
                     <%}%>
+                    
+                    
+                        <div class="paymentId">#id : <%=val.paymentId%></div>
+                    
                     
                 </div>
                 <div class="second">
@@ -116,6 +119,8 @@
 
             let statusFormatted = "Pending";
             if (statusText.includes("completed")) {
+                statusFormatted = "Completed";
+            }else if (statusText.includes("captured")) {
                 statusFormatted = "Completed";
             }
 
