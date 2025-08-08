@@ -446,24 +446,35 @@ app.post("/admin/automaticCreateTournament/:adminId",async function(req,res){
        let now = new Date(); // IST = UTC + 5:30
 
     let tournament = {};
-    for(let i=0;i<5;i++){
+    for(let i=0;i<8;i++){
 
 let date = new Date(Date.UTC(
   now.getUTCFullYear(),
   now.getUTCMonth(),
   now.getUTCDate(),
-  13, 
-  30 + i * 30, // Adjust this according to your needs
+  14,  //14
+  0 + i * 30, // Adjust this according to your needs  current time is 7:30PM
   0
 ));
 
+// tournament = {
+//                 description:"CLASH SQUAD 4v4 (FREE 🎁)",
+//                 entryFee:0,
+//                 prizePool:20,
+//                 perKillAmount:0,
+//                 totalSlots:8,
+//                 matchType:"squad",
+//                 modeType:"cs",
+//                 firstPrize:0,
+//                 secondPrize:0,
+//                 dateAndTime:date,map:"Bermunda"  
+//             }
 
-
-        if(i==0){
+        if(i<2){
             tournament = {
                 description:"CLASH SQUAD 4v4 (FREE 🎁)",
                 entryFee:0,
-                prizePool:20,
+                prizePool:16,
                 perKillAmount:0,
                 totalSlots:8,
                 matchType:"squad",
@@ -473,14 +484,27 @@ let date = new Date(Date.UTC(
                 dateAndTime:date,map:"Bermunda"  
             }
             
-        }else if(i==1){
+        }else if(i<4){
             tournament = {
-                description:"CLASH SQUAD 4v4 (FREE 🎁)",
+                description:"CLASH SQUAD 2V2 (FREE 🎁)",
                 entryFee:0,
-                prizePool:20,
+                prizePool:8,
                 perKillAmount:0,
-                totalSlots:8,
-                matchType:"squad",
+                totalSlots:4,
+                matchType:"duo",
+                modeType:"cs",
+                firstPrize:0,
+                secondPrize:0,
+                dateAndTime:date,map:"Bermunda"  
+            }
+        }else if(i<6){
+            tournament = {
+                description:"CLASH SQUAD 1V1 ",
+                entryFee:5,
+                prizePool:10,
+                perKillAmount:0,
+                totalSlots:2,
+                matchType:"solo",
                 modeType:"cs",
                 firstPrize:0,
                 secondPrize:0,
@@ -488,16 +512,16 @@ let date = new Date(Date.UTC(
             }
         }else{
             tournament = {
-                description:"FULL MAP SOLO TOURNAMENT ",
+                description:"CLASH SQUAD 2V2 ",
                 entryFee:5,
-                prizePool:240,
-                perKillAmount:4,
-                totalSlots:20,
-                matchType:"solo",
-                modeType:"fullmap",
+                prizePool:20,
+                perKillAmount:0,
+                totalSlots:4,
+                matchType:"duo",
+                modeType:"cs",
                 firstPrize:0,
                 secondPrize:0,
-                dateAndTime:date,map:"Bermunda" ,map:"Bermunda" 
+                dateAndTime:date,map:"Bermunda"  
             }
         }
         await tournamentDataBase.create(tournament);
