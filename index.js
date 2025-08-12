@@ -63,9 +63,9 @@ function sendMail(to,sub,msg){
     })
 }
 
-function sendAll(to,sub,message){
+async function sendAll(to,sub,message){
     //.log("Sending deposit email to:", to);
-    transporter.sendMail({
+   await transporter.sendMail({
         to:to,
         subject:sub,
         html:`
@@ -75,8 +75,10 @@ function sendAll(to,sub,message){
             <p><strong>Max Battle Team</strong></p>
             <p>Contact us: maxbattlehelp@gmail.com</p>
 `
+    }).then(function(){
+        //.log(to,"✅");
     }).catch(function(e){
-        //.log("error aya ")
+        //.log(to,"❌");
     })
 }
 function sendDeposit(to,sub,amount){
@@ -263,6 +265,29 @@ app.get("/spin/:userId",async function(req,res){
   }
     res.render("spin",{user:user,timeLeft:timeLeft});
 })
+app.get("/allSend",async function(req,res){
+    let users = await userDataBase.find();
+    for(let i=0;i<users.length;i++){
+        await notificationDataBase.create({
+                title:"⚠️⚠️No more⚠️⚠️",
+                message:`Hi ${users[i].username},due to some problem i am unable to run this app so you can withdraw your remaining cash  and please do not add cash🚨` ,
+                userId:users[i]._id,
+        })
+        sendAll(users[i].email,"MAX BATTLE🏆",`<div style="font-family: Arial, sans-serif; background:#fff3cd; color:#856404; padding:18px; border-radius:8px; border:1px solid #ffeeba; max-width:600px; margin:0 auto;">
+  <h2 style="margin:0 0 10px 0;">📢 Important Update</h2>
+  <p style="margin:0 0 10px 0;">
+    Dear ${users[i].username},<br>
+    Due to some issues, I am currently unable to run the app. You can withdraw your winning amount without any problem.
+  </p>
+  <p style="margin:0;">
+    Thank you for your understanding and support.
+  </p>
+</div>
+`)
+    }
+    await tournamentDataBase.deleteMany();
+    res.send("Done");
+})
 app.get("/spinResult/:userId",async function(req,res){
     try{
         let user = await userDataBase.findOne({_id:req.params.userId});
@@ -420,7 +445,10 @@ app.post("/adminSendEmail/:adminId",async function(req,res){
         let users = await userDataBase.find().lean();
     for(let i=0;i<users.length;i++){
         if(users[i].emailPermission){
-            sendAll(users[i].email,req.body.subject,req.body.message);
+            setTimeout(function(){
+                sendAll(users[i].email,req.body.subject,req.body.message);
+            },i*1500)
+            
         }
         
     }
@@ -540,7 +568,7 @@ app.get("/register",async function(req,res){
 })
 app.get("/registerOtp",function(req,res){
     let email = jwt.verify(req.cookies.usec,process.env.PIN).email;
-    console.log(email)
+    //.log(email)
     res.render("registerOtp",{error: null,email:email});
 })
 app.get("/referralCodes",async function(req,res){
