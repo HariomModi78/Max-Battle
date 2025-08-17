@@ -1,0 +1,122 @@
+main{
+    height: 100vh;
+    min-height: fit-content;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: fit-content;
+}
+.fakeHeader{
+    height: 3rem;
+    width: 100%;
+}
+
+
+select{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+}
+input[type="number"]::-webkit-inner-spin-button{
+    display: none;
+}
+.topBar{
+    position: fixed;
+    top:0;
+}
+.page{
+    display: flex;
+    flex-direction: column;
+}
+.insidePage{
+    display: flex;
+}
+.events{
+    height: fit-content;
+    width: fit-content;
+    /* border: 1px solid white; */
+}
+.buttonBox{
+    height: fit-content;
+    width:22rem;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.last{
+    margin-bottom: 2.5rem;
+}
+form{
+    height: fit-content;
+    width: 85vw;
+    /* border: 2px solid white; */
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.ongoing{
+    height: 3rem;
+    width: 12rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 122, 198);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+input,select{
+    height: 2.7rem;
+    margin-top: 0.5rem;
+    border-radius: 20px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    padding-left: 0.5rem;
+    /* place-self: center; */
+    /* background-color: green; */
+    width: 90vw;
+    max-width: 25rem;
+    /* place-self: center; */
+    /* margin: auto; */
+    
+}
+.submit{
+    height: 2.5rem;
+    width: 90%;
+    max-width: 8rem;
+    place-self: center;
+    margin: auto;
+    margin-top: 1rem;
+    background-color: green;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    padding: 0;
+}
+.deleteButton{
+    height: 3rem;
+    width: 12rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+@media (max-width:680px){
+    .insidePage{
+        flex-direction: column;
+    }
+}
