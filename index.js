@@ -2063,7 +2063,7 @@ app.post("/verify-payment", (req, res) => {
 // Your webhook secret from Razorpay dashboard
 const WEBHOOK_SECRET = `${process.env.WEBHOOK_SECRET}`;
 
-app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
+app.post("/paymentCheck/razorpay", express.json({ type: '*/*' }), async (req, res) => {
   try {
     const razorpaySignature = req.headers['x-razorpay-signature'];
     const body = JSON.stringify(req.body);
@@ -2072,14 +2072,14 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
       .createHmac('sha256', WEBHOOK_SECRET)
       .update(body)
       .digest('hex');
-    console.log("payment check par request ayye");
+    //.log("payment check par request ayye");
     if (razorpaySignature === expectedSignature) {
-        console.log("yahan tak")
+        //.log("yahan tak")
       const payment = req.body.payload.payment.entity;
 
       const alreadyExists = await transactionDataBase.findOne({ paymentId: payment.id });
       if (!alreadyExists) {
-        console.log("duplicate bhe nahe hai")
+        //.log("duplicate bhe nahe hai")
 
         await transactionDataBase.create({
           paymentId: payment.id,
@@ -2111,7 +2111,7 @@ app.post("/paymentCheck", express.json({ type: '*/*' }), async (req, res) => {
             }
         }
       }
-      console.log("final step finish")
+      //.log("final step finish")
       return res.status(200).json({ status: "ok" });
     } else {
       return res.status(400).json({ error: "Invalid signature" });
