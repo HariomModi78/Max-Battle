@@ -1,0 +1,183 @@
+.quate{
+    height: 8rem;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    border: 1px solid white;
+    background-color: white;
+
+    /* border-bottom: 1px solid black; */
+}
+.profileImage{
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    border: 4px solid white;
+    position: relative;
+    top: 5.6rem;
+    overflow: hidden;
+    background-color: white;
+    /* border-top: white;
+    border-left: white;
+    border-right: white; */
+}
+.profileImage img{
+    height: 100%;
+    width: 100%;
+}
+.details{
+    height: 4.5rem;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    place-self: center;
+    margin: auto;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 0 2px black;
+}
+.detail{
+    height: 80%;
+    width: calc(100%/3);
+    border-right: 1px solid black;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 0.8rem;
+}
+.detail p{
+    text-align: center;
+}
+.count{
+    font-size: 1rem;
+    font-weight: 600;
+}
+.borderNone{
+    border: none;
+}
+.options{
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 1rem;
+}
+.option,.optionMute{
+    height: 2.5rem;
+    width: 90%;
+    max-width: 18rem;
+    background-color: white;
+    box-shadow: 0 0 2px black;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.optionLogo{
+    /* border: 1px solid black; */
+    height: 100%;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.optionArrow{
+    /* border: 1px solid black; */
+    height: 100%;
+    width: 3rem;
+    place-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.optionName{
+    height: 100%;
+    min-width: 60%;
+    /* border: 1px solid black; */
+    color: black;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.optionLogo img{
+    height: 1.5rem;
+    width: 1.5rem;
+}
+.optionArrow img{
+    height: 0.6rem;
+    width: 0.6rem;
+} 
+.fakeProfileBottom{
+    height: 3rem;
+    width: 100%;
+}
+.username{
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.fakeButton{
+     height: 8rem;
+    width:100vw;
+}
+
+.light{
+    height: 2rem;
+    width: fit-content;
+    place-self: center;
+    margin: auto;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.fit{
+    width: fit-content;
+}
+.slider{
+    height: 1.8rem;
+    width: 3.6rem;
+    /* border: 1px solid black; */
+    border-radius: 15px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: inset 0 0 2px black;
+    background-color: rgb(252, 248, 241);
+}
+.ball{
+    height: 1.8rem;
+    width: 1.8rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: rgb(0, 169, 221);
+
+}
+@keyframes on{
+    100%{
+        transform: translateX(100%);
+    }
+}
+.on{
+    animation:on 100ms linear forwards;
+    background-color: white;
+}
+.slideOn{
+    background-color: rgb(0, 169, 221)
+}

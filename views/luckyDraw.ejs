@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="/stylesheets/boiler.css">
+    <link rel="stylesheet" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="/stylesheets/luckyDraw.css">
+    <script
+  src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"
+  type="module"
+></script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+    
+        
+    <main>
+        <div class="disconnect">
+            <img src="/images/disconnect.webp" alt="">
+        </div>
+        <div class="header">
+            <div class="logo back" id="">
+                <img loading="lazy" style="height: 2rem;width: 2rem;" id="home" src="https://cdn-icons-png.flaticon.com/128/3114/3114883.png" alt="">
+            </div>
+            <div class="greet">
+                <p class="big">Lucky Draw</p>
+            </div>
+            <div class="notification">
+                <!-- <img loading="lazy" src="https://cdn-icons-png.flaticon.com/128/2311/2311524.png" alt=""> -->
+            </div>
+        </div>
+        <div class="fakeHeader"></div>
+        <div id="pageLoader">
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="page">
+            <div class="topOptionBar">
+                <div class="ongoing topOption">ONGOING</div>
+                <div class="result topOption">RESULT</div>
+            </div>
+            <div class="fakeTopBar"></div>
+        <div class="lotteryBox">
+            <%luckyDraw.forEach(function(val){%>
+                <div class="lottery">
+                <div class="image">
+                    <dotlottie-wc class="lotteryIcon"
+                    src="https://lottie.host/9db29445-ac78-4df2-966f-89c103abc79f/n2eA7hb0h2.lottie"
+  
+                speed="1"
+                autoplay
+                loop
+                ></dotlottie-wc>
+                <div class="buy" id="<%=val._id%>/<%=user._id%>">Buy</div>
+                </div>
+                <div class="detail">
+                        <div class="detailParts detailHeading"><%=val.description%></div>
+                        <div class="detailParts">Drawn time : <%=val.drawDateAndTime%></div>
+                        <div class="detailParts">Ticket price : ₹<%=val.price%></div>
+                        <div class="detailParts">Prize pool: ₹<%=val.prizePool%></div>
+                        <div class="detailParts lastBar">
+                            <div class="slotBar">
+                                <div class="filled" style="width:<%= val.slotsFilled/val.totalSlots*100%>%"></div>
+                            </div>
+                            <div class="slotNumberBar">
+                                <div class="slotNumberPart">Only <%=val.totalSlots - val.slotsFilled%> tickets left</div>
+                                <div class="slotNumberPart"><%=val.slotsFilled%> / <%=val.totalSlots%></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <%})%>
+            
+            
+    
+            
+            <div class="fakeHeader"></div>
+        </div>
+    </main>
+    
+    <script src="/javaScripts/footer.js"></script>
+    <script src="/javaScripts/back.js"></script>
+    <script>
+        let buy = document.getElementsByClassName("buy");
+        for(let i=0;i<buy.length;i++){
+            buy[i].addEventListener("click",function(){
+                window.location.href=`/luckyDrawPayment/${buy[i].id}`
+            })
+        }
+        let greet = document.querySelector(".big");
+        
+       window.addEventListener("pageshow", function(event) {
+            document.querySelector(".page").style.display = "block";
+            document.getElementById("pageLoader").style.display = "none";
+            greet.innerText = "Lucky Draw"
+        });
+    </script>
+    <script src="/javaScripts/boiler.js"></script>
+    <script type="module" src="/script.js"></script>
+    
+</body>
+</html>

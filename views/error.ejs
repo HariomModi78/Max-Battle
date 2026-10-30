@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Something Went Wrong</title>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Body and overall layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            display: flex;
+            align-items: center; /* items-center */
+            justify-content: center; /* justify-center */
+            min-height: 100vh; /* min-h-screen */
+            padding: 1rem; /* p-4 */
+            margin: 0;
+        }
+
+        /* Main container for the error message */
+        .error-container {
+            background-color: #fff; /* bg-white */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 2rem; /* p-8 */
+            text-align: center; /* text-center */
+            max-width: 32rem; /* max-w-lg */
+            width: 100%; /* w-full */
+        }
+
+        /* Responsive padding for larger screens */
+        @media (min-width: 768px) {
+            .error-container {
+                padding: 3rem; /* md:p-12 */
+            }
+        }
+
+        /* Icon container */
+        .icon-container {
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+
+        /* SVG icon styling */
+        .error-icon {
+            margin-left: auto; /* mx-auto */
+            margin-right: auto; /* mx-auto */
+            height: 6rem; /* h-24 */
+            width: 6rem; /* w-24 */
+            color: #ef4444; /* text-red-500 */
+            fill: none;
+            stroke: currentColor;
+        }
+
+        /* Error title */
+        .error-title {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* text-gray-800 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        /* Responsive font size for larger screens */
+        @media (min-width: 768px) {
+            .error-title {
+                font-size: 2.25rem; /* md:text-4xl */
+            }
+        }
+
+        /* Error message paragraph */
+        .error-message {
+            font-size: 1.125rem; /* text-lg */
+            color: #4b5563; /* text-gray-600 */
+            margin-bottom: 2rem; /* mb-8 */
+        }
+
+        /* Call to action button */
+        .home-button {
+            display: inline-block; /* inline-block */
+            background-color: #2563eb; /* bg-blue-600 */
+            color: #fff; /* text-white */
+            font-weight: 600; /* font-semibold */
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            transition-property: background-color, box-shadow; /* transition */
+            transition-duration: 300ms; /* duration-300 */
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            text-decoration: none; /* Remove underline from link */
+        }
+
+        .home-button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-lg */
+        }
+
+        /* Optional details section */
+        .details-section {
+            margin-top: 2rem; /* mt-8 */
+            font-size: 0.875rem; /* text-sm */
+            color: #6b7280; /* text-gray-500 */
+        }
+
+        .details-section p {
+            margin-bottom: 0.5rem; /* Added for spacing between paragraphs */
+        }
+
+        .details-section .mono-text {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; /* font-mono */
+            color: #374151; /* text-gray-700 */
+            margin-top: 0.5rem; /* mt-2 */
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- Error Icon/Image -->
+        <div class="icon-container">
+            <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+
+        <!-- Error Title -->
+        <h1 class="error-title">Oops! Something Went Wrong.</h1>
+
+        <!-- Error Message -->
+        <p class="error-message">
+            We're sorry, but an unexpected error occurred. Please try again later or contact support if the problem persists.
+        </p>
+
+        <!-- Call to Action Button -->
+        <a href="/" class="home-button">
+            Go to Homepage
+        </a>
+
+        <!-- Optional: Error Code/Details (can be dynamically inserted) -->
+        <div class="details-section">
+            <p>If you're seeing this page frequently, please provide the following details to support:</p>
+            <p class="mono-text">Error Reference: <span id="error-ref">ERR-001-XYZ</span></p>
+            <p class="mono-text">Timestamp: <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Function to set the current timestamp
+        function setTimestamp() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('timestamp').textContent = now.toLocaleString('en-US', options);
+        }
+
+        // Call the function when the page loads
+        window.onload = setTimestamp;
+
+        // You can dynamically update the error reference if needed, e.g.:
+        // document.getElementById('error-ref').textContent = "ERR-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+    </script>
+</body>
+</html>
