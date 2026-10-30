@@ -5,8 +5,6 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const cors = require("cors");
-const mongoSanitize = require("express-mongo-sanitize");
-const xss = require("xss-clean");
 
 // Route imports
 const authRoutes = require("./routes/authRoutes");
@@ -39,8 +37,26 @@ app.use(
 );
 app.use(hpp());
 app.use(cors());
-app.use(mongoSanitize());
-app.use(xss());
+
+// Express 5 compatible in-place NoSQL sanitization
+// (Express 5 treats req.query as a getter-only property; this mutates keys in-place without reassignment)
+const sanitizeObject = (obj) => {
+  if (!obj || typeof obj !== "object") return;
+  for (const key of Object.keys(obj)) {
+    if (key.startsWith("$") || key.includes(".")) {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      sanitizeObject(obj[key]);
+    }
+  }
+};
+
+app.use((req, res, next) => {
+  if (req.body) sanitizeObject(req.body);
+  if (req.params) sanitizeObject(req.params);
+  if (req.query) sanitizeObject(req.query);
+  next();
+});
 
 // View engine setup
 app.set("view engine", "ejs");
