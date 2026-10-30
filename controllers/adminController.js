@@ -623,20 +623,70 @@ const adminController = {
       }
 
       const expectedPass = process.env.email.split("@")[0] + "9";
-      if (req.body.password === expectedPass) {
-        const users = await userDataBase.find().lean();
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].emailPermission) {
-            setTimeout(() => {
-              emailService.sendAll(users[i].email, req.body.subject, req.body.message);
-            }, i * 20000);
+      if (req.body.password !== expectedPass) {
+        return res.status(400).send("❌ Invalid Admin Password. Email sending aborted.");
+      }
+
+      const users = await userDataBase.find({ emailPermission: true }).lean();
+      if (!users || users.length === 0) {
+        return res.send("ℹ️ No users found with email permission enabled.");
+      }
+
+      let successCount = 0;
+      let failedCount = 0;
+      const sampleErrors = [];
+
+      // Send emails concurrently in batches of 5 to avoid SMTP timeouts
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < users.length; i += BATCH_SIZE) {
+        const batch = users.slice(i, i + BATCH_SIZE);
+        const results = await Promise.all(
+          batch.map((user) => emailService.sendAll(user.email, req.body.subject, req.body.message))
+        );
+
+        for (const r of results) {
+          if (r.success) {
+            successCount++;
+          } else {
+            failedCount++;
+            if (sampleErrors.length < 5) {
+              sampleErrors.push(r.to + ": " + r.error);
+            }
           }
         }
-        res.send("Done✅");
-      } else {
-        res.send("Something went wrong");
       }
+
+      let reportHtml = `
+        <div style="font-family: Arial, sans-serif; padding: 24px; max-width: 600px; margin: 40px auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <h2 style="margin-top:0;">📊 Email Broadcast Report</h2>
+          <p><strong>Total Recipients Targeted:</strong> ${users.length}</p>
+          <p style="color: green; font-size: 16px;"><strong>✅ Successfully Delivered:</strong> ${successCount}</p>
+          <p style="color: ${failedCount > 0 ? '#d9534f' : '#6c757d'}; font-size: 16px;"><strong>❌ Failed Deliveries:</strong> ${failedCount}</p>
+      `;
+
+      if (failedCount > 0) {
+        reportHtml += `
+          <div style="background: #fff3f3; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px; margin: 16px 0;">
+            <h4 style="margin: 0 0 8px 0;">Sample Error Details:</h4>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${sampleErrors.map((err) => "<li><small>" + err + "</small></li>").join("")}
+            </ul>
+            <p style="margin: 10px 0 0 0; font-size: 13px;">
+              💡 <strong>Tip:</strong> If errors say <em>"Invalid login: 535-5.7.8 Username and Password not accepted"</em>, your Gmail App Password in <code>.env</code> needs to be refreshed.
+            </p>
+          </div>
+        `;
+      }
+
+      reportHtml += `
+          <br>
+          <a href="/adminPanel/${admin._id}" style="display: inline-block; padding: 10px 18px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Return to Admin Panel</a>
+        </div>
+      `;
+
+      return res.send(reportHtml);
     } catch (e) {
+      console.error("Error in postAdminSendEmail:", e);
       res.redirect("/error");
     }
   },

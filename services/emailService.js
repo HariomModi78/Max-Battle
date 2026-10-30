@@ -6,7 +6,7 @@ const emailService = {
    */
   sendMail: async (to, subject, otp) => {
     try {
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         to,
         subject,
         html: `
@@ -19,8 +19,10 @@ const emailService = {
           <p>Contact us: maxbattlehelp@gmail.com</p>
         `,
       });
+      return { success: true, to, messageId: info.messageId };
     } catch (err) {
       console.error(`❌ Failed to send OTP email to ${to}:`, err.message);
+      return { success: false, to, error: err.message };
     }
   },
 
@@ -29,7 +31,7 @@ const emailService = {
    */
   sendAll: async (to, subject, message) => {
     try {
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         to,
         subject,
         html: `
@@ -40,8 +42,11 @@ const emailService = {
           <p>Contact us: maxbattlehelp@gmail.com</p>
         `,
       });
+      console.log(`✅ Bulk email delivered to ${to}`);
+      return { success: true, to, messageId: info.messageId };
     } catch (err) {
       console.error(`❌ Failed to send broadcast email to ${to}:`, err.message);
+      return { success: false, to, error: err.message };
     }
   },
 
