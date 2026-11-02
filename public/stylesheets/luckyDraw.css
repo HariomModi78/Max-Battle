@@ -1,62 +1,76 @@
-.topOptionBar{
+.topOptionBar {
     height: 2.5rem;
     width: 100%;
-    /* border: 1px solid black; */
+    max-width: 30rem;
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     position: fixed;
+    top: 3.8rem;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: white;
-    z-index: 100;
+    z-index: 98;
+    border-bottom: 1px solid #eee;
 }
-.fakeTopBar{
+
+.fakeTopBar {
     height: 2.5rem;
     width: 100%;
 }
-.topOption{
+
+.topOption {
     height: 100%;
-    width: calc(100%/2);
-    /* border: 1px solid black; */
+    width: 50%;
     display: flex;
-    align-items:center;
+    align-items: center;
     justify-content: center;
-
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #555;
 }
-.ongoing{
-    border-bottom:2px solid black ;
 
+.ongoing {
+    border-bottom: 3px solid #00bcd4;
+    color: #00bcd4;
+    font-weight: 700;
 }
-.lotteryBox{
+
+.lotteryBox {
     height: fit-content;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 5rem;
 }
-.lottery{
-    height: 12rem;
-    width: 90%;
-    border: 1px solid black;
+
+.lottery {
+    min-height: 12rem;
+    width: 92%;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
-.image{
+
+.image {
     height: 100%;
     width: 40%;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-
 }
-.buy{
+
+.buy {
     height: 2.5rem;
     width: 100%;
     display: flex;
@@ -65,58 +79,63 @@
     background-color: rgb(0, 145, 255);
     color: white;
     font-weight: 800;
+    cursor: pointer;
+}
 
+.lotteryIcon {
+    height: 5rem;
+    width: 5rem;
+    object-fit: contain;
 }
-.lotteryIcon{
-    height: 90%;
-    width: 140%;
-    /* border: 1px solid black; */
-}
-.detail{
+
+.detail {
     height: 100%;
     width: 60%;
-    /* border: 1px solid black; */
+    padding: 0.4rem;
 }
-.detailParts{
-    height: calc(100%/5);
+
+.detailParts {
+    min-height: 1.8rem;
     width: 100%;
-    /* border: 1px solid black; */
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding-left: 0.3rem;
+    font-size: 0.85rem;
 }
-.detailHeading{
-    font-size: 1.3rem;
-    /* justify-content: center; */
-    color:rgb(4, 94, 108);
+
+.detailHeading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgb(4, 94, 108);
 }
-.lastBar{
+
+.lastBar {
     flex-direction: column;
-    /* border: 1px solid black; */
     font-size: 0.7rem;
     justify-content: center;
     align-items: center;
+    gap: 0.2rem;
 }
-.slotBar{
-    height: 0.3rem;
+
+.slotBar {
+    height: 0.4rem;
     width: 97%;
-    border: 0.5px solid black;
+    background-color: #eee;
     border-radius: 10px;
     overflow: hidden;
 }
-.slotNumberBar{
-    height: 50%;
+
+.slotNumberBar {
     width: 97%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 0.65rem;
+    color: #666;
 }
-.filled{
+
+.filled {
     height: 100%;
-    width: 10%;
     background-color: rgb(61, 145, 240);
 }
-
-
-

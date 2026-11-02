@@ -1,31 +1,71 @@
-.joiningBonus{
+.joiningBonus {
     height: 25rem;
     width: 20rem;
+    max-width: 90vw;
     position: fixed;
     top: 50%;
-  left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     background-color: rgb(46, 99, 242);
     display: flex;
     flex-direction: column;
-}
-.dailySpin{
-    position: fixed;
-    bottom: 5rem;
-    left: 75%;
-    height: 5rem;
-    width: 5rem;
-    /* border: 2px solid black; */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.joiningBonus img{
+.dailySpin {
+    position: fixed;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(calc(15rem - 5.5rem));
+    height: 5rem;
+    width: 5rem;
+    z-index: 98;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: block;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dailySpin dotlottie-wc {
+    height: 100%;
+    width: 100%;
+    display: block;
+    pointer-events: none;
+}
+
+.dailySpin:hover {
+    transform: translateX(calc(15rem - 5.5rem)) scale(1.05);
+}
+
+.dailySpin:active {
+    transform: translateX(calc(15rem - 5.5rem)) scale(0.95);
+}
+
+@media (max-width: 30rem) {
+    .dailySpin {
+        left: auto;
+        right: 1rem;
+        transform: none;
+    }
+    .dailySpin:hover {
+        transform: scale(1.05);
+    }
+    .dailySpin:active {
+        transform: scale(0.95);
+    }
+}
+
+.joiningBonus img {
     height: 85%;
     width: 100%;
+    object-fit: cover;
 }
-.confirm,.confirm1{
+
+.confirm, .confirm1 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,130 +73,155 @@
     height: 15%;
     width: 100%;
     text-decoration: none;
-    /* border: 1px solid black; */
+    cursor: pointer;
+    background-color: #1a73e8;
+    font-weight: 700;
 }
 
-.noticeBoard{
+.noticeBoard {
     height: 14rem;
     width: 100%;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    margin-top: 0.2rem;
 }
-.board{
+
+.board {
     height: 11rem;
-    width: 19.5rem;
-    max-width: 95vw;
-    border-radius: 5px;
-    border: 0.5px solid black;
+    width: 92%;
+    max-width: 27.6rem;
+    border-radius: 8px;
+    border: 0.5px solid #ddd;
     display: flex;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
-.slide{
+
+.slide {
     height: 100%;
-    width:calc(6*100%);
-    border-radius: 5px;
-    border: 0.5px solid black;
+    width: calc(6 * 100%);
     display: flex;
     transition: transform 0.5s ease-in-out;
-    gap: 1px;
 }
-.slide img{
+
+.slide img {
     height: 100%;
     width: 100%;
     flex-shrink: 0;
+    object-fit: cover;
 }
-.imageTracker{
+
+.imageTracker {
     height: 1rem;
     width: 7rem;
-    /* border: 1px solid black; */
     display: flex;
     align-items: center;
     justify-content: space-evenly;
 }
-.circle{
+
+.circle {
     height: 0.6rem;
     width: 0.6rem;
-    border: 1px solid black;
+    border: 1px solid #999;
     border-radius: 50%;
 }
-.activeImage{
-    background-color: rgb(161, 160, 160);
+
+.activeImage {
+    background-color: rgb(12, 179, 194);
+    border-color: rgb(12, 179, 194);
 }
-.heading{
-    height: 2rem;
+
+.heading {
+    height: 2.2rem;
     width: 100%;
-    /* border: 1px solid black; */
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1rem;
+    color: #333;
 }
-.myMatch{
+
+.myMatch {
     height: 8rem;
     width: 95%;
-    place-self: center;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    /* border: 1px solid black; */
 }
-.myOption{
+
+.myOption {
     height: 6rem;
     width: 5.8rem;
-    box-shadow: 0 0 2px black;
-    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease;
 }
-.myOption img{
-    height: 2rem;
-    width: 2rem;
+
+.myOption:active {
+    transform: scale(0.96);
 }
-.myOption p{
-    height: 2rem;
+
+.myOption img {
+    height: 2.2rem;
+    width: 2.2rem;
+    object-fit: contain;
+}
+
+.myOption p {
+    height: 1.8rem;
     width: 100%;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    color: #444;
 }
-.tournamentBox{
-    height: 10rem;
-    min-height: fit-content;
+
+.tournamentBox {
+    min-height: 10rem;
     width: 100%;
     display: flex;
     justify-content: space-evenly;
     padding: 0.4rem;
-    /* border: 1px solid black; */
     flex-wrap: wrap;
-    row-gap: 0.5rem;
+    row-gap: 0.8rem;
 }
-.tournament{
-    height: 9rem;
-    width: 6.5rem;
-    box-shadow: 0 0 2px black;
-    border-radius: 5px;
+
+.tournament {
+    height: 9.5rem;
+    width: 6.8rem;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
     background-color: white;
-    /* overflow: hidden; */
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s ease;
 }
-.freeAnimation{
+
+.tournament:active {
+    transform: scale(0.97);
+}
+
+.freeAnimation {
     position: relative;
     bottom: 100%;
     left: 0rem;
     height: 100%;
     width: 100%;
-
-    /* mix-blend-mode: multiply; */
 }
-.tournamentPart1{
-    height: 80%;
+
+.tournamentPart1 {
+    height: 78%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -164,67 +229,63 @@
     justify-content: space-evenly;
     font-size: 0.8rem;
 }
-.image{
+
+.image {
     height: 75%;
-    width: 95%;
-    border-radius: 3px;
-    border: 0.5px solid black;
+    width: 92%;
+    border-radius: 5px;
     overflow: hidden;
-    object-fit: cover;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tournamentPart1 img{
-    display: flex;
-    height: 125%;
-    width: 120%;
-}
-.fit img{
+.tournamentPart1 img {
     height: 100%;
     width: 100%;
+    object-fit: cover;
 }
-.tournamentPart1 p{
-    /* border: 1px solid black; */
-    height: 1.3rem;
+
+.fit img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.tournamentPart1 p {
+    height: 1.4rem;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
 }
-.length{
-    height: 1rem;
-    width: 1rem;
-    border: 1px solid black;
-    border-radius: 50%;
-    background-color: red;
-    font-size: 0.7rem;
+
+.length {
+    height: 1.1rem;
+    min-width: 1.1rem;
+    padding: 0 3px;
+    border-radius: 10px;
+    background-color: #e53935;
+    color: white;
+    font-size: 0.65rem;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    left: 0.5rem;
+    left: 0.4rem;
+    font-weight: 700;
 }
-.tournamentPart2{
-    height: 20%;
+
+.tournamentPart2 {
+    height: 22%;
     width: 100%;
-    /* border: 1px solid black; */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(78, 78, 78);
+    background-color: #2b2b2b;
     color: white;
     font-size: 0.8rem;
-}
-
-@keyframes move{
-    100%{
-        transform: translateY(10rem) ;
-    }
-}
-@keyframes move1{
-    100%{
-        transform: translateY(0) ;
-    }
+    font-weight: 600;
 }

@@ -1,57 +1,69 @@
+let footer = document.querySelector(".footer");
+let mainHeader = document.querySelector(".header");
+let pageLoader = document.getElementById("pageLoader");
+
 window.addEventListener("pageshow", function(event) {
-    document.querySelector(".page").style.display = "block";
-            footer.style.display = "flex";
-            mainHeader.style.display = "flex";
-            pageLoader.style.display = "none"; 
-
-    
-
-            
+    let page = document.querySelector(".page");
+    if (page) page.style.display = "block";
+    if (footer) footer.style.display = "flex";
+    if (mainHeader) mainHeader.style.display = "flex";
+    if (pageLoader) pageLoader.style.display = "none";
 });
 
 let dailySpin = document.querySelector(".dailySpin");
-dailySpin.addEventListener("click",function(){
-
-        document.querySelector(".page").style.display = "none";
-        footer.style.display = "none";
-        mainHeader.style.display = "none";
+if (dailySpin) {
+    dailySpin.addEventListener("click", function(e) {
+        e.preventDefault();
+        let targetId = this.getAttribute("id") || this.id;
+        let page = document.querySelector(".page");
+        if (page) page.style.display = "none";
+        if (footer) footer.style.display = "none";
+        if (mainHeader) mainHeader.style.display = "none";
 
         let header = document.createElement("div");
-            header.classList = "header";
-            let back = document.createElement("div");
-            back.classList = "logo";
-            let img = document.createElement("img");
-            img.src = "https://cdn-icons-png.flaticon.com/128/3114/3114883.png";
-            
-            let greet = document.createElement("div");
-            greet.classList = "greet";
-            let p = document.createElement("p");
-            p.classList = "big";
-            let notification = document.createElement("div");
-            notification.classList = "notification";
-            header.appendChild(back);
-            back.appendChild(img);
-            header.appendChild(greet);
-            greet.appendChild(p);
-            header.appendChild(notification); 
+        header.classList = "header";
+        let back = document.createElement("div");
+        back.classList = "logo";
+        let img = document.createElement("img");
+        img.src = "https://cdn-icons-png.flaticon.com/128/3114/3114883.png";
+        
+        let greet = document.createElement("div");
+        greet.classList = "greet";
+        let p = document.createElement("p");
+        p.classList = "big";
+        let notification = document.createElement("div");
+        notification.classList = "notification";
+        header.appendChild(back);
+        back.appendChild(img);
+        header.appendChild(greet);
+        greet.appendChild(p);
+        header.appendChild(notification); 
+        if (pageLoader) {
             pageLoader.appendChild(header);
             p.innerText = "Daily Spin";
             pageLoader.style.display = "flex";
-    window.location.href = `/spin/${dailySpin.id}`;
-})
+        }
+        window.location.href = this.getAttribute("href") || `/spin/${targetId}`;
+    });
+}
+
 let confirm = document.querySelector(".confirm");
 let confirm1 = document.querySelector(".confirm1");
-
 let joinBonus = document.querySelector(".joiningBonus");
-confirm.addEventListener("click",function(){
-    joinBonus.style.display = "none";
-    fetch(`/confirmBonus/${confirm.id}`,{
-        method:"GET"
-    })
-})
-confirm1.addEventListener("click",function(){
-    joinBonus.style.display = "none";
-})
+
+if (confirm && joinBonus) {
+    confirm.addEventListener("click", function() {
+        joinBonus.style.display = "none";
+        fetch(`/confirmBonus/${confirm.id}`, {
+            method: "GET"
+        });
+    });
+}
+if (confirm1 && joinBonus) {
+    confirm1.addEventListener("click", function() {
+        joinBonus.style.display = "none";
+    });
+}
 let myOption = document.getElementsByClassName("myOption");
 let boardImage = document.getElementsByClassName("boardImage");
 for(let i=0;i<boardImage.length;i++){
@@ -204,11 +216,6 @@ updateSlide(0);
 
 
 
-let home = document.querySelector(".home");
-let wallet = document.querySelector(".wallet");
-let leadboard = document.querySelector(".leadboard");
-let profile = document.querySelector(".profile");
-let footer = document.querySelector(".footer");
 let tournament = document.getElementsByClassName("tournament");
 
 for(let i=0;i<tournament.length;i++)
@@ -249,37 +256,6 @@ tournament[i].addEventListener("click",function(){
             window.location.href = `/tournament/upcoming/${tournament[i].classList[1]}/${tournament[i].id}`
         }
     
-})
-window.addEventListener("pageshow",function(){
-    document.querySelector(".page").style.display = "block";
-            footer.style.display = "flex";
-            mainHeader.style.display = "flex";
-            pageLoader.style.display = "none";
-})
-let y = 0;
-window.addEventListener("scroll",function(event){
-    if(window.scrollY>0 && window.scrollY>y){
-        home.style.cssText = "animation:move linear forwards 500ms;"
-        wallet.style.cssText = "animation:move linear forwards 500ms;"
-        leadboard.style.cssText = "animation:move linear forwards 500ms;"
-        profile.style.cssText = "animation:move linear forwards 500ms;"
-        footer.style.cssText = "animation:move linear forwards 500ms;"
-        y = window.scrollY;
-        dailySpin.style.display = "none";
-        console.log("y = ",y);
-
-    }
-    else{
-        home.style.cssText = "animation:move1 linear forwards 500ms;"
-        wallet.style.cssText = "animation:move1 linear forwards 500ms;"
-        leadboard.style.cssText = "animation:move1 linear forwards 500ms;"
-        profile.style.cssText = "animation:move1 linear forwards 500ms;"
-        footer.style.cssText = "animation:move1 linear forwards 500ms;"
-            y =0;
-        dailySpin.style.display = "block";
-        
-
-    }
-})
+});
 
 

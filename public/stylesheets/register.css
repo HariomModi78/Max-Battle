@@ -1,167 +1,166 @@
-*{
-    margin: 0%;
-    padding: 0%;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     user-select: none;
 }
-main{
-    height: 100vh;
-    min-height: fit-content;
-    overflow: hidden;
+
+main {
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    min-height: fit-content;
+    justify-content: center;
+    padding: 1.5rem 0;
 }
-.wellcome{
-    height: 11rem;
-    padding-left: 1rem;
-    /* border: 1px solid black; */
+
+.wellcome {
+    padding: 0 1rem;
     width: 100%;
     max-width: 25rem;
-    place-self: center;
-    /* margin: auto; */
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    /* align-items: flex-end; */
-    font-weight: 800;
     justify-content: flex-end;
     font-size: 1.6rem;
+    font-weight: 800;
     color: rgb(12, 179, 194);
-    /* justify-content: center; */
     padding-bottom: 1rem;
 }
-.signupGreet{
-    height: 8rem;
+
+.signupGreet {
+    height: auto;
+    padding-top: 1rem;
 }
-form{
+
+form {
     height: fit-content;
     width: 100%;
-    /* min-height: 20rem; */
-    /* border: 1px solid black; */
     padding: 1rem;
     display: flex;
     gap: 1rem;
     flex-direction: column;
     align-items: center;
-    /* justify-content: space-evenly; */
 }
 
-input{
+input {
     height: 2.8rem;
     width: 100%;
     max-width: 25rem;
-    border-radius: 6px;
-    background-color:transparent;
     border-radius: 20px;
     outline: none;
-    /* border: 1px solid rgba(247, 215, 2, 0.213); */
-    border: none;
-    /* background-color: green; */
-    padding-left: 0.8rem;
-    font-size:0.9rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    /* color: white; */
-    /* box-shadow:inset 0 -1px 2px rgba(0, 0, 0, 0.297); */
-    border: 0.2px solid rgba(128, 128, 128, 0.955);
+    border: 1px solid rgba(128, 128, 128, 0.4);
     color: black;
     background-color: white;
+    transition: border-color 0.2s ease;
 }
 
-
-.fakeButton{
-     height: 3rem;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-    /* width:100vw; */
+input:focus {
+    border-color: rgb(12, 179, 194);
 }
-.error{
+
+.fakeButton {
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error {
     height: 2rem;
-    /* border: 1px solid white; */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: red;
+    color: #e53935;
 }
-.lastOption{
+
+.lastOption {
     height: 2rem;
-    /* border: 1px solid white; */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
 }
-.lastOption p{
+
+.lastOption p {
     padding: 0.3rem;
-    font-weight: 300;
-    opacity: 0.6;
+    font-weight: 400;
+    opacity: 0.7;
 }
-.formatePassword{
+
+.formatePassword {
     height: 2rem;
     width: 100%;
-    /* border: 1px solid black; */
+    max-width: 25rem;
     display: flex;
     align-items: center;
-    color: black;
-    font-size: 0.8rem;
-    opacity: 0.6;
+    color: #555;
+    font-size: 0.85rem;
     justify-content: flex-end;
 }
-.payAndJoin{
+
+.payAndJoin {
     height: 3rem;
     width: 100%;
-    place-self: center;
-    margin: auto;
-    bottom: 2rem;
+    max-width: 25rem;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgb(12, 179, 194);
-    /* border: 2px solid rgb(12, 179, 194); */
     font-size: 1rem;
+    font-weight: 700;
     padding: 0;
     color: white;
-    /* background-color: white; */
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(12, 179, 194, 0.3);
+    transition: background-color 0.2s ease;
 }
 
-
+.payAndJoin:active {
+    background-color: rgb(10, 150, 163);
+}
 
 /* otp */
-
-.otpForm{
-    height: 7rem;
+.otpForm {
     min-height: 7rem;
 }
-strong{
-    font-size: 0.7rem;
+
+strong {
+    font-size: 0.75rem;
 }
 
-
-/* passward */
-
-.passwardForm{
+/* password */
+.passwardForm {
     min-height: 10rem;
 }
-.inputBox{
+
+.inputBox {
     height: 2.8rem;
     max-width: 25rem;
-
     width: 100%;
-    place-self: center;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    border-radius:20px ;
+    border-radius: 20px;
     padding-right: 0.4rem;
-    border: 0.2px solid rgba(128, 128, 128, 0.955);
+    border: 1px solid rgba(128, 128, 128, 0.4);
     color: black;
     background-color: white;
 }
-.apply{
+
+.apply {
     height: 2rem;
     width: 5rem;
     background-color: orange;
@@ -172,68 +171,71 @@ strong{
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 800;
-    /* border: 1px solid black; */
-    /* position: relative;
-    left: 35%;
-    bottom: 11%; */
+    cursor: pointer;
 }
-.heightFull{
+
+.heightFull {
     min-height: 100%;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    border: none;
 }
-.light{
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.412);
-    position: relative;
-    left: 25%;
-    bottom: 1.1rem;
+
+.light {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
-::-webkit-input-placeholder{
+
+::-webkit-input-placeholder {
     font-weight: 400;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    color: #888;
 }
-input[type="checkbox"]{
-    height: 0.7rem;
-    width: 0.7rem;
+
+input[type="checkbox"] {
+    height: 0.9rem;
+    width: 0.9rem;
+    cursor: pointer;
 }
-.borderNone{
+
+.borderNone {
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 1rem;
-    gap: 0.2rem;
-    font-size: 0.8rem;
-    /* border: 1px solid black; */
-}
-a{
-    color:black;
-    text-decoration: none;
-    font-weight: 800;
+    height: 1.5rem;
+    gap: 0.4rem;
+    font-size: 0.85rem;
 }
 
-/* HTML: <div class="loader"></div> */
-/* HTML: <div class="loader"></div> */
-.loader {
-  width: 60px;
-  display: none;
-  aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
-  background: 
-    var(--_g) 0%   50%,
-    var(--_g) 50%  50%,
-    var(--_g) 100% 50%;
-  background-size: calc(100%/3) 50%;
-  animation: l3 1s infinite linear;
-  position: fixed;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+a {
+    color: rgb(12, 179, 194);
+    text-decoration: none;
+    font-weight: 700;
 }
+
+.loader {
+    width: 60px;
+    display: none;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+    background: 
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+    position: fixed;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
 @keyframes l3 {
-    20%{background-position:0%   0%, 50%  50%,100%  50%}
-    40%{background-position:0% 100%, 50%   0%,100%  50%}
-    60%{background-position:0%  50%, 50% 100%,100%   0%}
-    80%{background-position:0%  50%, 50%  50%,100% 100%}
+    20% { background-position: 0% 0%, 50% 50%, 100% 50% }
+    40% { background-position: 0% 100%, 50% 0%, 100% 50% }
+    60% { background-position: 0% 50%, 50% 100%, 100% 0% }
+    80% { background-position: 0% 50%, 50% 50%, 100% 100% }
 }
